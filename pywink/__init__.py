@@ -147,9 +147,9 @@ class wink_sensor_pod(wink_object) :
 
     def state(self):
         if 'opened' in self._last_reading:
-            return self._last_reading.get('opened', False)
+            return self._last_reading['opened']
         elif 'motion' in self._last_reading:
-            return self._last_reading.get('motion', False)
+            return self._last_reading['motion']
         return false
 
     def deviceId(self):
