@@ -9,8 +9,62 @@ baseUrl = "https://winkapi.quirky.com"
 
 headers = {}
 
+class wink_device(object):
+    
+    def factory(aJSonObj):
+        if "light_bulb_id" in aJSonObj:
+            return wink_bulb(aJSonObj)
+        elif "sensor_pod_id" in aJSonObj:
+            return wink_sensor_pod(aJSonObj)
+        elif "binary_switch_id" in aJSonObj:
+            return wink_binary_switch(aJSonObj)
+        #elif "thermostat_id" in aJSonObj:
+        #elif "remote_id" in aJSonObj:
+        return wink_device(aJSonObj)
+    factory = staticmethod(factory)
+    
+    def __str__(self):
+        return "%s %s %s" % (self.name(), self.deviceId(), self.state())
 
-class wink_sensor_pod(object):
+    def __repr__(self):
+        return "<Wink object %s %s %s>" % (self.name(), self.deviceId(), self.state())
+    
+    def name(self):
+        return self.jsonState.get('name', "Unknown Name")
+    
+    def state(self):
+        raise NotImplementedError("Must implement state")
+    
+    def deviceId(self):
+        raise NotImplementedError("Must implement state")
+    
+    @property
+    def _last_reading(self):
+        return self.jsonState.get('last_reading') or {}
+    
+    def _updateStateFromResponse(self, response_json):
+        """
+        :param response_json: the json obj returned from query
+        :return:
+        """
+        self.jsonState = response_json.get('data')
+        
+    def updateState(self):
+        """ Update state with latest info from Wink API. """
+        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
+        arequest = requests.get(urlString, headers=headers)
+        self._updateStateFromResponse(arequest.json())
+
+    def refresh_state_at_hub(self):
+        """
+        Tell hub to query latest status from device and upload to Wink.
+        PS: Not sure if this even works..
+        """
+        urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
+        requests.get(urlString, headers=headers)
+    
+
+class wink_sensor_pod(wink_device) :
     """ represents a wink.py sensor
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -88,47 +142,20 @@ class wink_sensor_pod(object):
         self.jsonState = aJSonObj
         self.objectprefix = objectprefix
 
-    def __str__(self):
-        return "%s %s %s" % (self.name(), self.deviceId(), self.state())
-
     def __repr__(self):
         return "<Wink sensor %s %s %s>" % (self.name(), self.deviceId(), self.state())
 
-    @property
-    def _last_reading(self):
-        return self.jsonState.get('last_reading') or {}
-
-    def name(self):
-        return self.jsonState.get('name', "Unknown Name")
-
     def state(self):
-        return self._last_reading.get('opened', False)
+        if 'opened' in self._last_reading:
+            return self._last_reading['opened']
+        elif 'motion' in self._last_reading:
+            return self._last_reading['motion']
+        return false
 
     def deviceId(self):
         return self.jsonState.get('sensor_pod_id', self.name())
 
-    def refresh_state_at_hub(self):
-        """
-        Tell hub to query latest status from device and upload to Wink.
-        PS: Not sure if this even works..
-        """
-        urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
-        requests.get(urlString, headers=headers)
-
-    def updateState(self):
-        """ Update state with latest info from Wink API. """
-        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
-        arequest = requests.get(urlString, headers=headers)
-        self._updateStateFromResponse(arequest.json())
-
-    def _updateStateFromResponse(self, response_json):
-        """
-        :param response_json: the json obj returned from query
-        :return:
-        """
-        self.jsonState = response_json.get('data')
-
-class wink_binary_switch(object):
+class wink_binary_switch(wink_device):
     """ represents a wink.py switch
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -204,18 +231,8 @@ class wink_binary_switch(object):
         # Tuple (desired state, time)
         self._last_call = (0, None)
 
-    def __str__(self):
-        return "%s %s %s" % (self.name(), self.deviceId(), self.state())
-
     def __repr__(self):
         return "<Wink switch %s %s %s>" % (self.name(), self.deviceId(), self.state())
-
-    @property
-    def _last_reading(self):
-        return self.jsonState.get('last_reading') or {}
-
-    def name(self):
-        return self.jsonState.get('name', "Unknown Name")
 
     def state(self):
         # Optimistic approach to setState:
@@ -240,20 +257,6 @@ class wink_binary_switch(object):
 
         self._last_call = (time.time(), state)
 
-    def refresh_state_at_hub(self):
-        """
-        Tell hub to query latest status from device and upload to Wink.
-        PS: Not sure if this even works..
-        """
-        urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
-        requests.get(urlString, headers=headers)
-
-    def updateState(self):
-        """ Update state with latest info from Wink API. """
-        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
-        arequest = requests.get(urlString, headers=headers)
-        self._updateStateFromResponse(arequest.json())
-
     def wait_till_desired_reached(self):
         """ Wait till desired state reached. Max 10s. """
         if self._recent_state_set():
@@ -275,13 +278,6 @@ class wink_binary_switch(object):
             tries += 1
             self.updateState()
             last_read = self._last_reading
-
-    def _updateStateFromResponse(self, response_json):
-        """
-        :param response_json: the json obj returned from query
-        :return:
-        """
-        self.jsonState = response_json.get('data')
 
     def _recent_state_set(self):
         return time.time() - self._last_call[0] < 15
@@ -366,7 +362,7 @@ class wink_bulb(wink_binary_switch):
             self.name(), self.deviceId(), self.state())
 
 
-def get_devices(filter, constructor):
+def get_devices(filter):
     arequestUrl = baseUrl + "/users/me/wink_devices"
     j = requests.get(arequestUrl, headers=headers).json()
 
@@ -376,21 +372,21 @@ def get_devices(filter, constructor):
     for item in items:
         id = item.get(filter)
         if (id is not None and item.get("hidden_at") is None):
-            devices.append(constructor(item))
+            devices.append(wink_device.factory(item))
 
     return devices
 
 
 def get_bulbs():
-    return get_devices('light_bulb_id', wink_bulb)
+    return get_devices('light_bulb_id')
 
 
 def get_switches():
-    return get_devices('binary_switch_id', wink_binary_switch)
+    return get_devices('binary_switch_id')
 
 
 def get_sensors():
-    return get_devices('sensor_pod_id', wink_sensor_pod)
+    return get_devices('sensor_pod_id')
 
 
 def is_token_set():
