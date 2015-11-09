@@ -9,7 +9,7 @@ baseUrl = "https://winkapi.quirky.com"
 
 headers = {}
 
-class wink_object(object):
+class wink_device(object):
     
     def factory(aJSonObj):
         if "light_bulb_id" in aJSonObj:
@@ -20,7 +20,7 @@ class wink_object(object):
             return wink_binary_switch(aJSonObj)
         #elif "thermostat_id" in aJSonObj:
         #elif "remote_id" in aJSonObj:
-        return wink_object(aJSonObj)
+        return wink_device(aJSonObj)
     factory = staticmethod(factory)
     
     def __str__(self):
@@ -64,7 +64,7 @@ class wink_object(object):
         requests.get(urlString, headers=headers)
     
 
-class wink_sensor_pod(wink_object) :
+class wink_sensor_pod(wink_device) :
     """ represents a wink.py sensor
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -155,7 +155,7 @@ class wink_sensor_pod(wink_object) :
     def deviceId(self):
         return self.jsonState.get('sensor_pod_id', self.name())
 
-class wink_binary_switch(wink_object):
+class wink_binary_switch(wink_device):
     """ represents a wink.py switch
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -372,7 +372,7 @@ def get_devices(filter):
     for item in items:
         id = item.get(filter)
         if (id is not None and item.get("hidden_at") is None):
-            devices.append(wink_object.factory(item))
+            devices.append(wink_device.factory(item))
 
     return devices
 
