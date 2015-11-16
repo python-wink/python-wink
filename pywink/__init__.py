@@ -18,6 +18,8 @@ class wink_device(object):
             return wink_sensor_pod(aJSonObj)
         elif "binary_switch_id" in aJSonObj:
             return wink_binary_switch(aJSonObj)
+        elif "lock_id" in aJSonObj:
+            return wink_lock(aJSonObj)
         #elif "thermostat_id" in aJSonObj:
         #elif "remote_id" in aJSonObj:
         return wink_device(aJSonObj)
@@ -361,7 +363,206 @@ class wink_bulb(wink_binary_switch):
         return "<Wink Bulb %s %s %s>" % (
             self.name(), self.deviceId(), self.state())
 
+class wink_lock(wink_device):
+    """ represents a wink.py lock
+    json_obj holds the json stat at init (and if there is a refresh it's updated
+    it's the native format for this objects methods
+    and looks like so:
 
+{
+  "data": [
+    {
+      "desired_state": {
+        "locked": true,
+        "beeper_enabled": true,
+        "vacation_mode_enabled": false,
+        "auto_lock_enabled": false,
+        "key_code_length": 4,
+        "alarm_mode": null,
+        "alarm_sensitivity": 0.6,
+        "alarm_enabled": false
+      },
+      "last_reading": {
+        "locked": true,
+        "locked_updated_at": 1417823487.490747,
+        "connection": true,
+        "connection_updated_at": 1417823487.490747,
+        "battery": 0.83,
+        "battery_updated_at": 1417823487.490747,
+        "alarm_activated": null,
+        "alarm_activated_updated_at": null,
+        "beeper_enabled": true,
+        "beeper_enabled_updated_at": 1417823487.490747,
+        "vacation_mode_enabled": false,
+        "vacation_mode_enabled_updated_at": 1417823487.490747,
+        "auto_lock_enabled": false,
+        "auto_lock_enabled_updated_at": 1417823487.490747,
+        "key_code_length": 4,
+        "key_code_length_updated_at": 1417823487.490747,
+        "alarm_mode": null,
+        "alarm_mode_updated_at": 1417823487.490747,
+        "alarm_sensitivity": 0.6,
+        "alarm_sensitivity_updated_at": 1417823487.490747,
+        "alarm_enabled": true,
+        "alarm_enabled_updated_at": 1417823487.490747,
+        "last_error": null,
+        "last_error_updated_at": 1417823487.490747,
+        "desired_locked_updated_at": 1417823487.490747,
+        "desired_beeper_enabled_updated_at": 1417823487.490747,
+        "desired_vacation_mode_enabled_updated_at": 1417823487.490747,
+        "desired_auto_lock_enabled_updated_at": 1417823487.490747,
+        "desired_key_code_length_updated_at": 1417823487.490747,
+        "desired_alarm_mode_updated_at": 1417823487.490747,
+        "desired_alarm_sensitivity_updated_at": 1417823487.490747,
+        "desired_alarm_enabled_updated_at": 1417823487.490747,
+        "locked_changed_at": 1417823487.490747,
+        "battery_changed_at": 1417823487.490747,
+        "desired_locked_changed_at": 1417823487.490747,
+        "desired_beeper_enabled_changed_at": 1417823487.490747,
+        "desired_vacation_mode_enabled_changed_at": 1417823487.490747,
+        "desired_auto_lock_enabled_changed_at": 1417823487.490747,
+        "desired_key_code_length_changed_at": 1417823487.490747,
+        "desired_alarm_mode_changed_at": 1417823487.490747,
+        "desired_alarm_sensitivity_changed_at": 1417823487.490747,
+        "desired_alarm_enabled_changed_at": 1417823487.490747,
+        "last_error_changed_at": 1417823487.490747
+      },
+      "lock_id": "5304",
+      "name": "Main",
+      "locale": "en_us",
+      "units": {},
+      "created_at": 1417823382,
+      "hidden_at": null,
+      "capabilities": {
+        "fields": [
+          {
+            "field": "locked",
+            "type": "boolean",
+            "mutability": "read-write"
+          },
+          {
+            "field": "connection",
+            "mutability": "read-only",
+            "type": "boolean"
+          },
+          {
+            "field": "battery",
+            "mutability": "read-only",
+            "type": "percentage"
+          },
+          {
+            "field": "alarm_activated",
+            "mutability": "read-only",
+            "type": "boolean"
+          },
+          {
+            "field": "beeper_enabled",
+            "type": "boolean"
+          },
+          {
+            "field": "vacation_mode_enabled",
+            "type": "boolean"
+          },
+          {
+            "field": "auto_lock_enabled",
+            "type": "boolean"
+          },
+          {
+            "field": "key_code_length",
+            "type": "integer"
+          },
+          {
+            "field": "alarm_mode",
+            "type": "string"
+          },
+          {
+            "field": "alarm_sensitivity",
+            "type": "percentage"
+          },
+          {
+            "field": "alarm_enabled",
+            "type": "boolean"
+          }
+        ],
+        "home_security_device": true
+      },
+      "triggers": [],
+      "manufacturer_device_model": "schlage_zwave_lock",
+      "manufacturer_device_id": null,
+      "device_manufacturer": "schlage",
+      "model_name": "BE469",
+      "upc_id": "11",
+      "upc_code": "043156312214",
+      "hub_id": "11780",
+      "local_id": "1",
+      "radio_type": "zwave",
+      "lat_lng": [38.429962, -122.653715],
+      "location": ""
+    }
+  ],
+  "errors": [],
+  "pagination": {
+    "count": 1
+  }
+}
+
+     """
+    def __init__(self, aJSonObj, objectprefix="locks"):
+        self.jsonState = aJSonObj
+        self.objectprefix = objectprefix
+        # Tuple (desired state, time)
+        self._last_call = (0, None)
+
+    def __repr__(self):
+        return "<Wink lock %s %s %s>" % (self.name(), self.deviceId(), self.state())
+
+    def state(self):
+        # Optimistic approach to setState:
+        # Within 15 seconds of a call to setState we assume it worked.
+        if self._recent_state_set():
+            return self._last_call[1]
+
+        return self._last_reading.get('locked', False)
+
+    def deviceId(self):
+        return self.jsonState.get('lock_id', self.name())
+
+    def setState(self, state):
+        """
+        :param state:   a boolean of true (on) or false ('off')
+        :return: nothing
+        """
+        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
+        values = {"desired_state": {"locked": state}}
+        arequest = requests.put(urlString, data=json.dumps(values), headers=headers)
+        self._updateStateFromResponse(arequest.json())
+
+        self._last_call = (time.time(), state)
+
+    def wait_till_desired_reached(self):
+        """ Wait till desired state reached. Max 10s. """
+        if self._recent_state_set():
+            return
+
+        # self.refresh_state_at_hub()
+        tries = 1
+
+        while True:
+            self.updateState()
+            last_read = self._last_reading
+
+            if last_read.get('desired_locked') == last_read.get('locked') \
+               or tries == 5:
+                break
+
+            time.sleep(2)
+
+            tries += 1
+            self.updateState()
+            last_read = self._last_reading
+
+    def _recent_state_set(self):
+        return time.time() - self._last_call[0] < 15
 def get_devices(filter):
     arequestUrl = baseUrl + "/users/me/wink_devices"
     j = requests.get(arequestUrl, headers=headers).json()
@@ -387,6 +588,9 @@ def get_switches():
 
 def get_sensors():
     return get_devices('sensor_pod_id')
+
+def get_locks():
+    return get_devices('lock_id')
 
 
 def is_token_set():
