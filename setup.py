@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='python-wink',
-      version='0.1.1',
+      version='0.2',
       description='Access Wink devices via the Wink API',
       url='http://github.com/balloob/python-wink',
       author='John McLaughlin',
