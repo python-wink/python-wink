@@ -1,3 +1,5 @@
+import logging
+
 __author__ = 'JOHNMCL'
 
 import json
@@ -10,7 +12,7 @@ baseUrl = "https://winkapi.quirky.com"
 headers = {}
 
 class wink_device(object):
-    
+
     def factory(aJSonObj):
         if "light_bulb_id" in aJSonObj:
             return wink_bulb(aJSonObj)
@@ -24,33 +26,33 @@ class wink_device(object):
         #elif "remote_id" in aJSonObj:
         return wink_device(aJSonObj)
     factory = staticmethod(factory)
-    
+
     def __str__(self):
         return "%s %s %s" % (self.name(), self.deviceId(), self.state())
 
     def __repr__(self):
         return "<Wink object %s %s %s>" % (self.name(), self.deviceId(), self.state())
-    
+
     def name(self):
         return self.jsonState.get('name', "Unknown Name")
-    
+
     def state(self):
         raise NotImplementedError("Must implement state")
-    
+
     def deviceId(self):
         raise NotImplementedError("Must implement state")
-    
+
     @property
     def _last_reading(self):
         return self.jsonState.get('last_reading') or {}
-    
+
     def _updateStateFromResponse(self, response_json):
         """
         :param response_json: the json obj returned from query
         :return:
         """
         self.jsonState = response_json.get('data')
-        
+
     def updateState(self):
         """ Update state with latest info from Wink API. """
         urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
@@ -64,7 +66,7 @@ class wink_device(object):
         """
         urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
         requests.get(urlString, headers=headers)
-    
+
 
 class wink_sensor_pod(wink_device) :
     """ represents a wink.py sensor
@@ -156,6 +158,7 @@ class wink_sensor_pod(wink_device) :
 
     def deviceId(self):
         return self.jsonState.get('sensor_pod_id', self.name())
+
 
 class wink_binary_switch(wink_device):
     """ represents a wink.py switch
@@ -338,12 +341,36 @@ class wink_bulb(wink_binary_switch):
     def brightness(self):
         return self._last_reading.get('brightness')
 
-    def setState(self, state, brightness=None):
+    def color_xy(self):
+        """
+        XY colour value: [float, float] or None
+        :rtype: list float
+        """
+        color_x = self._last_reading.get('color_x')
+        color_y = self._last_reading.get('color_y')
+
+        if color_x and color_y:
+            return [float(color_x), float(color_y)]
+
+        return None
+
+    def color_temperature_kelvin(self):
+        """
+        Color temperature, in degrees Kelvin.
+        Eg: "Daylight" light bulbs are 4600K
+        :rtype: int
+        """
+        return self._last_reading.get('color_temperature')
+
+    def setState(self, state, brightness=None, color_kelvin=None, color_xy=None):
         """
         :param state:   a boolean of true (on) or false ('off')
+        :param brightness: a float from 0 to 1 to set the brightness of this bulb
+        :param color_kelvin: an integer greater than 0 which is a color in degrees Kelvin
+        :param color_xy: a pair of floats in a list which specify the desired CIE 1931 x,y color coordinates
         :return: nothing
         """
-        urlString = baseUrl + "/light_bulbs/%s" % self.deviceId()
+        url_string = baseUrl + "/light_bulbs/%s" % self.deviceId()
         values = {
             "desired_state": {
                 "powered": state
@@ -353,8 +380,21 @@ class wink_bulb(wink_binary_switch):
         if brightness is not None:
             values["desired_state"]["brightness"] = brightness
 
-        urlString = baseUrl + "/light_bulbs/%s" % self.deviceId()
-        arequest = requests.put(urlString, data=json.dumps(values), headers=headers)
+        if color_kelvin and color_xy:
+            logging.warning("Both color temperature and CIE 1931 x,y color coordinates we provided to setState."
+                            "Using color temperature and ignoring CIE 1931 values.")
+
+        if color_kelvin:
+            values["desired_state"]["color_model"] = "color_temperature"
+            values["desired_state"]["color_temperature"] = color_kelvin
+        elif color_xy:
+            values["desired_state"]["color_model"] = "xy"
+            color_xy_iter = iter(color_xy)
+            values["desired_state"]["color_x"] = next(color_xy_iter)
+            values["desired_state"]["color_y"] = next(color_xy_iter)
+
+        url_string = baseUrl + "/light_bulbs/%s" % self.deviceId()
+        arequest = requests.put(url_string, data=json.dumps(values), headers=headers)
         self._updateStateFromResponse(arequest.json())
 
         self._last_call = (time.time(), state)
@@ -362,6 +402,7 @@ class wink_bulb(wink_binary_switch):
     def __repr__(self):
         return "<Wink Bulb %s %s %s>" % (
             self.name(), self.deviceId(), self.state())
+
 
 class wink_lock(wink_device):
     """ represents a wink.py lock
@@ -505,8 +546,8 @@ class wink_lock(wink_device):
     "count": 1
   }
 }
+"""
 
-     """
     def __init__(self, aJSonObj, objectprefix="locks"):
         self.jsonState = aJSonObj
         self.objectprefix = objectprefix
@@ -563,6 +604,7 @@ class wink_lock(wink_device):
 
     def _recent_state_set(self):
         return time.time() - self._last_call[0] < 15
+
 def get_devices(filter):
     arequestUrl = baseUrl + "/users/me/wink_devices"
     j = requests.get(arequestUrl, headers=headers).json()
