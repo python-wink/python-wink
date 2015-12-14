@@ -69,7 +69,7 @@ class wink_device(object):
         urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
         requests.get(urlString, headers=headers)
 
-ass wink_eggtray(wink_device) :
+class wink_eggtray(wink_device) :
     """ represents a wink.py egg tray
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -738,7 +738,7 @@ def get_sensors():
 def get_locks():
     return get_devices('lock_id')
 
-def get_eggtrays()
+def get_eggtrays():
    return get_devices('eggtray_id')
 
 def is_token_set():
