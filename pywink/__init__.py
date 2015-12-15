@@ -1,75 +1,80 @@
+"""
+Objects for interfacing with the Wink API
+"""
 import logging
-
-__author__ = 'JOHNMCL'
-
 import json
 import time
-
 import requests
 
-baseUrl = "https://winkapi.quirky.com"
+BASE_URL = "https://winkapi.quirky.com"
 
-headers = {}
+HEADERS = {}
 
-class wink_device(object):
 
-    def factory(aJSonObj):
-        if "light_bulb_id" in aJSonObj:
-            return wink_bulb(aJSonObj)
-        elif "sensor_pod_id" in aJSonObj:
-            return wink_sensor_pod(aJSonObj)
-        elif "binary_switch_id" in aJSonObj:
-            return wink_binary_switch(aJSonObj)
-        elif "lock_id" in aJSonObj:
-            return wink_lock(aJSonObj)
-        elif "eggtray_id" in aJSonObj:
-            return wink_eggtray(aJSonObj)
-        #elif "thermostat_id" in aJSonObj:
-        #elif "remote_id" in aJSonObj:
-        return wink_device(aJSonObj)
-    factory = staticmethod(factory)
+class WinkDevice(object):
+
+    @staticmethod
+    def factory(device_state_as_json):
+        if "light_bulb_id" in device_state_as_json:
+            return WinkBulb(device_state_as_json)
+        elif "sensor_pod_id" in device_state_as_json:
+            return WinkSensorPod(device_state_as_json)
+        elif "binary_switch_id" in device_state_as_json:
+            return WinkBinarySwitch(device_state_as_json)
+        elif "lock_id" in device_state_as_json:
+            return WinkLock(device_state_as_json)
+        elif "eggtray_id" in device_state_as_json:
+            return WinkEggTray(device_state_as_json)
+        # elif "thermostat_id" in aJSonObj:
+        # elif "remote_id" in aJSonObj:
+        return WinkDevice(device_state_as_json)
+
+    def __init__(self, device_state_as_json, objectprefix=None):
+        self.objectprefix = objectprefix
+        self.json_state = device_state_as_json
 
     def __str__(self):
-        return "%s %s %s" % (self.name(), self.deviceId(), self.state())
+        return "%s %s %s" % (self.name(), self.device_id(), self.state())
 
     def __repr__(self):
-        return "<Wink object %s %s %s>" % (self.name(), self.deviceId(), self.state())
+        return "<Wink object %s %s %s>" % (self.name(), self.device_id(), self.state())
 
     def name(self):
-        return self.jsonState.get('name', "Unknown Name")
+        return self.json_state.get('name', "Unknown Name")
 
     def state(self):
         raise NotImplementedError("Must implement state")
 
-    def deviceId(self):
+    def device_id(self):
         raise NotImplementedError("Must implement state")
 
     @property
     def _last_reading(self):
-        return self.jsonState.get('last_reading') or {}
+        return self.json_state.get('last_reading') or {}
 
-    def _updateStateFromResponse(self, response_json):
+    def _update_state_from_response(self, response_json):
         """
         :param response_json: the json obj returned from query
         :return:
         """
-        self.jsonState = response_json.get('data')
+        self.json_state = response_json.get('data')
 
-    def updateState(self):
+    def update_state(self):
         """ Update state with latest info from Wink API. """
-        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
-        arequest = requests.get(urlString, headers=headers)
-        self._updateStateFromResponse(arequest.json())
+        url_string = BASE_URL + "/%s/%s" % (self.objectprefix, self.device_id())
+        arequest = requests.get(url_string, headers=HEADERS)
+        self._update_state_from_response(arequest.json())
 
     def refresh_state_at_hub(self):
         """
         Tell hub to query latest status from device and upload to Wink.
         PS: Not sure if this even works..
         """
-        urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
-        requests.get(urlString, headers=headers)
+        url_string = BASE_URL + "/%s/%s/refresh" % (self.objectprefix, self.device_id())
+        requests.get(url_string, headers=HEADERS)
 
-class wink_eggtray(wink_device) :
+
+class WinkEggTray(WinkDevice):
     """ represents a wink.py egg tray
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -155,24 +160,20 @@ class wink_eggtray(wink_device) :
   }
 }
 
-     """
-    def __init__(self, aJSonObj, objectprefix="eggtrays"):
-        self.jsonState = aJSonObj
-        self.objectprefix = objectprefix
-
+"""
     def __repr__(self):
-        return "<Wink eggtray Name:%s Device_id:%s state:%s>" % (self.name(), self.deviceId(), self.state())
+        return "<Wink eggtray Name:%s Device_id:%s state:%s>" % (self.name(), self.device_id(), self.state())
 
     def state(self):
         if 'inventory' in self._last_reading:
             return self._last_reading['inventory']
-        return false
+        return False
 
-    def deviceId(self):
-        return self.jsonState.get('eggtray_id', self.name())
+    def device_id(self):
+        return self.json_state.get('eggtray_id', self.name())
 
 
-class wink_sensor_pod(wink_device) :
+class WinkSensorPod(WinkDevice):
     """ represents a wink.py sensor
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -246,25 +247,25 @@ class wink_sensor_pod(wink_device) :
 }
 
      """
-    def __init__(self, aJSonObj, objectprefix="sensor_pods"):
-        self.jsonState = aJSonObj
-        self.objectprefix = objectprefix
+    def __init__(self, device_state_as_json, objectprefix="sensor_pods"):
+        super(WinkSensorPod, self).__init__(device_state_as_json,
+                                            objectprefix=objectprefix)
 
     def __repr__(self):
-        return "<Wink sensor %s %s %s>" % (self.name(), self.deviceId(), self.state())
+        return "<Wink sensor %s %s %s>" % (self.name(), self.device_id(), self.state())
 
     def state(self):
         if 'opened' in self._last_reading:
             return self._last_reading['opened']
         elif 'motion' in self._last_reading:
             return self._last_reading['motion']
-        return false
+        return False
 
-    def deviceId(self):
-        return self.jsonState.get('sensor_pod_id', self.name())
+    def device_id(self):
+        return self.json_state.get('sensor_pod_id', self.name())
 
 
-class wink_binary_switch(wink_device):
+class WinkBinarySwitch(WinkDevice):
     """ represents a wink.py switch
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -334,14 +335,14 @@ class wink_binary_switch(wink_device):
 }
 
      """
-    def __init__(self, aJSonObj, objectprefix="binary_switches"):
-        self.jsonState = aJSonObj
-        self.objectprefix = objectprefix
+    def __init__(self, device_state_as_json, objectprefix="binary_switches"):
+        super(WinkBinarySwitch, self).__init__(device_state_as_json,
+                                               objectprefix=objectprefix)
         # Tuple (desired state, time)
         self._last_call = (0, None)
 
     def __repr__(self):
-        return "<Wink switch %s %s %s>" % (self.name(), self.deviceId(), self.state())
+        return "<Wink switch %s %s %s>" % (self.name(), self.device_id(), self.state())
 
     def state(self):
         # Optimistic approach to setState:
@@ -351,18 +352,20 @@ class wink_binary_switch(wink_device):
 
         return self._last_reading.get('powered', False)
 
-    def deviceId(self):
-        return self.jsonState.get('binary_switch_id', self.name())
+    def device_id(self):
+        return self.json_state.get('binary_switch_id', self.name())
 
-    def setState(self, state):
+    # pylint: disable=unused-argument
+    # kwargs is unused here but is used by child implementations
+    def set_state(self, state, **kwargs):
         """
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
+        url_string = BASE_URL + "/%s/%s" % (self.objectprefix, self.device_id())
         values = {"desired_state": {"powered": state}}
-        arequest = requests.put(urlString, data=json.dumps(values), headers=headers)
-        self._updateStateFromResponse(arequest.json())
+        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        self._update_state_from_response(arequest.json())
 
         self._last_call = (time.time(), state)
 
@@ -375,7 +378,7 @@ class wink_binary_switch(wink_device):
         tries = 1
 
         while True:
-            self.updateState()
+            self.update_state()
             last_read = self._last_reading
 
             if last_read.get('desired_powered') == last_read.get('powered') \
@@ -385,14 +388,14 @@ class wink_binary_switch(wink_device):
             time.sleep(2)
 
             tries += 1
-            self.updateState()
+            self.update_state()
             last_read = self._last_reading
 
     def _recent_state_set(self):
         return time.time() - self._last_call[0] < 15
 
 
-class wink_bulb(wink_binary_switch):
+class WinkBulb(WinkBinarySwitch):
     """ represents a wink.py bulb
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -434,13 +437,14 @@ class wink_bulb(wink_binary_switch):
     "order": 0
 
      """
-    jsonState = {}
+    json_state = {}
 
-    def __init__(self, ajsonobj):
-        super().__init__(ajsonobj, "light_bulbs")
+    def __init__(self, device_state_as_json):
+        super().__init__(device_state_as_json,
+                         objectprefix="light_bulbs")
 
-    def deviceId(self):
-        return self.jsonState.get('light_bulb_id', self.name())
+    def device_id(self):
+        return self.json_state.get('light_bulb_id', self.name())
 
     def brightness(self):
         return self._last_reading.get('brightness')
@@ -466,7 +470,7 @@ class wink_bulb(wink_binary_switch):
         """
         return self._last_reading.get('color_temperature')
 
-    def setState(self, state, brightness=None, color_kelvin=None, color_xy=None):
+    def set_state(self, state, brightness=None, color_kelvin=None, color_xy=None, **kwargs):
         """
         :param state:   a boolean of true (on) or false ('off')
         :param brightness: a float from 0 to 1 to set the brightness of this bulb
@@ -474,7 +478,7 @@ class wink_bulb(wink_binary_switch):
         :param color_xy: a pair of floats in a list which specify the desired CIE 1931 x,y color coordinates
         :return: nothing
         """
-        url_string = baseUrl + "/light_bulbs/%s" % self.deviceId()
+        url_string = BASE_URL + "/light_bulbs/%s" % self.device_id()
         values = {
             "desired_state": {
                 "powered": state
@@ -497,18 +501,18 @@ class wink_bulb(wink_binary_switch):
             values["desired_state"]["color_x"] = next(color_xy_iter)
             values["desired_state"]["color_y"] = next(color_xy_iter)
 
-        url_string = baseUrl + "/light_bulbs/%s" % self.deviceId()
-        arequest = requests.put(url_string, data=json.dumps(values), headers=headers)
-        self._updateStateFromResponse(arequest.json())
+        url_string = BASE_URL + "/light_bulbs/%s" % self.device_id()
+        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        self._update_state_from_response(arequest.json())
 
         self._last_call = (time.time(), state)
 
     def __repr__(self):
         return "<Wink Bulb %s %s %s>" % (
-            self.name(), self.deviceId(), self.state())
+            self.name(), self.device_id(), self.state())
 
 
-class wink_lock(wink_device):
+class WinkLock(WinkDevice):
     """ represents a wink.py lock
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
@@ -652,14 +656,14 @@ class wink_lock(wink_device):
 }
 """
 
-    def __init__(self, aJSonObj, objectprefix="locks"):
-        self.jsonState = aJSonObj
-        self.objectprefix = objectprefix
+    def __init__(self, device_state_as_json, objectprefix="locks"):
+        super(WinkLock, self).__init__(device_state_as_json,
+                                       objectprefix=objectprefix)
         # Tuple (desired state, time)
         self._last_call = (0, None)
 
     def __repr__(self):
-        return "<Wink lock %s %s %s>" % (self.name(), self.deviceId(), self.state())
+        return "<Wink lock %s %s %s>" % (self.name(), self.device_id(), self.state())
 
     def state(self):
         # Optimistic approach to setState:
@@ -669,18 +673,18 @@ class wink_lock(wink_device):
 
         return self._last_reading.get('locked', False)
 
-    def deviceId(self):
-        return self.jsonState.get('lock_id', self.name())
+    def device_id(self):
+        return self.json_state.get('lock_id', self.name())
 
-    def setState(self, state):
+    def set_state(self, state):
         """
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        urlString = baseUrl + "/%s/%s" % (self.objectprefix, self.deviceId())
+        url_string = BASE_URL + "/%s/%s" % (self.objectprefix, self.device_id())
         values = {"desired_state": {"locked": state}}
-        arequest = requests.put(urlString, data=json.dumps(values), headers=headers)
-        self._updateStateFromResponse(arequest.json())
+        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        self._update_state_from_response(arequest.json())
 
         self._last_call = (time.time(), state)
 
@@ -693,7 +697,7 @@ class wink_lock(wink_device):
         tries = 1
 
         while True:
-            self.updateState()
+            self.update_state()
             last_read = self._last_reading
 
             if last_read.get('desired_locked') == last_read.get('locked') \
@@ -703,23 +707,24 @@ class wink_lock(wink_device):
             time.sleep(2)
 
             tries += 1
-            self.updateState()
+            self.update_state()
             last_read = self._last_reading
 
     def _recent_state_set(self):
         return time.time() - self._last_call[0] < 15
 
-def get_devices(filter):
-    arequestUrl = baseUrl + "/users/me/wink_devices"
-    j = requests.get(arequestUrl, headers=headers).json()
+
+def get_devices(filter_key):
+    arequest_url = BASE_URL + "/users/me/wink_devices"
+    j = requests.get(arequest_url, headers=HEADERS).json()
 
     items = j.get('data')
 
     devices = []
     for item in items:
-        id = item.get(filter)
-        if (id is not None and item.get("hidden_at") is None):
-            devices.append(wink_device.factory(item))
+        value_at_key = item.get(filter_key)
+        if value_at_key is not None and item.get("hidden_at") is None:
+            devices.append(WinkDevice.factory(item))
 
     return devices
 
@@ -735,26 +740,24 @@ def get_switches():
 def get_sensors():
     return get_devices('sensor_pod_id')
 
+
 def get_locks():
     return get_devices('lock_id')
 
+
 def get_eggtrays():
-   return get_devices('eggtray_id')
+    return get_devices('eggtray_id')
+
 
 def is_token_set():
     """ Returns if an auth token has been set. """
-    return bool(headers)
+    return bool(HEADERS)
 
 
 def set_bearer_token(token):
-    global headers
+    global HEADERS
 
-    headers = {
+    HEADERS = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(token)
     }
-
-if __name__ == "__main__":
-    sw = get_bulbs()
-    lamp = sw[3]
-    lamp.setState(False)

@@ -1,0 +1,9 @@
+[MASTER]
+max-line-length=120
+
+# Reasons disabled:
+# missing-docstring - Document as you like.  Good, descriptive method names and variables are preferred over docstrings.
+# global-statement - used for the on-demand requirement installation
+disable=
+    missing-docstring
+  , global-statement
