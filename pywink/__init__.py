@@ -22,6 +22,8 @@ class wink_device(object):
             return wink_binary_switch(aJSonObj)
         elif "lock_id" in aJSonObj:
             return wink_lock(aJSonObj)
+        elif "eggtray_id" in aJSonObj:
+            return wink_eggtray(aJSonObj)
         #elif "thermostat_id" in aJSonObj:
         #elif "remote_id" in aJSonObj:
         return wink_device(aJSonObj)
@@ -66,6 +68,108 @@ class wink_device(object):
         """
         urlString = baseUrl + "/%s/%s/refresh" % (self.objectprefix, self.deviceId())
         requests.get(urlString, headers=headers)
+
+class wink_eggtray(wink_device) :
+    """ represents a wink.py egg tray
+    json_obj holds the json stat at init (and if there is a refresh it's updated
+    it's the native format for this objects methods
+    and looks like so:
+{
+    "data": {
+        "last_reading": {
+            "connection": true,
+            "connection_updated_at": 1417823487.490747,
+            "battery": 0.83,
+            "battery_updated_at": 1417823487.490747,
+            "inventory": 3,
+            "inventory_updated_at": 1449705551.7313306,
+            "freshness_remaining": 2419191,
+            "freshness_remaining_updated_at": 1449705551.7313495,
+            "age_updated_at": 1449705551.7313418,
+            "age": 1449705542,
+            "connection_changed_at": 1449705443.6858568,
+            "next_trigger_at_updated_at": None,
+            "next_trigger_at": None,
+            "egg_1_timestamp_updated_at": 1449753143.8631344,
+            "egg_1_timestamp_changed_at": 1449705534.0782206,
+            "egg_1_timestamp": 1449705545.0,
+            "egg_2_timestamp_updated_at": 1449753143.8631344,
+            "egg_2_timestamp_changed_at": 1449705534.0782206,
+            "egg_2_timestamp": 1449705545.0,
+            "egg_3_timestamp_updated_at": 1449753143.8631344,
+            "egg_3_timestamp_changed_at": 1449705534.0782206,
+            "egg_3_timestamp": 1449705545.0,
+            "egg_4_timestamp_updated_at": 1449753143.8631344,
+            "egg_4_timestamp_changed_at": 1449705534.0782206,
+            "egg_4_timestamp": 1449705545.0,
+            "egg_5_timestamp_updated_at": 1449753143.8631344,
+            "egg_5_timestamp_changed_at": 1449705534.0782206,
+            "egg_5_timestamp": 1449705545.0,
+            "egg_6_timestamp_updated_at": 1449753143.8631344,
+            "egg_6_timestamp_changed_at": 1449705534.0782206,
+            "egg_6_timestamp": 1449705545.0,
+            "egg_7_timestamp_updated_at": 1449753143.8631344,
+            "egg_7_timestamp_changed_at": 1449705534.0782206,
+            "egg_7_timestamp": 1449705545.0,
+            "egg_8_timestamp_updated_at": 1449753143.8631344,
+            "egg_8_timestamp_changed_at": 1449705534.0782206,
+            "egg_8_timestamp": 1449705545.0,
+            "egg_9_timestamp_updated_at": 1449753143.8631344,
+            "egg_9_timestamp_changed_at": 1449705534.0782206,
+            "egg_9_timestamp": 1449705545.0,
+            "egg_10_timestamp_updated_at": 1449753143.8631344,
+            "egg_10_timestamp_changed_at": 1449705534.0782206,
+            "egg_10_timestamp": 1449705545.0,
+            "egg_11_timestamp_updated_at": 1449753143.8631344,
+            "egg_11_timestamp_changed_at": 1449705534.0782206,
+            "egg_11_timestamp": 1449705545.0,
+            "egg_12_timestamp_updated_at": 1449753143.8631344,
+            "egg_12_timestamp_changed_at": 1449705534.0782206,
+            "egg_12_timestamp": 1449705545.0,
+            "egg_13_timestamp_updated_at": 1449753143.8631344,
+            "egg_13_timestamp_changed_at": 1449705534.0782206,
+            "egg_13_timestamp": 1449705545.0,
+            "egg_14_timestamp_updated_at": 1449753143.8631344,
+            "egg_14_timestamp_changed_at": 1449705534.0782206,
+            "egg_14_timestamp": 1449705545.0,
+          },
+          "eggtray_id": "153869",
+          "name": "Egg Minder",
+          "freshness_period": 2419200,
+          "locale": "en_us",
+          "units": {},
+          "created_at": 1417823382,
+          "hidden_at": null,
+          "capabilities": {},
+          "triggers": [],
+          "device_manufacturer": "quirky_ge",
+          "model_name": "Egg Minder",
+          "upc_id": "23",
+          "upc_code": "814434017233",
+          "lat_lng": [38.429962, -122.653715],
+          "location": ""
+        },
+  "errors": [],
+  "pagination": {
+    "count": 1
+  }
+}
+
+     """
+    def __init__(self, aJSonObj, objectprefix="eggtrays"):
+        self.jsonState = aJSonObj
+        self.objectprefix = objectprefix
+
+    def __repr__(self):
+        return "<Wink eggtray Name:%s Device_id:%s state:%s>" % (self.name(), self.deviceId(), self.state())
+
+    def state(self):
+        if 'inventory' in self._last_reading:
+            return self._last_reading['inventory']
+        return false
+
+    def deviceId(self):
+        return self.jsonState.get('eggtray_id', self.name())
 
 
 class wink_sensor_pod(wink_device) :
@@ -634,6 +738,8 @@ def get_sensors():
 def get_locks():
     return get_devices('lock_id')
 
+def get_eggtrays():
+   return get_devices('eggtray_id')
 
 def is_token_set():
     """ Returns if an auth token has been set. """
