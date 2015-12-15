@@ -46,7 +46,7 @@ class WinkDevice(object):
         raise NotImplementedError("Must implement state")
 
     def device_id(self):
-        raise NotImplementedError("Must implement state")
+        raise NotImplementedError("Must implement device_id")
 
     @property
     def _last_reading(self):
@@ -61,7 +61,7 @@ class WinkDevice(object):
 
     def update_state(self):
         """ Update state with latest info from Wink API. """
-        url_string = BASE_URL + "/%s/%s" % (self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
         arequest = requests.get(url_string, headers=HEADERS)
         self._update_state_from_response(arequest.json())
 
@@ -70,7 +70,7 @@ class WinkDevice(object):
         Tell hub to query latest status from device and upload to Wink.
         PS: Not sure if this even works..
         """
-        url_string = BASE_URL + "/%s/%s/refresh" % (self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}/refresh".format(BASE_URL, self.objectprefix, self.device_id())
         requests.get(url_string, headers=HEADERS)
 
 
@@ -362,7 +362,7 @@ class WinkBinarySwitch(WinkDevice):
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        url_string = BASE_URL + "/%s/%s" % (self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
         values = {"desired_state": {"powered": state}}
         arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
         self._update_state_from_response(arequest.json())
@@ -478,7 +478,7 @@ class WinkBulb(WinkBinarySwitch):
         :param color_xy: a pair of floats in a list which specify the desired CIE 1931 x,y color coordinates
         :return: nothing
         """
-        url_string = BASE_URL + "/light_bulbs/%s" % self.device_id()
+        url_string = "{}/light_bulbs/{}".format(BASE_URL, self.device_id())
         values = {
             "desired_state": {
                 "powered": state
@@ -501,7 +501,7 @@ class WinkBulb(WinkBinarySwitch):
             values["desired_state"]["color_x"] = next(color_xy_iter)
             values["desired_state"]["color_y"] = next(color_xy_iter)
 
-        url_string = BASE_URL + "/light_bulbs/%s" % self.device_id()
+        url_string = "{}/light_bulbs/{}".format(BASE_URL, self.device_id())
         arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
         self._update_state_from_response(arequest.json())
 
@@ -681,7 +681,7 @@ class WinkLock(WinkDevice):
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        url_string = BASE_URL + "/%s/%s" % (self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
         values = {"desired_state": {"locked": state}}
         arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
         self._update_state_from_response(arequest.json())
@@ -715,7 +715,7 @@ class WinkLock(WinkDevice):
 
 
 def get_devices(filter_key):
-    arequest_url = BASE_URL + "/users/me/wink_devices"
+    arequest_url = "{}/users/me/wink_devices".format(BASE_URL)
     j = requests.get(arequest_url, headers=HEADERS).json()
 
     items = j.get('data')
