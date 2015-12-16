@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.3.1
+- Added init method for WinkEggTray
+
 ## 0.3.0 
 - Breaking change: Renamed classes to satisfy pylint
 
