@@ -161,6 +161,9 @@ class WinkEggTray(WinkDevice):
 }
 
 """
+    def __init__(self, device_state_as_json, objectprefix="eggtrays"):
+        super(WinkEggTray, self).__init__(device_state_as_json,
+                                            objectprefix=objectprefix)
     def __repr__(self):
         return "<Wink eggtray Name:%s Device_id:%s state:%s>" % (self.name(), self.device_id(), self.state())
 
