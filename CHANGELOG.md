@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.3.1.1
+- Changed mock to test-only dependency
+
 ## 0.3.1
 - Added init method for WinkEggTray
 
