@@ -4,6 +4,8 @@ cache: pip
 python:
   - 3.4
   - 3.5
+install:
+  - script/before_install
 script:
   - script/test
 matrix:
