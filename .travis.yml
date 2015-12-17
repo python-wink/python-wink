@@ -1,0 +1,10 @@
+sudo: false
+language: python
+cache: pip
+python:
+  - 3.4
+  - 3.5
+script:
+  - script/test
+matrix:
+  fast_finish: true
