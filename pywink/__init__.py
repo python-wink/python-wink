@@ -25,6 +25,8 @@ class WinkDevice(object):
             return WinkLock(device_state_as_json)
         elif "eggtray_id" in device_state_as_json:
             return WinkEggTray(device_state_as_json)
+        elif "garage_door_id" in device_state_as_json:
+            return WinkGarageDoor(device_state_as_json)
         # elif "thermostat_id" in aJSonObj:
         # elif "remote_id" in aJSonObj:
         return WinkDevice(device_state_as_json)
@@ -718,6 +720,140 @@ class WinkLock(WinkDevice):
         return time.time() - self._last_call[0] < 15
 
 
+class WinkGarageDoor(WinkDevice):
+    """ represents a wink.py garage door
+    json_obj holds the json stat at init (and if there is a refresh it's updated
+    it's the native format for this objects methods
+    and looks like so:
+
+{
+  "data": {
+    "desired_state": {
+      "position": 0
+    },
+    "last_reading": {
+      "position_opened": "N\/A",
+      "position_opened_updated_at": 1450357467.371,
+      "tamper_detected_true": null,
+      "tamper_detected_true_updated_at": null,
+      "connection": true,
+      "connection_updated_at": 1450357538.2715,
+      "position": 0,
+      "position_updated_at": 1450357537.836,
+      "battery": null,
+      "battery_updated_at": null,
+      "fault": false,
+      "fault_updated_at": 1447976866.0784,
+      "disabled": null,
+      "disabled_updated_at": null,
+      "control_enabled": true,
+      "control_enabled_updated_at": 1447976866.0784,
+      "desired_position_updated_at": 1447976846.8869,
+      "connection_changed_at": 1444775470.5484,
+      "position_changed_at": 1450357537.836,
+      "control_enabled_changed_at": 1444775472.2474,
+      "fault_changed_at": 1444775472.2474,
+      "position_opened_changed_at": 1450357467.371,
+      "desired_position_changed_at": 1447976846.8869
+    },
+    "garage_door_id": "30528",
+    "name": "Garage Door",
+    "locale": "en_us",
+    "units": {
+
+    },
+    "created_at": 1444775470,
+    "hidden_at": null,
+    "capabilities": {
+      "home_security_device": true
+    },
+    "triggers": [
+
+    ],
+    "manufacturer_device_model": "chamberlain_garage_door_opener",
+    "manufacturer_device_id": "1133930",
+    "device_manufacturer": "chamberlain",
+    "model_name": "MyQ Garage Door Controller",
+    "upc_id": "26",
+    "upc_code": "012381109302",
+    "hub_id": null,
+    "local_id": null,
+    "radio_type": null,
+    "linked_service_id": "206203",
+    "lat_lng": [
+      0,
+      0
+    ],
+    "location": "",
+    "order": null
+  },
+  "errors": [
+
+  ],
+  "pagination": {
+
+  }
+}
+"""
+
+    def __init__(self, device_state_as_json, objectprefix="garage_doors"):
+        super(WinkGarageDoor, self).__init__(device_state_as_json,
+                                       objectprefix=objectprefix)
+        # Tuple (desired state, time)
+        self._last_call = (0, None)
+
+    def __repr__(self):
+        return "<Wink garage door %s %s %s>" % (self.name(), self.device_id(), self.state())
+
+    def state(self):
+        # Optimistic approach to setState:
+        # Within 15 seconds of a call to setState we assume it worked.
+        if self._recent_state_set():
+            return self._last_call[1]
+
+        return self._last_reading.get('position', 0)
+
+    def device_id(self):
+        return self.json_state.get('garage_door_id', self.name())
+
+    def set_state(self, state):
+        """
+        :param state:   a number of 1 ('open') or 0 ('close')
+        :return: nothing
+        """
+        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
+        values = {"desired_state": {"position": state}}
+        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        self._update_state_from_response(arequest.json())
+
+        self._last_call = (time.time(), state)
+
+    def wait_till_desired_reached(self):
+        """ Wait till desired state reached. Max 10s. """
+        if self._recent_state_set():
+            return
+
+        # self.refresh_state_at_hub()
+        tries = 1
+
+        while True:
+            self.update_state()
+            last_read = self._last_reading
+
+            if last_read.get('desired_position') == last_read.get('0.0') \
+               or tries == 5:
+                break
+
+            time.sleep(2)
+
+            tries += 1
+            self.update_state()
+            last_read = self._last_reading
+
+    def _recent_state_set(self):
+        return time.time() - self._last_call[0] < 15
+
+
 def get_devices(filter_key):
     arequest_url = "{}/users/me/wink_devices".format(BASE_URL)
     j = requests.get(arequest_url, headers=HEADERS).json()
@@ -752,6 +888,9 @@ def get_locks():
 def get_eggtrays():
     return get_devices('eggtray_id')
 
+
+def get_garage_doors():
+    return get_devices('garage_door_id')
 
 def is_token_set():
     """ Returns if an auth token has been set. """
