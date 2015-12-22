@@ -721,7 +721,7 @@ class WinkLock(WinkDevice):
 
 
 class WinkGarageDoor(WinkDevice):
-    """ represents a wink.py garage door
+    r""" represents a wink.py garage door
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
     and looks like so:
@@ -798,7 +798,7 @@ class WinkGarageDoor(WinkDevice):
 
     def __init__(self, device_state_as_json, objectprefix="garage_doors"):
         super(WinkGarageDoor, self).__init__(device_state_as_json,
-                                       objectprefix=objectprefix)
+                                             objectprefix=objectprefix)
         # Tuple (desired state, time)
         self._last_call = (0, None)
 
@@ -891,6 +891,7 @@ def get_eggtrays():
 
 def get_garage_doors():
     return get_devices('garage_door_id')
+
 
 def is_token_set():
     """ Returns if an auth token has been set. """
