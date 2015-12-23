@@ -15,21 +15,23 @@ class WinkDevice(object):
 
     @staticmethod
     def factory(device_state_as_json):
+        
+        new_object = None
+        
         if "light_bulb_id" in device_state_as_json:
-            return WinkBulb(device_state_as_json)
+            new_object = WinkBulb(device_state_as_json)
         elif "sensor_pod_id" in device_state_as_json:
-            return WinkSensorPod(device_state_as_json)
+            new_object = WinkSensorPod(device_state_as_json)
         elif "binary_switch_id" in device_state_as_json:
-            return WinkBinarySwitch(device_state_as_json)
+            new_object = WinkBinarySwitch(device_state_as_json)
         elif "lock_id" in device_state_as_json:
-            return WinkLock(device_state_as_json)
+            new_object = WinkLock(device_state_as_json)
         elif "eggtray_id" in device_state_as_json:
-            return WinkEggTray(device_state_as_json)
+            new_object = WinkEggTray(device_state_as_json)
         elif "garage_door_id" in device_state_as_json:
-            return WinkGarageDoor(device_state_as_json)
-        # elif "thermostat_id" in aJSonObj:
-        # elif "remote_id" in aJSonObj:
-        return WinkDevice(device_state_as_json)
+            new_object = WinkGarageDoor(device_state_as_json)
+        
+        return new_object or WinkDevice(device_state_as_json)
 
     def __init__(self, device_state_as_json, objectprefix=None):
         self.objectprefix = objectprefix
