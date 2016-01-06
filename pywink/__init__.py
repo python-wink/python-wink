@@ -45,8 +45,9 @@ class WinkDevice(object):
         return "%s %s %s" % (self.name(), self.device_id(), self.state())
 
     def __repr__(self):
-        return "<Wink object %s %s %s>" \
-               % (self.name(), self.device_id(), self.state())
+        return "<Wink object name:{name} id:{device} state:{state}>".format(name=self.name(),
+                                                                            device=self.device_id(),
+                                                                            state=self.state())
 
     def name(self):
         return self.json_state.get('name', "Unknown Name")
@@ -179,9 +180,9 @@ class WinkEggTray(WinkDevice):
                                           objectprefix=objectprefix)
 
     def __repr__(self):
-        return "<Wink eggtray Name:%s" \
-               " Device_id:%s state:%s>" % (self.name(),
-                                            self.device_id(), self.state())
+        return "<Wink eggtray name:{name} id:{device} state:{state}>".format(name=self.name(),
+                                                                             device=self.device_id(),
+                                                                             state=self.state())
 
     def state(self):
         if 'inventory' in self._last_reading:
@@ -406,8 +407,7 @@ class WinkBinarySwitch(WinkDevice):
             self.update_state()
             last_read = self._last_reading
 
-            if last_read.get('desired_powered') == last_read.get('powered') \
-                    or tries == 5:
+            if last_read.get('desired_powered') == last_read.get('powered') or tries == 5:
                 break
 
             time.sleep(2)
@@ -735,8 +735,7 @@ class WinkLock(WinkDevice):
             self.update_state()
             last_read = self._last_reading
 
-            if last_read.get('desired_locked') == last_read.get('locked') \
-                    or tries == 5:
+            if last_read.get('desired_locked') == last_read.get('locked') or tries == 5:
                 break
 
             time.sleep(2)
@@ -852,11 +851,11 @@ class WinkPowerStripOutlet(WinkDevice):
         self._last_call = (0, None)
 
     def __repr__(self):
-        return "<Wink" \
-               " Power strip Outlet %s %s %s %s>" % (self.name(),
-                                                     self.device_id(),
-                                                     self.parent_id(),
-                                                     self.state())
+        return "<Wink Power strip outlet name:{name} id:{device}" \
+               " parent id:{parent_id} state:{state}>".format(name=self.name(),
+                                                              device=self.device_id(),
+                                                              parent_id=self.parent_id(),
+                                                              state=self.state())
 
     @property
     def _last_reading(self):
@@ -930,8 +929,7 @@ class WinkPowerStripOutlet(WinkDevice):
             self.update_state()
             last_read = self._last_reading
 
-            if last_read.get('desired_powered') == last_read.get('powered') \
-                    or tries == 5:
+            if last_read.get('desired_powered') == last_read.get('powered') or tries == 5:
                 break
 
             time.sleep(2)
