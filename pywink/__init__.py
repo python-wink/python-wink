@@ -15,9 +15,12 @@ class WinkDevice(object):
 
     @staticmethod
     def factory(device_state_as_json):
-        
+
         new_object = None
-        
+
+        # pylint: disable=redefined-variable-type
+        # These objects all share the same base class: WinkDevice
+
         if "light_bulb_id" in device_state_as_json:
             new_object = WinkBulb(device_state_as_json)
         elif "sensor_pod_id" in device_state_as_json:
@@ -30,7 +33,7 @@ class WinkDevice(object):
             new_object = WinkEggTray(device_state_as_json)
         elif "garage_door_id" in device_state_as_json:
             new_object = WinkGarageDoor(device_state_as_json)
-        
+
         return new_object or WinkDevice(device_state_as_json)
 
     def __init__(self, device_state_as_json, objectprefix=None):
