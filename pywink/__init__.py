@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """
 Objects for interfacing with the Wink API
 """
