@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.3.3
+- Added init method for Wink Power strip
+
 ## 0.3.2
 - Added init method for WinkGarageDoor
 
