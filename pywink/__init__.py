@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """
 Objects for interfacing with the Wink API
 """
@@ -12,7 +13,6 @@ HEADERS = {}
 
 
 class WinkDevice(object):
-
     @staticmethod
     def factory(device_state_as_json):
 
@@ -27,6 +27,8 @@ class WinkDevice(object):
             new_object = WinkSensorPod(device_state_as_json)
         elif "binary_switch_id" in device_state_as_json:
             new_object = WinkBinarySwitch(device_state_as_json)
+        elif "outlet_id" in device_state_as_json:
+            new_object = WinkPowerStripOutlet(device_state_as_json)
         elif "lock_id" in device_state_as_json:
             new_object = WinkLock(device_state_as_json)
         elif "eggtray_id" in device_state_as_json:
@@ -44,7 +46,9 @@ class WinkDevice(object):
         return "%s %s %s" % (self.name(), self.device_id(), self.state())
 
     def __repr__(self):
-        return "<Wink object %s %s %s>" % (self.name(), self.device_id(), self.state())
+        return "<Wink object name:{name} id:{device} state:{state}>".format(name=self.name(),
+                                                                            device=self.device_id(),
+                                                                            state=self.state())
 
     def name(self):
         return self.json_state.get('name', "Unknown Name")
@@ -68,7 +72,8 @@ class WinkDevice(object):
 
     def update_state(self):
         """ Update state with latest info from Wink API. """
-        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}".format(BASE_URL,
+                                       self.objectprefix, self.device_id())
         arequest = requests.get(url_string, headers=HEADERS)
         self._update_state_from_response(arequest.json())
 
@@ -77,13 +82,15 @@ class WinkDevice(object):
         Tell hub to query latest status from device and upload to Wink.
         PS: Not sure if this even works..
         """
-        url_string = "{}/{}/{}/refresh".format(BASE_URL, self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}/refresh".format(BASE_URL,
+                                               self.objectprefix,
+                                               self.device_id())
         requests.get(url_string, headers=HEADERS)
 
 
 class WinkEggTray(WinkDevice):
     """ represents a wink.py egg tray
-    json_obj holds the json stat at init (and if there is a refresh it's updated
+    json_obj holds the json stat at init (if there is a refresh it's updated)
     it's the native format for this objects methods
     and looks like so:
 {
@@ -168,12 +175,15 @@ class WinkEggTray(WinkDevice):
 }
 
 """
+
     def __init__(self, device_state_as_json, objectprefix="eggtrays"):
         super(WinkEggTray, self).__init__(device_state_as_json,
                                           objectprefix=objectprefix)
 
     def __repr__(self):
-        return "<Wink eggtray Name:%s Device_id:%s state:%s>" % (self.name(), self.device_id(), self.state())
+        return "<Wink eggtray name:{name} id:{device} state:{state}>".format(name=self.name(),
+                                                                             device=self.device_id(),
+                                                                             state=self.state())
 
     def state(self):
         if 'inventory' in self._last_reading:
@@ -186,7 +196,7 @@ class WinkEggTray(WinkDevice):
 
 class WinkSensorPod(WinkDevice):
     """ represents a wink.py sensor
-    json_obj holds the json stat at init (and if there is a refresh it's updated
+    json_obj holds the json stat at init (if there is a refresh it's updated)
     it's the native format for this objects methods
     and looks like so:
 {
@@ -258,12 +268,14 @@ class WinkSensorPod(WinkDevice):
 }
 
      """
+
     def __init__(self, device_state_as_json, objectprefix="sensor_pods"):
         super(WinkSensorPod, self).__init__(device_state_as_json,
                                             objectprefix=objectprefix)
 
     def __repr__(self):
-        return "<Wink sensor %s %s %s>" % (self.name(), self.device_id(), self.state())
+        return "<Wink sensor %s %s %s>" % (self.name(),
+                                           self.device_id(), self.state())
 
     def state(self):
         if 'opened' in self._last_reading:
@@ -278,7 +290,7 @@ class WinkSensorPod(WinkDevice):
 
 class WinkBinarySwitch(WinkDevice):
     """ represents a wink.py switch
-    json_obj holds the json stat at init (and if there is a refresh it's updated
+    json_obj holds the json stat at init (if there is a refresh it's updated)
     it's the native format for this objects methods
     and looks like so:
 
@@ -346,6 +358,7 @@ class WinkBinarySwitch(WinkDevice):
 }
 
      """
+
     def __init__(self, device_state_as_json, objectprefix="binary_switches"):
         super(WinkBinarySwitch, self).__init__(device_state_as_json,
                                                objectprefix=objectprefix)
@@ -353,7 +366,8 @@ class WinkBinarySwitch(WinkDevice):
         self._last_call = (0, None)
 
     def __repr__(self):
-        return "<Wink switch %s %s %s>" % (self.name(), self.device_id(), self.state())
+        return "<Wink switch %s %s %s>" % (self.name(),
+                                           self.device_id(), self.state())
 
     def state(self):
         # Optimistic approach to setState:
@@ -373,9 +387,11 @@ class WinkBinarySwitch(WinkDevice):
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}".format(BASE_URL,
+                                       self.objectprefix, self.device_id())
         values = {"desired_state": {"powered": state}}
-        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        arequest = requests.put(url_string,
+                                data=json.dumps(values), headers=HEADERS)
         self._update_state_from_response(arequest.json())
 
         self._last_call = (time.time(), state)
@@ -392,8 +408,7 @@ class WinkBinarySwitch(WinkDevice):
             self.update_state()
             last_read = self._last_reading
 
-            if last_read.get('desired_powered') == last_read.get('powered') \
-               or tries == 5:
+            if last_read.get('desired_powered') == last_read.get('powered') or tries == 5:
                 break
 
             time.sleep(2)
@@ -408,7 +423,7 @@ class WinkBinarySwitch(WinkDevice):
 
 class WinkBulb(WinkBinarySwitch):
     """ represents a wink.py bulb
-    json_obj holds the json stat at init (and if there is a refresh it's updated
+    json_obj holds the json stat at init (if there is a refresh it's updated)
     it's the native format for this objects methods
     and looks like so:
 
@@ -481,12 +496,16 @@ class WinkBulb(WinkBinarySwitch):
         """
         return self._last_reading.get('color_temperature')
 
-    def set_state(self, state, brightness=None, color_kelvin=None, color_xy=None, **kwargs):
+    def set_state(self, state, brightness=None,
+                  color_kelvin=None, color_xy=None, **kwargs):
         """
         :param state:   a boolean of true (on) or false ('off')
-        :param brightness: a float from 0 to 1 to set the brightness of this bulb
-        :param color_kelvin: an integer greater than 0 which is a color in degrees Kelvin
-        :param color_xy: a pair of floats in a list which specify the desired CIE 1931 x,y color coordinates
+        :param brightness: a float from 0 to 1 to set the brightness of
+         this bulb
+        :param color_kelvin: an integer greater than 0 which is a color in
+         degrees Kelvin
+        :param color_xy: a pair of floats in a list which specify the desired
+         CIE 1931 x,y color coordinates
         :return: nothing
         """
         url_string = "{}/light_bulbs/{}".format(BASE_URL, self.device_id())
@@ -500,8 +519,10 @@ class WinkBulb(WinkBinarySwitch):
             values["desired_state"]["brightness"] = brightness
 
         if color_kelvin and color_xy:
-            logging.warning("Both color temperature and CIE 1931 x,y color coordinates we provided to setState."
-                            "Using color temperature and ignoring CIE 1931 values.")
+            logging.warning("Both color temperature and CIE 1931 x,y"
+                            " color coordinates we provided to setState."
+                            "Using color temperature and ignoring"
+                            " CIE 1931 values.")
 
         if color_kelvin:
             values["desired_state"]["color_model"] = "color_temperature"
@@ -513,7 +534,8 @@ class WinkBulb(WinkBinarySwitch):
             values["desired_state"]["color_y"] = next(color_xy_iter)
 
         url_string = "{}/light_bulbs/{}".format(BASE_URL, self.device_id())
-        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        arequest = requests.put(url_string,
+                                data=json.dumps(values), headers=HEADERS)
         self._update_state_from_response(arequest.json())
 
         self._last_call = (time.time(), state)
@@ -525,7 +547,7 @@ class WinkBulb(WinkBinarySwitch):
 
 class WinkLock(WinkDevice):
     """ represents a wink.py lock
-    json_obj holds the json stat at init (and if there is a refresh it's updated
+    json_obj holds the json stat at init (if there is a refresh it's updated)
     it's the native format for this objects methods
     and looks like so:
 
@@ -674,7 +696,8 @@ class WinkLock(WinkDevice):
         self._last_call = (0, None)
 
     def __repr__(self):
-        return "<Wink lock %s %s %s>" % (self.name(), self.device_id(), self.state())
+        return "<Wink lock %s %s %s>" % (self.name(),
+                                         self.device_id(), self.state())
 
     def state(self):
         # Optimistic approach to setState:
@@ -692,9 +715,11 @@ class WinkLock(WinkDevice):
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        url_string = "{}/{}/{}".format(BASE_URL, self.objectprefix, self.device_id())
+        url_string = "{}/{}/{}".format(BASE_URL,
+                                       self.objectprefix, self.device_id())
         values = {"desired_state": {"locked": state}}
-        arequest = requests.put(url_string, data=json.dumps(values), headers=HEADERS)
+        arequest = requests.put(url_string,
+                                data=json.dumps(values), headers=HEADERS)
         self._update_state_from_response(arequest.json())
 
         self._last_call = (time.time(), state)
@@ -711,8 +736,201 @@ class WinkLock(WinkDevice):
             self.update_state()
             last_read = self._last_reading
 
-            if last_read.get('desired_locked') == last_read.get('locked') \
-               or tries == 5:
+            if last_read.get('desired_locked') == last_read.get('locked') or tries == 5:
+                break
+
+            time.sleep(2)
+
+            tries += 1
+            self.update_state()
+            last_read = self._last_reading
+
+    def _recent_state_set(self):
+        return time.time() - self._last_call[0] < 15
+
+
+class WinkPowerStripOutlet(WinkDevice):
+    """ represents a wink.py switch
+    json_obj holds the json stat at init (if there is a refresh it's updated)
+    it's the native format for this objects methods
+    and looks like so:
+
+{
+   "errors":[
+
+   ],
+   "data":{
+      "powerstrip_id":"12345",
+      "model_name":"Pivot Power Genius",
+      "created_at":1451578768,
+      "mac_address":"0c2a69000000",
+      "locale":"en_us",
+      "name":"Power strip",
+      "units":{
+
+      },
+      "last_reading":{
+         "connection":true,
+         "connection_changed_at":1451947138.418391,
+         "connection_updated_at":1452093346.488989
+      },
+      "triggers":[
+
+      ],
+      "location":"",
+      "capabilities":{
+
+      },
+      "hidden_at":null,
+      "outlets":[
+         {
+            "parent_object_type":"powerstrip",
+            "icon_id":"4",
+            "desired_state":{
+               "powered":false
+            },
+            "parent_object_id":"24313",
+            "scheduled_outlet_states":[
+
+            ],
+            "name":"Outlet #1",
+            "outlet_index":0,
+            "last_reading":{
+               "desired_powered_updated_at":1452094688.1679382,
+               "powered_updated_at":1452094688.1461067,
+               "powered":false,
+               "powered_changed_at":1452094688.1461067
+            },
+            "powered":false,
+            "outlet_id":"48628"
+         },
+         {
+            "parent_object_type":"powerstrip",
+            "icon_id":"4",
+            "desired_state":{
+               "powered":false
+            },
+            "parent_object_id":"24313",
+            "scheduled_outlet_states":[
+
+            ],
+            "name":"Outlet #2",
+            "outlet_index":1,
+            "last_reading":{
+               "desired_powered_updated_at":1452094689.7589157,
+               "powered_updated_at":1452094689.443459,
+               "powered":false,
+               "powered_changed_at":1452094689.443459
+            },
+            "powered":false,
+            "outlet_id":"48629"
+         }
+      ],
+      "serial":"AAAA00012345",
+      "lat_lng":[
+         00.000000,
+         -00.000000
+      ],
+      "desired_state":{
+
+      },
+      "device_manufacturer":"quirky_ge",
+      "upc_id":"24",
+      "upc_code":"814434017226"
+   },
+   "pagination":{
+
+   }
+}
+
+     """
+
+    def __init__(self, device_state_as_json, objectprefix="powerstrips"):
+        super(WinkPowerStripOutlet, self).__init__(device_state_as_json,
+                                                   objectprefix=objectprefix)
+        # Tuple (desired state, time)
+        self._last_call = (0, None)
+
+    def __repr__(self):
+        return "<Wink Power strip outlet name:{name} id:{device}" \
+               " parent id:{parent_id} state:{state}>".format(name=self.name(),
+                                                              device=self.device_id(),
+                                                              parent_id=self.parent_id(),
+                                                              state=self.state())
+
+    @property
+    def _last_reading(self):
+        return self.json_state.get('last_reading') or {}
+
+    def _update_state_from_response(self, response_json):
+        """
+        :param response_json: the json obj returned from query
+        :return:
+        """
+        power_strip = response_json.get('data')
+        outlets = power_strip.get('outlets', power_strip)
+        for outlet in outlets:
+            if outlet.get('outlet_id') == str(self.device_id()):
+                self.json_state = outlet
+
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        url_string = "{}/{}/{}".format(BASE_URL,
+                                       self.objectprefix, self.parent_id())
+        arequest = requests.get(url_string, headers=HEADERS)
+        self._update_state_from_response(arequest.json())
+
+    def state(self):
+        # Optimistic approach to setState:
+        # Within 15 seconds of a call to setState we assume it worked.
+        if self._recent_state_set():
+            return self._last_call[1]
+
+        return self._last_reading.get('powered', False)
+
+    def index(self):
+        return self.json_state.get('outlet_index', None)
+
+    def device_id(self):
+        return self.json_state.get('outlet_id', self.name())
+
+    def parent_id(self):
+        return self.json_state.get('parent_object_id',
+                                   self.json_state.get('powerstrip_id'))
+
+    # pylint: disable=unused-argument
+    # kwargs is unused here but is used by child implementations
+    def set_state(self, state, **kwargs):
+        """
+        :param state:   a boolean of true (on) or false ('off')
+        :return: nothing
+        """
+        url_string = "{}/{}/{}".format(BASE_URL,
+                                       self.objectprefix, self.parent_id())
+        if self.index() == 0:
+            values = {"outlets": [{"desired_state": {"powered": state}}, {}]}
+        else:
+            values = {"outlets": [{}, {"desired_state": {"powered": state}}]}
+
+        arequest = requests.put(url_string,
+                                data=json.dumps(values), headers=HEADERS)
+        self._update_state_from_response(arequest.json())
+
+        self._last_call = (time.time(), state)
+
+    def wait_till_desired_reached(self):
+        """ Wait till desired state reached. Max 10s. """
+        if self._recent_state_set():
+            return
+
+        # self.refresh_state_at_hub()
+        tries = 1
+
+        while True:
+            self.update_state()
+            last_read = self._last_reading
+
+            if last_read.get('desired_powered') == last_read.get('powered') or tries == 5:
                 break
 
             time.sleep(2)
@@ -869,7 +1087,15 @@ def get_devices(filter_key):
     for item in items:
         value_at_key = item.get(filter_key)
         if value_at_key is not None and item.get("hidden_at") is None:
-            devices.append(WinkDevice.factory(item))
+            if filter_key == "powerstrip_id":
+                outlets = item['outlets']
+                for outlet in outlets:
+                    value_at_key = outlet.get('outlet_id')
+                    if (value_at_key is not None and
+                            outlet.get("hidden_at") is None):
+                        devices.append(WinkDevice.factory(outlet))
+            else:
+                devices.append(WinkDevice.factory(item))
 
     return devices
 
@@ -896,6 +1122,10 @@ def get_eggtrays():
 
 def get_garage_doors():
     return get_devices('garage_door_id')
+
+
+def get_powerstrip_outlets():
+    return get_devices('powerstrip_id')
 
 
 def is_token_set():
