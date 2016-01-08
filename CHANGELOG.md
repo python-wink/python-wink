@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.4.0
+- Removed API responses from docstring and moved into unit tests.
+- Refactored __init__.py to support easier unit testing
+
 ## 0.3.3
 - Added init method for Wink Power strip
 
