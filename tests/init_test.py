@@ -39,6 +39,87 @@ class LightSetStateTests(unittest.TestCase):
         self.assertNotIn('color_y', sent_data['desired_state'])
 
 
+class PowerStripStateTests(unittest.TestCase):
+
+    def test_should_show_powered_state_as_false_if_device_is_disconnected(self):
+        respone = """
+        {
+            "data": {
+            "desired_state": {},
+            "last_reading": {
+              "connection": False,
+              "connection_updated_at": 1452306146.129263,
+              "connection_changed_at": 1452306144.425378
+            },
+            "powerstrip_id": "24123",
+            "name": "Power strip",
+            "locale": "en_us",
+            "units": {},
+            "created_at": 1451578768,
+            "hidden_at": null,
+            "capabilities": {},
+            "triggers": [],
+            "device_manufacturer": "quirky_ge",
+            "model_name": "Pivot Power Genius",
+            "upc_id": "24",
+            "upc_code": "814434017226",
+            "lat_lng": [
+              12.345678,
+              -98.765432
+            ],
+            "location": "",
+            "mac_address": "0c2a69123456",
+            "serial": "AAAA00012345",
+            "outlets": [
+              {
+                "powered": false,
+                "scheduled_outlet_states": [],
+                "name": "First",
+                "outlet_index": 0,
+                "outlet_id": "48123",
+                "icon_id": "4",
+                "parent_object_type": "powerstrip",
+                "parent_object_id": "24123",
+                "desired_state": {
+                  "powered": false
+                },
+                "last_reading": {
+                  "powered": false,
+                  "powered_updated_at": 1452306146.0882413,
+                  "powered_changed_at": 1452306004.7519948,
+                  "desired_powered_updated_at": 1452306008.2215497
+                }
+              },
+              {
+                "powered": false,
+                "scheduled_outlet_states": [],
+                "name": "Second",
+                "outlet_index": 1,
+                "outlet_id": "48124",
+                "icon_id": "4",
+                "parent_object_type": "powerstrip",
+                "parent_object_id": "24123",
+                "desired_state": {
+                  "powered": true
+                },
+                "last_reading": {
+                  "powered": true,
+                  "powered_updated_at": 1452311731.8861659,
+                  "powered_changed_at": 1452311731.8861659,
+                  "desired_powered_updated_at": 1452311885.3523679
+                }
+              }
+            ]
+          },
+          "errors": [],
+          "pagination": {}
+        }
+        """
+      
+        devices = get_devices_from_respone_dict(json.loads(response))
+        self.assertFalse(devices[0].state())
+
+
 class WinkAPIResponseHandlingTests(unittest.TestCase):
 
     def test_should_handle_light_bulb_response(self):
@@ -640,3 +721,4 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         devices = get_devices_from_response_dict(response_dict)
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkEggTray)
+
