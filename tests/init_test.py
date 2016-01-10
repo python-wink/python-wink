@@ -47,7 +47,7 @@ class PowerStripStateTests(unittest.TestCase):
             "data": {
             "desired_state": {},
             "last_reading": {
-              "connection": False,
+              "connection": false,
               "connection_updated_at": 1452306146.129263,
               "connection_changed_at": 1452306144.425378
             },
@@ -117,7 +117,7 @@ class PowerStripStateTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(json.loads(response_dict))
+        devices = get_devices_from_response_dict(response_dict)
         self.assertFalse(devices[0].state())
 
 
