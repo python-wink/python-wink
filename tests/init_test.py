@@ -42,7 +42,7 @@ class LightSetStateTests(unittest.TestCase):
 class PowerStripStateTests(unittest.TestCase):
 
     def test_should_show_powered_state_as_false_if_device_is_disconnected(self):
-        respone = """
+        response = """
         {
             "data": {
             "desired_state": {},
@@ -115,8 +115,9 @@ class PowerStripStateTests(unittest.TestCase):
           "pagination": {}
         }
         """
-      
-        devices = get_devices_from_respone_dict(json.loads(response))
+
+        response_dict = json.loads(response)
+        devices = get_devices_from_response_dict(json.loads(response_dict))
         self.assertFalse(devices[0].state())
 
 
@@ -721,4 +722,3 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         devices = get_devices_from_response_dict(response_dict)
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkEggTray)
-
