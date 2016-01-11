@@ -166,6 +166,8 @@ class WinkBinarySwitch(WinkDevice):
                                            self.device_id(), self.state())
 
     def state(self):
+        if not self._last_reading.get('connection', False):
+            return False
         # Optimistic approach to setState:
         # Within 15 seconds of a call to setState we assume it worked.
         if self._recent_state_set():
@@ -374,7 +376,7 @@ class WinkLock(WinkDevice):
         return time.time() - self._last_call[0] < 15
 
 
-class WinkPowerStripOutlet(WinkDevice):
+class WinkPowerStripOutlet(WinkBinarySwitch):
     """ represents a wink.py switch
     json_obj holds the json stat at init (if there is a refresh it's updated)
     it's the native format for this objects methods
@@ -404,9 +406,11 @@ class WinkPowerStripOutlet(WinkDevice):
         :return:
         """
         power_strip = response_json.get('data')
+        power_strip_reading = power_strip.get('last_reading')
         outlets = power_strip.get('outlets', power_strip)
         for outlet in outlets:
             if outlet.get('outlet_id') == str(self.device_id()):
+                outlet['last_reading']['connection'] = power_strip_reading.get('connection')
                 self.json_state = outlet
 
     def update_state(self):
@@ -415,14 +419,6 @@ class WinkPowerStripOutlet(WinkDevice):
                                        self.objectprefix, self.parent_id())
         arequest = requests.get(url_string, headers=HEADERS)
         self._update_state_from_response(arequest.json())
-
-    def state(self):
-        # Optimistic approach to setState:
-        # Within 15 seconds of a call to setState we assume it worked.
-        if self._recent_state_set():
-            return self._last_call[1]
-
-        return self._last_reading.get('powered', False)
 
     def index(self):
         return self.json_state.get('outlet_index', None)

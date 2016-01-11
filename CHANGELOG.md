@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.4.1
+- Treating offline binary switches as if they have a powered state of false
+
 ## 0.4.0
 - Removed API responses from docstring and moved into unit tests.
 - Refactored __init__.py to support easier unit testing
