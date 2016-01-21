@@ -396,7 +396,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
                  "local_id":"8",
                  "radio_type":"zwave",
                  "lat_lng":[
-                    12.1345678
+                    12.1345678,
                     -98.765432
                  ],
                  "location":""
