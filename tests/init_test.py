@@ -3,7 +3,7 @@ import mock
 import unittest
 
 from pywink import WinkBulb, get_devices_from_response_dict, WinkGarageDoor, WinkPowerStripOutlet, WinkLock, \
-    WinkBinarySwitch, WinkSensorPod, WinkEggTray
+    WinkBinarySwitch, WinkSensorPod, WinkEggTray, WinkSiren
 
 
 class LightSetStateTests(unittest.TestCase):
