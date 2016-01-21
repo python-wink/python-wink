@@ -19,7 +19,8 @@ DEVICE_ID_KEYS = {
     device_types.LIGHT_BULB: 'light_bulb_id',
     device_types.LOCK: 'lock_id',
     device_types.POWER_STRIP: 'powerstrip_id',
-    device_types.SENSOR_POD: 'sensor_pod_id'
+    device_types.SENSOR_POD: 'sensor_pod_id',
+    device_types.SIREN: 'siren_id'
 }
 
 
@@ -46,6 +47,8 @@ class WinkDevice(object):
             new_object = WinkEggTray(device_state_as_json)
         elif "garage_door_id" in device_state_as_json:
             new_object = WinkGarageDoor(device_state_as_json)
+        elif "siren_id" in device_state_as_json:
+            new_object = WinkSiren(device_state_as_json)
 
         return new_object or WinkDevice(device_state_as_json)
 
@@ -540,6 +543,26 @@ class WinkGarageDoor(WinkDevice):
         return time.time() - self._last_call[0] < 15
 
 
+class WinkSiren(WinkBinarySwitch):
+    """ represents a wink.py siren
+    json_obj holds the json stat at init (if there is a refresh it's updated)
+    it's the native format for this objects methods
+    """
+
+    def __init__(self, device_state_as_json, objectprefix="sirens"):
+        super(WinkSiren, self).__init__(device_state_as_json,
+                                        objectprefix=objectprefix)
+        # Tuple (desired state, time)
+        self._last_call = (0, None)
+
+    def __repr__(self):
+        return "<Wink siren %s %s %s>" % (self.name(),
+                                          self.device_id(), self.state())
+
+    def device_id(self):
+        return self.json_state.get('siren_id', self.name())
+
+
 def get_devices(device_type):
     arequest_url = "{}/users/me/wink_devices".format(BASE_URL)
     response_dict = requests.get(arequest_url, headers=HEADERS).json()
@@ -600,6 +623,10 @@ def get_garage_doors():
 
 def get_powerstrip_outlets():
     return get_devices(device_types.POWER_STRIP)
+
+
+def get_sirens():
+    return get_devices(device_types.SIREN)
 
 
 def is_token_set():
