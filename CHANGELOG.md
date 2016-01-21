@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.4.2
+- Added init method for WinkSiren
+
 ## 0.4.1
 - Treating offline binary switches as if they have a powered state of false
 

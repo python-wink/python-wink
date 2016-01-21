@@ -3,7 +3,7 @@ import mock
 import unittest
 
 from pywink import WinkBulb, get_devices_from_response_dict, WinkGarageDoor, WinkPowerStripOutlet, WinkLock, \
-    WinkBinarySwitch, WinkSensorPod, WinkEggTray
+    WinkBinarySwitch, WinkSensorPod, WinkEggTray, WinkSiren
 
 
 class LightSetStateTests(unittest.TestCase):
@@ -341,6 +341,81 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         self.assertEqual(2, len(devices))
         self.assertIsInstance(devices[0], WinkPowerStripOutlet)
         self.assertIsInstance(devices[1], WinkPowerStripOutlet)
+
+
+    def test_should_handle_siren_response(self):
+
+        response = """
+        {
+           "data":[
+              {
+                 "desired_state":{
+                    "auto_shutoff":30,
+                    "mode":"siren_and_strobe",
+                    "powered":false
+                 },
+                 "last_reading":{
+                    "connection":true,
+                    "connection_updated_at":1453249957.2466462,
+                    "battery":1,
+                    "battery_updated_at":1453249957.2466462,
+                    "auto_shutoff":30,
+                    "auto_shutoff_updated_at":1453249957.2466462,
+                    "mode":"siren_and_strobe",
+                    "mode_updated_at":1453249957.2466462,
+                    "powered":false,
+                    "powered_updated_at":1453249957.2466462,
+                    "desired_auto_shutoff_updated_at":1452812848.5178623,
+                    "desired_mode_updated_at":1452812848.5178623,
+                    "desired_powered_updated_at":1452812668.1190264,
+                    "connection_changed_at":1452812587.0312104,
+                    "powered_changed_at":1452812668.0807295,
+                    "battery_changed_at":1453032821.1796713,
+                    "mode_changed_at":1452812589.8262901,
+                    "auto_shutoff_changed_at":1452812589.8262901,
+                    "desired_auto_shutoff_changed_at":1452812590.029748,
+                    "desired_powered_changed_at":1452812668.1190264,
+                    "desired_mode_changed_at":1452812848.5178623
+                 },
+                 "siren_id":"6123",
+                 "name":"Alarm",
+                 "locale":"en_us",
+                 "units":{
+
+                 },
+                 "created_at":1452812587,
+                 "hidden_at":null,
+                 "capabilities":{
+
+                 },
+                 "device_manufacturer":"linear",
+                 "model_name":"Wireless Siren & Strobe (Wireless)",
+                 "upc_id":"243",
+                 "upc_code":"wireless_linear_siren",
+                 "hub_id":"30123",
+                 "local_id":"8",
+                 "radio_type":"zwave",
+                 "lat_lng":[
+                    12.1345678,
+                    -98.765432
+                 ],
+                 "location":""
+              }
+           ],
+           "errors":[
+
+           ],
+           "pagination":{
+              "count":17
+           }
+        }
+        """
+
+        response_dict = json.loads(response)
+        devices = get_devices_from_response_dict(response_dict)
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkSiren)
+
 
     def test_should_handle_lock_response(self):
 
