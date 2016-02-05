@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.4.3
+- Added better error handling for API authorization problems.
+
 ## 0.4.2
 - Added init method for WinkSiren
 

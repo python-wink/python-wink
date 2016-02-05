@@ -565,10 +565,17 @@ class WinkSiren(WinkBinarySwitch):
 
 def get_devices(device_type):
     arequest_url = "{}/users/me/wink_devices".format(BASE_URL)
-    response_dict = requests.get(arequest_url, headers=HEADERS).json()
-    filter_key = DEVICE_ID_KEYS.get(device_type)
-    return get_devices_from_response_dict(response_dict,
-                                          filter_key=filter_key)
+    response = requests.get(arequest_url, headers=HEADERS)
+    if response.status_code == 200:
+        response_dict = response.json()
+        filter_key = DEVICE_ID_KEYS.get(device_type)
+        return get_devices_from_response_dict(response_dict,
+                                              filter_key=filter_key)
+
+    if response.status_code == 401:
+        raise WinkAPIException("401 Response from Wink API.  Maybe Bearer token is expired?")
+    else:
+        raise WinkAPIException("Unexpected")
 
 
 def get_devices_from_response_dict(response_dict, filter_key=None):
@@ -641,3 +648,7 @@ def set_bearer_token(token):
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(token)
     }
+
+
+class WinkAPIException(Exception):
+    pass
