@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.5.0 
+- Major bug fix.  Methods like `get_bulbs` were always returning empty lists.
+
 ## 0.4.3
 - Added better error handling for API authorization problems.
 

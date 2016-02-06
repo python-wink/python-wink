@@ -578,14 +578,14 @@ def get_devices(device_type):
         raise WinkAPIException("Unexpected")
 
 
-def get_devices_from_response_dict(response_dict, filter_key=None):
+def get_devices_from_response_dict(response_dict, filter_key):
     items = response_dict.get('data')
 
     devices = []
 
     keys = DEVICE_ID_KEYS.values()
     if filter_key:
-        keys = [filter_key]
+        keys = [DEVICE_ID_KEYS.get(filter_key)]
 
     for item in items:
         for key in keys:
