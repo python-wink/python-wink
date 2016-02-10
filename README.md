@@ -1,6 +1,8 @@
 Python Wink API
 ---------------
 
+[![Join the chat at https://gitter.im/bradsk88/python-wink](https://badges.gitter.im/bradsk88/python-wink.svg)](https://gitter.im/bradsk88/python-wink?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 _This script used to be part of Home Assistant. It has been extracted to fit
 the goal of Home Assistant to not contain any device specific API implementations
 but rely on open-source implementations of the API._
