@@ -1,0 +1,123 @@
+{
+  "data": [
+    {
+      "last_event": {
+        "brightness_occurred_at": 1445973676.198793,
+        "loudness_occurred_at": 1453186523.6125298,
+        "vibration_occurred_at": 1453186429.210991
+      },
+      "desired_state": {},
+      "last_reading": {
+        "battery": 0.85,
+        "battery_updated_at": 1453187132.7789793,
+        "brightness": 1,
+        "brightness_updated_at": 1453187132.7789793,
+        "external_power": true,
+        "external_power_updated_at": 1453187132.7789793,
+        "humidity": 48,
+        "humidity_updated_at": 1453187132.7789793,
+        "loudness": false,
+        "loudness_updated_at": 1453187132.7789793,
+        "temperature": 5,
+        "temperature_updated_at": 1453187132.7789793,
+        "vibration": false,
+        "vibration_updated_at": 1453187132.7789793,
+        "brightness_true": "N/A",
+        "brightness_true_updated_at": 1445973676.198793,
+        "loudness_true": "N/A",
+        "loudness_true_updated_at": 1453186523.6125298,
+        "vibration_true": "N/A",
+        "vibration_true_updated_at": 1453186429.210991,
+        "connection": true,
+        "connection_updated_at": 1453187132.7789793,
+        "agent_session_id": null,
+        "agent_session_id_updated_at": null,
+        "desired_battery_updated_at": null,
+        "desired_brightness_updated_at": null,
+        "desired_external_power_updated_at": null,
+        "desired_humidity_updated_at": null,
+        "desired_loudness_updated_at": null,
+        "desired_temperature_updated_at": null,
+        "desired_vibration_updated_at": null,
+        "loudness_changed_at": 1453186586.7168324,
+        "loudness_true_changed_at": 1453186523.6125298,
+        "vibration_changed_at": 1453186528.978827,
+        "vibration_true_changed_at": 1453186429.210991,
+        "temperature_changed_at": 1453186523.6125298,
+        "humidity_changed_at": 1453187132.7789793,
+        "brightness_changed_at": 1445973676.198793,
+        "brightness_true_changed_at": 1445973676.198793,
+        "battery_changed_at": 1452267645.8792017
+      },
+      "sensor_pod_id": "72503",
+      "uuid": "0d889d64-e77b-48a3-a132-475626f8ab1f",
+      "name": "Well Spotter",
+      "locale": "en_us",
+      "units": {},
+      "created_at": 1432962859,
+      "hidden_at": null,
+      "capabilities": {
+        "fields": [
+          {
+            "field": "battery",
+            "type": "percentage",
+            "mutability": "read-only"
+          },
+          {
+            "field": "brightness",
+            "type": "percentage",
+            "mutability": "read-only"
+          },
+          {
+            "field": "external_power",
+            "type": "boolean",
+            "mutability": "read-only"
+          },
+          {
+            "field": "humidity",
+            "type": "percentage",
+            "mutability": "read-only"
+          },
+          {
+            "field": "loudness",
+            "type": "boolean",
+            "mutability": "read-only"
+          },
+          {
+            "field": "temperature",
+            "type": "float",
+            "mutability": "read-only"
+          },
+          {
+            "field": "vibration",
+            "type": "boolean",
+            "mutability": "read-only"
+          }
+        ]
+      },
+      "triggers": [],
+      "manufacturer_device_model": "quirky_ge_spotter",
+      "manufacturer_device_id": null,
+      "device_manufacturer": "quirky_ge",
+      "model_name": "Spotter",
+      "upc_id": "25",
+      "upc_code": "814434018858",
+      "gang_id": null,
+      "hub_id": null,
+      "local_id": null,
+      "radio_type": null,
+      "linked_service_id": null,
+      "lat_lng": [
+        null,
+        null
+      ],
+      "location": "",
+      "mac_address": "0c2a5905a5a2",
+      "serial": "ABAB00010864"
+    }
+  ],
+  "errors": [],
+  "pagination": {
+    "count": 24
+  }
+}

@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.6.0 
+- Major structural change.  Using modules to avoid circular dependencies.
+- Added support for devices that contain multiple onboard sensors.
+
 ## 0.5.0 
 - Major bug fix.  Methods like `get_bulbs` were always returning empty lists.
 

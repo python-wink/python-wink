@@ -2,15 +2,23 @@ import json
 import mock
 import unittest
 
-from pywink import WinkBulb, get_devices_from_response_dict, device_types, WinkGarageDoor, WinkPowerStripOutlet, \
-    WinkLock, WinkBinarySwitch, WinkSensorPod, WinkEggTray, WinkSiren
+from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.devices import types as device_types
+from pywink.devices.sensors import WinkSensorPod
+from pywink.devices.standard import WinkBulb, WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
+    WinkBinarySwitch, WinkEggTray
+from pywink.devices.types import DEVICE_ID_KEYS
 
 
 class LightSetStateTests(unittest.TestCase):
 
+    def setUp(self):
+        super(LightSetStateTests, self).setUp()
+        self.api_interface = WinkApiInterface()
+
     @mock.patch('requests.put')
     def test_should_send_correct_color_xy_values_to_wink_api(self, put_mock):
-        bulb = WinkBulb({})
+        bulb = WinkBulb({}, self.api_interface)
         color_x = 0.75
         color_y = 0.25
         bulb.set_state(True, color_xy=[color_x, color_y])
@@ -21,7 +29,7 @@ class LightSetStateTests(unittest.TestCase):
 
     @mock.patch('requests.put')
     def test_should_send_correct_color_temperature_values_to_wink_api(self, put_mock):
-        bulb = WinkBulb({})
+        bulb = WinkBulb({}, self.api_interface)
         arbitrary_kelvin_color = 4950
         bulb.set_state(True, color_kelvin=arbitrary_kelvin_color)
         sent_data = json.loads(put_mock.call_args[1].get('data'))
@@ -30,7 +38,7 @@ class LightSetStateTests(unittest.TestCase):
 
     @mock.patch('requests.put')
     def test_should_only_send_color_xy_if_both_color_xy_and_color_temperature_are_given(self, put_mock):
-        bulb = WinkBulb({})
+        bulb = WinkBulb({}, self.api_interface)
         arbitrary_kelvin_color = 4950
         bulb.set_state(True, color_kelvin=arbitrary_kelvin_color, color_xy=[0, 1])
         sent_data = json.loads(put_mock.call_args[1].get('data'))
@@ -121,11 +129,15 @@ class PowerStripStateTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.POWER_STRIP)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.POWER_STRIP])
         self.assertFalse(devices[0].state())
 
 
 class WinkAPIResponseHandlingTests(unittest.TestCase):
+
+    def setUp(self):
+        super(WinkAPIResponseHandlingTests, self).setUp()
+        self.api_interface = mock.MagicMock()
 
     def test_should_handle_light_bulb_response(self):
         response = """
@@ -172,7 +184,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         }
         """
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.LIGHT_BULB)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkBulb)
 
@@ -245,7 +257,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         }
         """
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.GARAGE_DOOR)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.GARAGE_DOOR])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkGarageDoor)
 
@@ -337,7 +349,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         }
         """
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.POWER_STRIP)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.POWER_STRIP])
         self.assertEqual(2, len(devices))
         self.assertIsInstance(devices[0], WinkPowerStripOutlet)
         self.assertIsInstance(devices[1], WinkPowerStripOutlet)
@@ -412,7 +424,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.SIREN)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SIREN])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkSiren)
 
@@ -559,7 +571,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.LOCK)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LOCK])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkLock)
 
@@ -631,7 +643,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.BINARY_SWITCH)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.BINARY_SWITCH])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkBinarySwitch)
 
@@ -708,7 +720,7 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.SENSOR_POD)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkSensorPod)
 
@@ -798,6 +810,6 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         """
 
         response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, device_types.EGG_TRAY)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.EGG_TRAY])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkEggTray)

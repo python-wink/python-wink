@@ -3,12 +3,12 @@
 cd "$(dirname "$0")/.."
 
 echo "Checking style with flake8..."
-flake8 pywink
+flake8 src/pywink
 
 FLAKE8_STATUS=$?
 
 echo "Checking style with pylint..."
-pylint pywink
+pylint src/pywink
 PYLINT_STATUS=$?
 
 if [ $FLAKE8_STATUS -eq 0 ]

@@ -1,9 +1,12 @@
 [MASTER]
 max-line-length=120
+ignore=test
 
 # Reasons disabled:
 # missing-docstring - Document as you like.  Good, descriptive method names and variables are preferred over docstrings.
 # global-statement - used for the on-demand requirement installation
+# locally-disabled - Because that's the whole point!
 disable=
     missing-docstring
   , global-statement
+  , locally-disabled
