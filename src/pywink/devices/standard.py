@@ -67,7 +67,12 @@ class WinkBinarySwitch(WinkDevice):
         :param state:   a boolean of true (on) or false ('off')
         :return: nothing
         """
-        response = self.api_interface.set_device_state(self, state)
+        values = {
+            "desired_state": {
+                "powered": state
+            }
+        }
+        response = self.api_interface.set_device_state(self, values)
         self._update_state_from_response(response)
 
         self._last_call = (time.time(), state)
