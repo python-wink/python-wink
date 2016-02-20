@@ -25,6 +25,12 @@ class _WinkCapabilitySensor(WinkDevice):
     def capability(self):
         return self._capability
 
+    def name(self):
+        name = self.json_state.get('name', "Unknown Name")
+        if self._capability != "opened":
+            name += " " + self._capability
+        return name
+
     def device_id(self):
         root_name = self.json_state.get('sensor_pod_id', self.name())
         return '{}+{}'.format(root_name, self._capability)

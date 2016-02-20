@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.6.1
+- Return the capability of a sensor as part of the name.
+
 ## 0.6.0 
 - Major structural change.  Using modules to avoid circular dependencies.
 - Added support for devices that contain multiple onboard sensors.
