@@ -47,7 +47,7 @@ class WinkSensorPod(_WinkCapabilitySensor):
 
     def __init__(self, device_state_as_json, api_interface):
         super(WinkSensorPod, self).__init__(device_state_as_json, api_interface,
-              self.CAPABILITY, self.UNIT)
+                                            self.CAPABILITY, self.UNIT)
 
     def __repr__(self):
         return "<Wink sensor %s %s %s>" % (self.name(),
