@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.6.1
+## 0.6.2
 - Changed sensor brightness to boolean.
 - Added UNIT to all sensors.
 
