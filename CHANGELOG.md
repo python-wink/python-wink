@@ -1,6 +1,10 @@
 # Change Log
 
 ## 0.6.1
+- Changed sensor brightness to boolean.
+- Added UNIT to all sensors.
+
+## 0.6.1
 - Return the capability of a sensor as part of the name.
 
 ## 0.6.0 
