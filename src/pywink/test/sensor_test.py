@@ -33,7 +33,7 @@ class SensorTests(unittest.TestCase):
         """:type : list of WinkBrightnessSensor"""
         brightness_sensor = [sensor for sensor in sensors if sensor.capability() is WinkBrightnessSensor.CAPABILITY][0]
         expected_brightness = 1
-        self.assertEquals(expected_brightness, brightness_sensor.brightness_percentage())
+        self.assertEquals(expected_brightness, brightness_sensor.brightness_boolean())
 
     def test_humidity_should_have_correct_value(self):
         with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:

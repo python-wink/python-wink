@@ -43,9 +43,11 @@ class WinkSensorPod(_WinkCapabilitySensor):
     and looks like so:
     """
     CAPABILITY = 'opened'
+    UNIT = None
 
     def __init__(self, device_state_as_json, api_interface):
-        super(WinkSensorPod, self).__init__(device_state_as_json, api_interface, self.CAPABILITY, None)
+        super(WinkSensorPod, self).__init__(device_state_as_json, api_interface,
+                                            self.CAPABILITY, self.UNIT)
 
     def __repr__(self):
         return "<Wink sensor %s %s %s>" % (self.name(),
@@ -83,14 +85,14 @@ class WinkHumiditySensor(_WinkCapabilitySensor):
 class WinkBrightnessSensor(_WinkCapabilitySensor):
 
     CAPABILITY = 'brightness'
-    UNIT = '%'
+    UNIT = None
 
     def __init__(self, device_state_as_json, api_interface):
         super(WinkBrightnessSensor, self).__init__(device_state_as_json, api_interface,
                                                    self.CAPABILITY,
                                                    self.UNIT)
 
-    def brightness_percentage(self):
+    def brightness_boolean(self):
         """
         :return: The percentage of brightness as determined by the device.
         :rtype: int
@@ -101,11 +103,12 @@ class WinkBrightnessSensor(_WinkCapabilitySensor):
 class WinkSoundPresenceSensor(_WinkCapabilitySensor):
 
     CAPABILITY = 'loudness'
+    UNIT = None
 
     def __init__(self, device_state_as_json, api_interface):
         super(WinkSoundPresenceSensor, self).__init__(device_state_as_json, api_interface,
                                                       self.CAPABILITY,
-                                                      None)
+                                                      self.UNIT)
 
     def loudness_boolean(self):
         """
@@ -136,11 +139,12 @@ class WinkTemperatureSensor(_WinkCapabilitySensor):
 class WinkVibrationPresenceSensor(_WinkCapabilitySensor):
 
     CAPABILITY = 'vibration'
+    UNIT = None
 
     def __init__(self, device_state_as_json, api_interface):
         super(WinkVibrationPresenceSensor, self).__init__(device_state_as_json, api_interface,
                                                           self.CAPABILITY,
-                                                          None)
+                                                          self.UNIT)
 
     def vibration_boolean(self):
         """
