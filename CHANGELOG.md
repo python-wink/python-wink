@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.6.4
+- Added available method to report "connection" status
+
 ## 0.6.3
 - Override capability sensor device_id during update.
 
