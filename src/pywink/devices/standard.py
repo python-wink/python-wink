@@ -352,7 +352,6 @@ class WinkGarageDoor(WinkDevice):
     it's the native format for this objects methods
     and looks like so:
     """
-
     def __init__(self, device_state_as_json, api_interface, objectprefix="garage_doors"):
         super(WinkGarageDoor, self).__init__(device_state_as_json, api_interface,
                                              objectprefix=objectprefix)

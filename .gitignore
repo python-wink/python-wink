@@ -3,3 +3,4 @@
 *.py[cod]
 /test.py
 /.cache
+.idea/*

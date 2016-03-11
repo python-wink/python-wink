@@ -1,4 +1,5 @@
 import json
+import os
 import mock
 import unittest
 
@@ -189,74 +190,9 @@ class WinkAPIResponseHandlingTests(unittest.TestCase):
         self.assertIsInstance(devices[0], WinkBulb)
 
     def test_should_handle_garage_door_opener_response(self):
-
-        response = """
-        {
-            "data": [{
-                "desired_state": {
-                    "position": 0
-                },
-                "last_reading": {
-                    "position_opened": "N\/A",
-                    "position_opened_updated_at": 1450357467.371,
-                    "tamper_detected_true": null,
-                    "tamper_detected_true_updated_at": null,
-                    "connection": true,
-                    "connection_updated_at": 1450357538.2715,
-                    "position": 0,
-                    "position_updated_at": 1450357537.836,
-                    "battery": null,
-                    "battery_updated_at": null,
-                    "fault": false,
-                    "fault_updated_at": 1447976866.0784,
-                    "disabled": null,
-                    "disabled_updated_at": null,
-                    "control_enabled": true,
-                    "control_enabled_updated_at": 1447976866.0784,
-                    "desired_position_updated_at": 1447976846.8869,
-                    "connection_changed_at": 1444775470.5484,
-                    "position_changed_at": 1450357537.836,
-                    "control_enabled_changed_at": 1444775472.2474,
-                    "fault_changed_at": 1444775472.2474,
-                    "position_opened_changed_at": 1450357467.371,
-                    "desired_position_changed_at": 1447976846.8869
-                },
-                "garage_door_id": "30528",
-                "name": "Garage Door",
-                "locale": "en_us",
-                "units": {
-
-                },
-                "created_at": 1444775470,
-                "hidden_at": null,
-                "capabilities": {
-                    "home_security_device": true
-                },
-                "triggers": [
-
-                ],
-                "manufacturer_device_model": "chamberlain_garage_door_opener",
-                "manufacturer_device_id": "1133930",
-                "device_manufacturer": "chamberlain",
-                "model_name": "MyQ Garage Door Controller",
-                "upc_id": "26",
-                "upc_code": "012381109302",
-                "hub_id": null,
-                "local_id": null,
-                "radio_type": null,
-                "linked_service_id": "206203",
-                "lat_lng": [
-                    0,
-                    0
-                ],
-                "location": "",
-                "order": null
-            }],
-            "errors": [],
-            "pagination": {}
-        }
-        """
-        response_dict = json.loads(response)
+        door_file = '{}/api_responses/myq_garage_door.json'.format(os.path.dirname(__file__))
+        with open(door_file) as door_file:
+            response_dict = json.load(door_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.GARAGE_DOOR])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkGarageDoor)

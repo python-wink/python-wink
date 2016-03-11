@@ -6,6 +6,8 @@ from pywink.devices.standard import WinkBulb, WinkBinarySwitch, WinkPowerStripOu
 
 def build_device(device_state_as_json, api_interface):
 
+    assert device_state_as_json is not None
+
     new_object = None
 
     # pylint: disable=redefined-variable-type
