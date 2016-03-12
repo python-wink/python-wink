@@ -36,6 +36,8 @@ class WinkDevice(object):
         :param response_json: the json obj returned from query
         :return:
         """
+        if 'data' not in response_json:
+            raise ValueError("Expected data to be present in response:\n%s" % response_json)
         self.json_state = response_json.get('data')
 
     def update_state(self):
