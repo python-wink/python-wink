@@ -1,21 +1,32 @@
 import json
 import mock
 import unittest
+import sys
+import os
 
 from pywink.api import get_devices_from_response_dict, WinkApiInterface
 from pywink.devices import types as device_types
-from pywink.devices.sensors import WinkSensorPod
+from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
+     WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
+     _WinkCapabilitySensor
 from pywink.devices.standard import WinkBulb, WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
-    WinkBinarySwitch, WinkEggTray
+     WinkBinarySwitch, WinkEggTray
 from pywink.devices.types import DEVICE_ID_KEYS
 
 
-class LightSetStateTests(unittest.TestCase):
-
+class LightTests(unittest.TestCase):
+     
     def setUp(self):
-        super(LightSetStateTests, self).setUp()
+        super(LightTests, self).setUp()
         self.api_interface = WinkApiInterface()
-
+        
+    def test_should_handle_light_bulb_response(self):
+        with open('{}/api_responses/light_bulb.json'.format(os.path.dirname(__file__))) as light_file:
+            response_dict = json.load(light_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkBulb)        
+ 
     @mock.patch('requests.put')
     def test_should_send_correct_color_xy_values_to_wink_api(self, put_mock):
         bulb = WinkBulb({}, self.api_interface)
@@ -45,771 +56,275 @@ class LightSetStateTests(unittest.TestCase):
         self.assertEquals('color_temperature', sent_data['desired_state'].get('color_model'))
         self.assertNotIn('color_x', sent_data['desired_state'])
         self.assertNotIn('color_y', sent_data['desired_state'])
+ 
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/light_bulb.json'.format(os.path.dirname(__file__))) as light_file:
+            response_dict = json.load(light_file)
+        light = response_dict.get('data')[0]
+        wink_light = WinkBulb(light, self.api_interface)
+        device_id = wink_light.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")
 
 
-class PowerStripStateTests(unittest.TestCase):
-
-    def test_should_show_powered_state_as_false_if_device_is_disconnected(self):
-        response = """
-        {
-          "data": [
-            {
-              "desired_state": {},
-              "last_reading": {
-                "connection": false,
-                "connection_updated_at": 1452306146.129263,
-                "connection_changed_at": 1452306144.425378
-              },
-              "powerstrip_id": "24123",
-              "name": "Power strip",
-              "locale": "en_us",
-              "units": {},
-              "created_at": 1451578768,
-              "hidden_at": null,
-              "capabilities": {},
-              "triggers": [],
-              "device_manufacturer": "quirky_ge",
-              "model_name": "Pivot Power Genius",
-              "upc_id": "24",
-              "upc_code": "814434017226",
-              "lat_lng": [
-                12.123456,
-                -98.765432
-              ],
-              "location": "",
-              "mac_address": "0c2a69123456",
-              "serial": "AAAA00123456",
-              "outlets": [
-                {
-                  "powered": false,
-                  "scheduled_outlet_states": [],
-                  "name": "First",
-                  "outlet_index": 0,
-                  "outlet_id": "48123",
-                  "icon_id": "4",
-                  "parent_object_type": "powerstrip",
-                  "parent_object_id": "24123",
-                  "desired_state": {
-                    "powered": false
-                  },
-                  "last_reading": {
-                    "powered": true,
-                    "powered_updated_at": 1452306146.0882413,
-                    "powered_changed_at": 1452306004.7519948,
-                    "desired_powered_updated_at": 1452306008.2215497
-                  }
-                },
-                {
-                  "powered": false,
-                  "scheduled_outlet_states": [],
-                  "name": "Second",
-                  "outlet_index": 1,
-                  "outlet_id": "48124",
-                  "icon_id": "4",
-                  "parent_object_type": "powerstrip",
-                  "parent_object_id": "24123",
-                  "desired_state": {
-                    "powered": false
-                  },
-                  "last_reading": {
-                    "powered": true,
-                    "powered_updated_at": 1452311731.8861659,
-                    "powered_changed_at": 1452311731.8861659,
-                    "desired_powered_updated_at": 1452311885.3523679
-                  }
-                }
-              ]
-            }
-          ],
-          "errors": [],
-          "pagination": {
-            "count": 10
-          }
-        }
-        """
-
-        response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.POWER_STRIP])
-        self.assertFalse(devices[0].state())
-
-
-class WinkAPIResponseHandlingTests(unittest.TestCase):
+class PowerStripTests(unittest.TestCase):
 
     def setUp(self):
-        super(WinkAPIResponseHandlingTests, self).setUp()
+        super(PowerStripTests, self).setUp()
         self.api_interface = mock.MagicMock()
 
-    def test_should_handle_light_bulb_response(self):
-        response = """
-        {
-            "data": [{
-                "light_bulb_id": "33990",
-                "name": "downstaurs lamp",
-                "locale": "en_us",
-                "units": {},
-                "created_at": 1410925804,
-                "hidden_at": null,
-                "capabilities": {},
-                "subscription": {},
-                "triggers": [],
-                "desired_state": {
-                    "powered": true,
-                    "brightness": 1
-                },
-                "manufacturer_device_model": "lutron_p_pkg1_w_wh_d",
-                "manufacturer_device_id": null,
-                "device_manufacturer": "lutron",
-                "model_name": "Caseta Wireless Dimmer & Pico",
-                "upc_id": "3",
-                "hub_id": "11780",
-                "local_id": "8",
-                "radio_type": "lutron",
-                "linked_service_id": null,
-                "last_reading": {
-                    "brightness": 1,
-                    "brightness_updated_at": 1417823487.490747,
-                    "connection": true,
-                    "connection_updated_at": 1417823487.4907365,
-                    "powered": true,
-                    "powered_updated_at": 1417823487.4907532,
-                    "desired_powered": true,
-                    "desired_powered_updated_at": 1417823485.054675,
-                    "desired_brightness": 1,
-                    "desired_brightness_updated_at": 1417409293.2591703
-                },
-                "lat_lng": [38.429962, -122.653715],
-                "location": "",
-                "order": 0
-            }]
-        }
-        """
-        response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
-        self.assertEqual(1, len(devices))
-        self.assertIsInstance(devices[0], WinkBulb)
-
-    def test_should_handle_garage_door_opener_response(self):
-
-        response = """
-        {
-            "data": [{
-                "desired_state": {
-                    "position": 0
-                },
-                "last_reading": {
-                    "position_opened": "N\/A",
-                    "position_opened_updated_at": 1450357467.371,
-                    "tamper_detected_true": null,
-                    "tamper_detected_true_updated_at": null,
-                    "connection": true,
-                    "connection_updated_at": 1450357538.2715,
-                    "position": 0,
-                    "position_updated_at": 1450357537.836,
-                    "battery": null,
-                    "battery_updated_at": null,
-                    "fault": false,
-                    "fault_updated_at": 1447976866.0784,
-                    "disabled": null,
-                    "disabled_updated_at": null,
-                    "control_enabled": true,
-                    "control_enabled_updated_at": 1447976866.0784,
-                    "desired_position_updated_at": 1447976846.8869,
-                    "connection_changed_at": 1444775470.5484,
-                    "position_changed_at": 1450357537.836,
-                    "control_enabled_changed_at": 1444775472.2474,
-                    "fault_changed_at": 1444775472.2474,
-                    "position_opened_changed_at": 1450357467.371,
-                    "desired_position_changed_at": 1447976846.8869
-                },
-                "garage_door_id": "30528",
-                "name": "Garage Door",
-                "locale": "en_us",
-                "units": {
-
-                },
-                "created_at": 1444775470,
-                "hidden_at": null,
-                "capabilities": {
-                    "home_security_device": true
-                },
-                "triggers": [
-
-                ],
-                "manufacturer_device_model": "chamberlain_garage_door_opener",
-                "manufacturer_device_id": "1133930",
-                "device_manufacturer": "chamberlain",
-                "model_name": "MyQ Garage Door Controller",
-                "upc_id": "26",
-                "upc_code": "012381109302",
-                "hub_id": null,
-                "local_id": null,
-                "radio_type": null,
-                "linked_service_id": "206203",
-                "lat_lng": [
-                    0,
-                    0
-                ],
-                "location": "",
-                "order": null
-            }],
-            "errors": [],
-            "pagination": {}
-        }
-        """
-        response_dict = json.loads(response)
-        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.GARAGE_DOOR])
-        self.assertEqual(1, len(devices))
-        self.assertIsInstance(devices[0], WinkGarageDoor)
-
     def test_should_handle_power_strip_response(self):
-
-        response = """
-        {
-            "errors": [
-
-            ],
-            "data": [{
-                "powerstrip_id": "12345",
-                "model_name": "Pivot Power Genius",
-                "created_at": 1451578768,
-                "mac_address": "0c2a69000000",
-                "locale": "en_us",
-                "name": "Power strip",
-                "units": {
-
-                },
-                "last_reading": {
-                    "connection": true,
-                    "connection_changed_at": 1451947138.418391,
-                    "connection_updated_at": 1452093346.488989
-                },
-                "triggers": [
-
-                ],
-                "location": "",
-                "capabilities": {
-
-                },
-                "hidden_at": null,
-                "outlets": [{
-                    "parent_object_type": "powerstrip",
-                    "icon_id": "4",
-                    "desired_state": {
-                        "powered": false
-                    },
-                    "parent_object_id": "24313",
-                    "scheduled_outlet_states": [
-
-                    ],
-                    "name": "Outlet #1",
-                    "outlet_index": 0,
-                    "last_reading": {
-                        "desired_powered_updated_at": 1452094688.1679382,
-                        "powered_updated_at": 1452094688.1461067,
-                        "powered": false,
-                        "powered_changed_at": 1452094688.1461067
-                    },
-                    "powered": false,
-                    "outlet_id": "48628"
-                }, {
-                    "parent_object_type": "powerstrip",
-                    "icon_id": "4",
-                    "desired_state": {
-                        "powered": false
-                    },
-                    "parent_object_id": "24313",
-                    "scheduled_outlet_states": [
-
-                    ],
-                    "name": "Outlet #2",
-                    "outlet_index": 1,
-                    "last_reading": {
-                        "desired_powered_updated_at": 1452094689.7589157,
-                        "powered_updated_at": 1452094689.443459,
-                        "powered": false,
-                        "powered_changed_at": 1452094689.443459
-                    },
-                    "powered": false,
-                    "outlet_id": "48629"
-                }],
-                "serial": "AAAA00012345",
-                "lat_lng": [
-                    0.000000, -0.000000
-                ],
-                "desired_state": {
-
-                },
-                "device_manufacturer": "quirky_ge",
-                "upc_id": "24",
-                "upc_code": "814434017226"
-            }],
-            "pagination": {
-
-            }
-        }
-        """
-        response_dict = json.loads(response)
+        with open('{}/api_responses/power_strip.json'.format(os.path.dirname(__file__))) as powerstrip_file:
+            response_dict = json.load(powerstrip_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.POWER_STRIP])
         self.assertEqual(2, len(devices))
         self.assertIsInstance(devices[0], WinkPowerStripOutlet)
         self.assertIsInstance(devices[1], WinkPowerStripOutlet)
 
+    def test_should_show_powered_state_as_false_if_device_is_disconnected(self):
+        with open('{}/api_responses/power_strip.json'.format(os.path.dirname(__file__))) as powerstrip_file:
+            response_dict = json.load(powerstrip_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.POWER_STRIP])
+        self.assertFalse(devices[0].state())
+
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/power_strip.json'.format(os.path.dirname(__file__))) as powerstrip_file:
+            response_dict = json.load(powerstrip_file)
+        power_strip = response_dict.get('data')
+        outlets = power_strip[0].get('outlets')
+
+        for outlet in outlets:
+            wink_outlet = WinkPowerStripOutlet(outlet, self.api_interface)
+            device_id = wink_outlet.device_id()
+            self.assertRegex(device_id, "^[0-9]{4,6}$")
+            
+
+class GarageDoorTests(unittest.TestCase):
+
+    def setUp(self):
+        super(GarageDoorTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_handle_garage_door_opener_response(self):
+        with open('{}/api_responses/garage_door.json'.format(os.path.dirname(__file__))) as garage_door_file:
+            response_dict = json.load(garage_door_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.GARAGE_DOOR])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkGarageDoor)
+        
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/garage_door.json'.format(os.path.dirname(__file__))) as garage_door_file:
+            response_dict = json.load(garage_door_file)
+        garage_door = response_dict.get('data')[0]
+        wink_garage_door = WinkGarageDoor(garage_door, self.api_interface)
+        device_id = wink_garage_door.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")
+
+        
+class SirenTests(unittest.TestCase):     
+
+    def setUp(self):
+        super(SirenTests, self).setUp()
+        self.api_interface = mock.MagicMock()   
 
     def test_should_handle_siren_response(self):
-
-        response = """
-        {
-           "data":[
-              {
-                 "desired_state":{
-                    "auto_shutoff":30,
-                    "mode":"siren_and_strobe",
-                    "powered":false
-                 },
-                 "last_reading":{
-                    "connection":true,
-                    "connection_updated_at":1453249957.2466462,
-                    "battery":1,
-                    "battery_updated_at":1453249957.2466462,
-                    "auto_shutoff":30,
-                    "auto_shutoff_updated_at":1453249957.2466462,
-                    "mode":"siren_and_strobe",
-                    "mode_updated_at":1453249957.2466462,
-                    "powered":false,
-                    "powered_updated_at":1453249957.2466462,
-                    "desired_auto_shutoff_updated_at":1452812848.5178623,
-                    "desired_mode_updated_at":1452812848.5178623,
-                    "desired_powered_updated_at":1452812668.1190264,
-                    "connection_changed_at":1452812587.0312104,
-                    "powered_changed_at":1452812668.0807295,
-                    "battery_changed_at":1453032821.1796713,
-                    "mode_changed_at":1452812589.8262901,
-                    "auto_shutoff_changed_at":1452812589.8262901,
-                    "desired_auto_shutoff_changed_at":1452812590.029748,
-                    "desired_powered_changed_at":1452812668.1190264,
-                    "desired_mode_changed_at":1452812848.5178623
-                 },
-                 "siren_id":"6123",
-                 "name":"Alarm",
-                 "locale":"en_us",
-                 "units":{
-
-                 },
-                 "created_at":1452812587,
-                 "hidden_at":null,
-                 "capabilities":{
-
-                 },
-                 "device_manufacturer":"linear",
-                 "model_name":"Wireless Siren & Strobe (Wireless)",
-                 "upc_id":"243",
-                 "upc_code":"wireless_linear_siren",
-                 "hub_id":"30123",
-                 "local_id":"8",
-                 "radio_type":"zwave",
-                 "lat_lng":[
-                    12.1345678,
-                    -98.765432
-                 ],
-                 "location":""
-              }
-           ],
-           "errors":[
-
-           ],
-           "pagination":{
-              "count":17
-           }
-        }
-        """
-
-        response_dict = json.loads(response)
+        with open('{}/api_responses/siren.json'.format(os.path.dirname(__file__))) as siren_file:
+            response_dict = json.load(siren_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SIREN])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkSiren)
+        
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/siren.json'.format(os.path.dirname(__file__))) as siren_file:
+            response_dict = json.load(siren_file)
+        siren = response_dict.get('data')[0]
+        wink_siren = WinkSiren(siren, self.api_interface)
+        device_id = wink_siren.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")        
 
-
+        
+class LockTests(unittest.TestCase):     
+        
+    def setUp(self):
+        super(LockTests, self).setUp()
+        self.api_interface = mock.MagicMock()      
+        
     def test_should_handle_lock_response(self):
-
-        response = """
-        {
-          "data": [
-            {
-              "desired_state": {
-                "locked": true,
-                "beeper_enabled": true,
-                "vacation_mode_enabled": false,
-                "auto_lock_enabled": false,
-                "key_code_length": 4,
-                "alarm_mode": null,
-                "alarm_sensitivity": 0.6,
-                "alarm_enabled": false
-              },
-              "last_reading": {
-                "locked": true,
-                "locked_updated_at": 1417823487.490747,
-                "connection": true,
-                "connection_updated_at": 1417823487.490747,
-                "battery": 0.83,
-                "battery_updated_at": 1417823487.490747,
-                "alarm_activated": null,
-                "alarm_activated_updated_at": null,
-                "beeper_enabled": true,
-                "beeper_enabled_updated_at": 1417823487.490747,
-                "vacation_mode_enabled": false,
-                "vacation_mode_enabled_updated_at": 1417823487.490747,
-                "auto_lock_enabled": false,
-                "auto_lock_enabled_updated_at": 1417823487.490747,
-                "key_code_length": 4,
-                "key_code_length_updated_at": 1417823487.490747,
-                "alarm_mode": null,
-                "alarm_mode_updated_at": 1417823487.490747,
-                "alarm_sensitivity": 0.6,
-                "alarm_sensitivity_updated_at": 1417823487.490747,
-                "alarm_enabled": true,
-                "alarm_enabled_updated_at": 1417823487.490747,
-                "last_error": null,
-                "last_error_updated_at": 1417823487.490747,
-                "desired_locked_updated_at": 1417823487.490747,
-                "desired_beeper_enabled_updated_at": 1417823487.490747,
-                "desired_vacation_mode_enabled_updated_at": 1417823487.490747,
-                "desired_auto_lock_enabled_updated_at": 1417823487.490747,
-                "desired_key_code_length_updated_at": 1417823487.490747,
-                "desired_alarm_mode_updated_at": 1417823487.490747,
-                "desired_alarm_sensitivity_updated_at": 1417823487.490747,
-                "desired_alarm_enabled_updated_at": 1417823487.490747,
-                "locked_changed_at": 1417823487.490747,
-                "battery_changed_at": 1417823487.490747,
-                "desired_locked_changed_at": 1417823487.490747,
-                "desired_beeper_enabled_changed_at": 1417823487.490747,
-                "desired_vacation_mode_enabled_changed_at": 1417823487.490747,
-                "desired_auto_lock_enabled_changed_at": 1417823487.490747,
-                "desired_key_code_length_changed_at": 1417823487.490747,
-                "desired_alarm_mode_changed_at": 1417823487.490747,
-                "desired_alarm_sensitivity_changed_at": 1417823487.490747,
-                "desired_alarm_enabled_changed_at": 1417823487.490747,
-                "last_error_changed_at": 1417823487.490747
-              },
-              "lock_id": "5304",
-              "name": "Main",
-              "locale": "en_us",
-              "units": {},
-              "created_at": 1417823382,
-              "hidden_at": null,
-              "capabilities": {
-                "fields": [
-                  {
-                    "field": "locked",
-                    "type": "boolean",
-                    "mutability": "read-write"
-                  },
-                  {
-                    "field": "connection",
-                    "mutability": "read-only",
-                    "type": "boolean"
-                  },
-                  {
-                    "field": "battery",
-                    "mutability": "read-only",
-                    "type": "percentage"
-                  },
-                  {
-                    "field": "alarm_activated",
-                    "mutability": "read-only",
-                    "type": "boolean"
-                  },
-                  {
-                    "field": "beeper_enabled",
-                    "type": "boolean"
-                  },
-                  {
-                    "field": "vacation_mode_enabled",
-                    "type": "boolean"
-                  },
-                  {
-                    "field": "auto_lock_enabled",
-                    "type": "boolean"
-                  },
-                  {
-                    "field": "key_code_length",
-                    "type": "integer"
-                  },
-                  {
-                    "field": "alarm_mode",
-                    "type": "string"
-                  },
-                  {
-                    "field": "alarm_sensitivity",
-                    "type": "percentage"
-                  },
-                  {
-                    "field": "alarm_enabled",
-                    "type": "boolean"
-                  }
-                ],
-                "home_security_device": true
-              },
-              "triggers": [],
-              "manufacturer_device_model": "schlage_zwave_lock",
-              "manufacturer_device_id": null,
-              "device_manufacturer": "schlage",
-              "model_name": "BE469",
-              "upc_id": "11",
-              "upc_code": "043156312214",
-              "hub_id": "11780",
-              "local_id": "1",
-              "radio_type": "zwave",
-              "lat_lng": [38.429962, -122.653715],
-              "location": ""
-            }
-          ],
-          "errors": [],
-          "pagination": {
-            "count": 1
-          }
-        }
-        """
-
-        response_dict = json.loads(response)
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LOCK])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkLock)
+        
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        lock = response_dict.get('data')[0]
+        wink_lock = WinkLock(lock, self.api_interface)
+        device_id = wink_lock.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")    
+
+        
+class BinarySwitchTests(unittest.TestCase): 
+
+    def setUp(self):
+        super(BinarySwitchTests, self).setUp()
+        self.api_interface = mock.MagicMock()        
 
     def test_should_handle_binary_switch_response(self):
-
-        response = """
-        {
-            "data": [{
-                "binary_switch_id": "4153",
-                "name": "Garage door indicator",
-                "locale": "en_us",
-                "units": {},
-                "created_at": 1411614982,
-                "hidden_at": null,
-                "capabilities": {},
-                "subscription": {},
-                "triggers": [],
-                "desired_state": {
-                    "powered": false
-                },
-                "manufacturer_device_model": "leviton_dzs15",
-                "manufacturer_device_id": null,
-                "device_manufacturer": "leviton",
-                "model_name": "Switch",
-                "upc_id": "94",
-                "gang_id": null,
-                "hub_id": "11780",
-                "local_id": "9",
-                "radio_type": "zwave",
-                "last_reading": {
-                    "powered": false,
-                    "powered_updated_at": 1411614983.6153464,
-                    "powering_mode": null,
-                    "powering_mode_updated_at": null,
-                    "consumption": null,
-                    "consumption_updated_at": null,
-                    "cost": null,
-                    "cost_updated_at": null,
-                    "budget_percentage": null,
-                    "budget_percentage_updated_at": null,
-                    "budget_velocity": null,
-                    "budget_velocity_updated_at": null,
-                    "summation_delivered": null,
-                    "summation_delivered_updated_at": null,
-                    "sum_delivered_multiplier": null,
-                    "sum_delivered_multiplier_updated_at": null,
-                    "sum_delivered_divisor": null,
-                    "sum_delivered_divisor_updated_at": null,
-                    "sum_delivered_formatting": null,
-                    "sum_delivered_formatting_updated_at": null,
-                    "sum_unit_of_measure": null,
-                    "sum_unit_of_measure_updated_at": null,
-                    "desired_powered": false,
-                    "desired_powered_updated_at": 1417893563.7567682,
-                    "desired_powering_mode": null,
-                    "desired_powering_mode_updated_at": null
-                },
-                "current_budget": null,
-                "lat_lng": [
-                    38.429996,
-                    -122.653721
-                ],
-                "location": "",
-                "order": 0
-            }],
-            "errors": [],
-            "pagination": {}
-        }
-        """
-
-        response_dict = json.loads(response)
+        with open('{}/api_responses/binary_switch.json'.format(os.path.dirname(__file__))) as binary_switch_file:
+            response_dict = json.load(binary_switch_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.BINARY_SWITCH])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkBinarySwitch)
+        
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/binary_switch.json'.format(os.path.dirname(__file__))) as binary_switch_file:
+            response_dict = json.load(binary_switch_file)
+        switch = response_dict.get('data')[0]
+        wink_switch = WinkBinarySwitch(switch, self.api_interface)
+        device_id = wink_switch.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")   
+        
+        
+class BinarySensorTests(unittest.TestCase): 
 
+    def setUp(self):
+        super(BinarySensorTests, self).setUp()
+        self.api_interface = mock.MagicMock() 
+        
     def test_should_handle_sensor_pod_response(self):
-
-        response = """
-        {
-            "data": [{
-                "last_event": {
-                    "brightness_occurred_at": null,
-                    "loudness_occurred_at": null,
-                    "vibration_occurred_at": null
-                },
-                "model_name": "Tripper",
-                "capabilities": {
-                    "sensor_types": [
-                        {
-                            "field": "opened",
-                            "type": "boolean"
-                        },
-                        {
-                            "field": "battery",
-                            "type": "percentage"
-                        }
-                    ]
-                },
-                "manufacturer_device_model": "quirky_ge_tripper",
-                "location": "",
-                "radio_type": "zigbee",
-                "manufacturer_device_id": null,
-                "gang_id": null,
-                "sensor_pod_id": "37614",
-                "subscription": {
-                },
-                "units": {
-                },
-                "upc_id": "184",
-                "hidden_at": null,
-                "last_reading": {
-                    "battery_voltage_threshold_2": 0,
-                    "opened": false,
-                    "battery_alarm_mask": 0,
-                    "opened_updated_at": 1421697092.7347496,
-                    "battery_voltage_min_threshold_updated_at": 1421697092.7347229,
-                    "battery_voltage_min_threshold": 0,
-                    "connection": null,
-                    "battery_voltage": 25,
-                    "battery_voltage_threshold_1": 25,
-                    "connection_updated_at": null,
-                    "battery_voltage_threshold_3": 0,
-                    "battery_voltage_updated_at": 1421697092.7347066,
-                    "battery_voltage_threshold_1_updated_at": 1421697092.7347302,
-                    "battery_voltage_threshold_3_updated_at": 1421697092.7347434,
-                    "battery_voltage_threshold_2_updated_at": 1421697092.7347374,
-                    "battery": 1.0,
-                    "battery_updated_at": 1421697092.7347553,
-                    "battery_alarm_mask_updated_at": 1421697092.734716
-                },
-                "triggers": [
-                ],
-                "name": "MasterBathroom",
-                "lat_lng": [
-                    37.550773,
-                    -122.279182
-                ],
-                "uuid": "a2cb868a-dda3-4211-ab73-fc08087aeed7",
-                "locale": "en_us",
-                "device_manufacturer": "quirky_ge",
-                "created_at": 1421523277,
-                "local_id": "2",
-                "hub_id": "88264"
-            }]
-        }
-        """
-
-        response_dict = json.loads(response)
+        with open('{}/api_responses/binary_sensor.json'.format(os.path.dirname(__file__))) as binary_sensor_file:
+            response_dict = json.load(binary_sensor_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkSensorPod)
+        
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/binary_sensor.json'.format(os.path.dirname(__file__))) as binary_sensor_file:
+            response_dict = json.load(binary_sensor_file)
+        sensor = response_dict.get('data')[0]
+        wink_binary_sensor = WinkSensorPod(sensor, self.api_interface)
+        device_id = wink_binary_sensor.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")        
+        
+        
+class EggtrayTests(unittest.TestCase): 
+
+    def setUp(self):
+        super(EggtrayTests, self).setUp()
+        self.api_interface = mock.MagicMock()               
 
     def test_should_handle_egg_tray_response(self):
-
-        response = """
-        {
-            "data": [{
-                "last_reading": {
-                    "connection": true,
-                    "connection_updated_at": 1417823487.490747,
-                    "battery": 0.83,
-                    "battery_updated_at": 1417823487.490747,
-                    "inventory": 3,
-                    "inventory_updated_at": 1449705551.7313306,
-                    "freshness_remaining": 2419191,
-                    "freshness_remaining_updated_at": 1449705551.7313495,
-                    "age_updated_at": 1449705551.7313418,
-                    "age": 1449705542,
-                    "connection_changed_at": 1449705443.6858568,
-                    "next_trigger_at_updated_at": null,
-                    "next_trigger_at": null,
-                    "egg_1_timestamp_updated_at": 1449753143.8631344,
-                    "egg_1_timestamp_changed_at": 1449705534.0782206,
-                    "egg_1_timestamp": 1449705545.0,
-                    "egg_2_timestamp_updated_at": 1449753143.8631344,
-                    "egg_2_timestamp_changed_at": 1449705534.0782206,
-                    "egg_2_timestamp": 1449705545.0,
-                    "egg_3_timestamp_updated_at": 1449753143.8631344,
-                    "egg_3_timestamp_changed_at": 1449705534.0782206,
-                    "egg_3_timestamp": 1449705545.0,
-                    "egg_4_timestamp_updated_at": 1449753143.8631344,
-                    "egg_4_timestamp_changed_at": 1449705534.0782206,
-                    "egg_4_timestamp": 1449705545.0,
-                    "egg_5_timestamp_updated_at": 1449753143.8631344,
-                    "egg_5_timestamp_changed_at": 1449705534.0782206,
-                    "egg_5_timestamp": 1449705545.0,
-                    "egg_6_timestamp_updated_at": 1449753143.8631344,
-                    "egg_6_timestamp_changed_at": 1449705534.0782206,
-                    "egg_6_timestamp": 1449705545.0,
-                    "egg_7_timestamp_updated_at": 1449753143.8631344,
-                    "egg_7_timestamp_changed_at": 1449705534.0782206,
-                    "egg_7_timestamp": 1449705545.0,
-                    "egg_8_timestamp_updated_at": 1449753143.8631344,
-                    "egg_8_timestamp_changed_at": 1449705534.0782206,
-                    "egg_8_timestamp": 1449705545.0,
-                    "egg_9_timestamp_updated_at": 1449753143.8631344,
-                    "egg_9_timestamp_changed_at": 1449705534.0782206,
-                    "egg_9_timestamp": 1449705545.0,
-                    "egg_10_timestamp_updated_at": 1449753143.8631344,
-                    "egg_10_timestamp_changed_at": 1449705534.0782206,
-                    "egg_10_timestamp": 1449705545.0,
-                    "egg_11_timestamp_updated_at": 1449753143.8631344,
-                    "egg_11_timestamp_changed_at": 1449705534.0782206,
-                    "egg_11_timestamp": 1449705545.0,
-                    "egg_12_timestamp_updated_at": 1449753143.8631344,
-                    "egg_12_timestamp_changed_at": 1449705534.0782206,
-                    "egg_12_timestamp": 1449705545.0,
-                    "egg_13_timestamp_updated_at": 1449753143.8631344,
-                    "egg_13_timestamp_changed_at": 1449705534.0782206,
-                    "egg_13_timestamp": 1449705545.0,
-                    "egg_14_timestamp_updated_at": 1449753143.8631344,
-                    "egg_14_timestamp_changed_at": 1449705534.0782206,
-                    "egg_14_timestamp": 1449705545.0
-                },
-                "eggtray_id": "153869",
-                "name": "Egg Minder",
-                "freshness_period": 2419200,
-                "locale": "en_us",
-                "units": {},
-                "created_at": 1417823382,
-                "hidden_at": null,
-                "capabilities": {},
-                "triggers": [],
-                "device_manufacturer": "quirky_ge",
-                "model_name": "Egg Minder",
-                "upc_id": "23",
-                "upc_code": "814434017233",
-                "lat_lng": [38.429962, -122.653715],
-                "location": ""
-            }],
-            "errors": [],
-            "pagination": {
-                "count": 1
-            }
-        }
-        """
-
-        response_dict = json.loads(response)
+        with open('{}/api_responses/eggtray.json'.format(os.path.dirname(__file__))) as eggtray_file:
+            response_dict = json.load(eggtray_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.EGG_TRAY])
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkEggTray)
+        
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/eggtray.json'.format(os.path.dirname(__file__))) as eggtray_file:
+            response_dict = json.load(eggtray_file)
+        eggtray = response_dict.get('data')[0]
+        wink_eggtray = WinkEggTray(eggtray, self.api_interface)
+        device_id = wink_eggtray.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")
+
+        
+class SensorTests(unittest.TestCase):
+
+    def setUp(self):
+        super(SensorTests, self).setUp()
+        self.api_interface = mock.MagicMock() 
+
+    def test_quirky_spotter_api_response_should_create_unique_one_primary_sensor_and_five_subsensors(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        self.assertEquals(1 + 5, len(sensors))
+
+    def test_alternative_quirky_spotter_api_response_should_create_one_primary_sensor_and_five_subsensors(self):
+        with open('{}/api_responses/quirky_spotter_2.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        self.assertEquals(1 + 5, len(sensors))
+
+    def test_brightness_should_have_correct_value(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkBrightnessSensor"""
+        brightness_sensor = [sensor for sensor in sensors if sensor.capability() is WinkBrightnessSensor.CAPABILITY][0]
+        expected_brightness = 1
+        self.assertEquals(expected_brightness, brightness_sensor.brightness_boolean())
+
+    def test_humidity_should_have_correct_value(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkHumiditySensor"""
+        humidity_sensor = [sensor for sensor in sensors if sensor.capability() is WinkHumiditySensor.CAPABILITY][0]
+        expected_humidity = 48
+        self.assertEquals(expected_humidity, humidity_sensor.humidity_percentage())
+
+    def test_loudness_should_have_correct_value(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkSoundPresenceSensor"""
+        sound_sensor = [sensor for sensor in sensors if sensor.capability() is WinkSoundPresenceSensor.CAPABILITY][0]
+        expected_sound_presence = False
+        self.assertEquals(expected_sound_presence, sound_sensor.loudness_boolean())
+
+    def test_vibration_should_have_correct_value(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkVibrationPresenceSensor"""
+        vibration_sensor = [sensor for sensor in sensors if sensor.capability() is WinkVibrationPresenceSensor.CAPABILITY][0]
+        expected_vibrartion_presence = False
+        self.assertEquals(expected_vibrartion_presence, vibration_sensor.vibration_boolean())
+
+    def test_temperature_should_have_correct_value(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkTemperatureSensor"""
+        temp_sensor = [sensor for sensor in sensors if sensor.capability() is WinkTemperatureSensor.CAPABILITY][0]
+        expected_temperature = 5
+        self.assertEquals(expected_temperature, temp_sensor.temperature_float())
+
+    def test_device_id_should_start_with_a_number(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+
+        for sensor in sensors:
+            device_id = sensor.device_id()
+            self.assertRegex(device_id, "^[0-9]{4,6}")     
+
+
+class WinkCapabilitySensorTests(unittest.TestCase):
+
+    def setUp(self):
+        super(WinkCapabilitySensorTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_call_get_state_endpoint_with_capability_removed_from_id(self):
+        expected_id = '72503'
+        unit = 'DEG'  # mock doesn't like unicode
+        capability = "Test"
+        sensor = _WinkCapabilitySensor({
+            'sensor_pod_id': expected_id
+        }, self.api_interface, unit, capability)
+
+        sensor.update_state()
+        self.api_interface.get_device_state.assert_called_once_with(sensor, expected_id)
+
