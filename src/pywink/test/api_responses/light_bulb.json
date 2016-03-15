@@ -1,0 +1,41 @@
+{
+  "data": [{
+      "light_bulb_id": "33990",
+      "name": "downstaurs lamp",
+      "locale": "en_us",
+      "units": {},
+      "created_at": 1410925804,
+      "hidden_at": null,
+      "capabilities": {},
+      "subscription": {},
+      "triggers": [],
+      "desired_state": {
+          "powered": true,
+          "brightness": 1
+      },
+      "manufacturer_device_model": "lutron_p_pkg1_w_wh_d",
+      "manufacturer_device_id": null,
+      "device_manufacturer": "lutron",
+      "model_name": "Caseta Wireless Dimmer & Pico",
+      "upc_id": "3",
+      "hub_id": "11780",
+      "local_id": "8",
+      "radio_type": "lutron",
+      "linked_service_id": null,
+      "last_reading": {
+          "brightness": 1,
+          "brightness_updated_at": 1417823487.490747,
+          "connection": true,
+          "connection_updated_at": 1417823487.4907365,
+          "powered": true,
+          "powered_updated_at": 1417823487.4907532,
+          "desired_powered": true,
+          "desired_powered_updated_at": 1417823485.054675,
+          "desired_brightness": 1,
+          "desired_brightness_updated_at": 1417409293.2591703
+      },
+      "lat_lng": [38.429962, -122.653715],
+      "location": "",
+      "order": 0
+  }]
+}

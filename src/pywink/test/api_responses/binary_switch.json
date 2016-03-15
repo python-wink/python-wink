@@ -1,0 +1,62 @@
+{
+    "data": [{
+        "binary_switch_id": "4153",
+        "name": "Garage door indicator",
+        "locale": "en_us",
+        "units": {},
+        "created_at": 1411614982,
+        "hidden_at": null,
+        "capabilities": {},
+        "subscription": {},
+        "triggers": [],
+        "desired_state": {
+            "powered": false
+        },
+        "manufacturer_device_model": "leviton_dzs15",
+        "manufacturer_device_id": null,
+        "device_manufacturer": "leviton",
+        "model_name": "Switch",
+        "upc_id": "94",
+        "gang_id": null,
+        "hub_id": "11780",
+        "local_id": "9",
+        "radio_type": "zwave",
+        "last_reading": {
+            "powered": false,
+            "powered_updated_at": 1411614983.6153464,
+            "powering_mode": null,
+            "powering_mode_updated_at": null,
+            "consumption": null,
+            "consumption_updated_at": null,
+            "cost": null,
+            "cost_updated_at": null,
+            "budget_percentage": null,
+            "budget_percentage_updated_at": null,
+            "budget_velocity": null,
+            "budget_velocity_updated_at": null,
+            "summation_delivered": null,
+            "summation_delivered_updated_at": null,
+            "sum_delivered_multiplier": null,
+            "sum_delivered_multiplier_updated_at": null,
+            "sum_delivered_divisor": null,
+            "sum_delivered_divisor_updated_at": null,
+            "sum_delivered_formatting": null,
+            "sum_delivered_formatting_updated_at": null,
+            "sum_unit_of_measure": null,
+            "sum_unit_of_measure_updated_at": null,
+            "desired_powered": false,
+            "desired_powered_updated_at": 1417893563.7567682,
+            "desired_powering_mode": null,
+            "desired_powering_mode_updated_at": null
+        },
+        "current_budget": null,
+        "lat_lng": [
+            38.429996,
+            -122.653721
+        ],
+        "location": "",
+        "order": 0
+    }],
+    "errors": [],
+    "pagination": {}
+}

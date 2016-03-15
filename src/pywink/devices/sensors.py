@@ -35,6 +35,12 @@ class _WinkCapabilitySensor(WinkDevice):
         root_name = self.json_state.get('sensor_pod_id', self.name())
         return '{}+{}'.format(root_name, self._capability)
 
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        root_name = self.json_state.get('sensor_pod_id', self.name())
+        response = self.api_interface.get_device_state(self, root_name)
+        self._update_state_from_response(response)
+
 
 class WinkSensorPod(_WinkCapabilitySensor):
     """ represents a wink.py sensor
@@ -94,8 +100,8 @@ class WinkBrightnessSensor(_WinkCapabilitySensor):
 
     def brightness_boolean(self):
         """
-        :return: The percentage of brightness as determined by the device.
-        :rtype: int
+        :return: True if light is detected.  False if light is below detection threshold (varies by device)
+        :rtype: bool
         """
         return self.last_reading()
 
