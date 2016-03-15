@@ -33,10 +33,7 @@ class WinkDevice(object):
 
     @property
     def available(self):
-        if not self._last_reading.get('connection', False):
-            return False
-        else:
-            return True
+        return self._last_reading.get('connection', False)
 
     def _update_state_from_response(self, response_json):
         """
