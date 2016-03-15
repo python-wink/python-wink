@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.7.0
+- Expanded color support for WinkBulbs
+- Added ability to supply client_id, client_secret, and refresh_token 
+instead of access_token.  This should get around tokens expiring.
+
 ## 0.6.4
 - Added available method to report "connection" status
 

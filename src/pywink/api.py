@@ -51,6 +51,24 @@ def set_bearer_token(token):
     }
 
 
+def set_wink_credentials(client_id, client_secret, refresh_token):
+    data = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "refresh_token",
+        "refresh_token": refresh_token
+    }
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.post('{}/oauth2/token'.format(WinkApiInterface.BASE_URL),
+                             data=json.dumps(data),
+                             headers=headers)
+    response_json = response.json()
+    access_token = response_json.get('access_token')
+    set_bearer_token(access_token)
+
+
 def get_bulbs():
     return get_devices(device_types.LIGHT_BULB)
 
