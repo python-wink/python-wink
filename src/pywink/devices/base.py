@@ -31,6 +31,10 @@ class WinkDevice(object):
     def _last_reading(self):
         return self.json_state.get('last_reading') or {}
 
+    @property
+    def available(self):
+        return self._last_reading.get('connection', False)
+
     def _update_state_from_response(self, response_json):
         """
         :param response_json: the json obj returned from query
