@@ -61,6 +61,76 @@ class BulbSupportsTemperatureTest(unittest.TestCase):
                         msg="Expected temperature to be un-supported")
 
 
+class SetStateTests(unittest.TestCase):
+
+    def setUp(self):
+        super(SetStateTests, self).setUp()
+        self.api_interface = mock.Mock()
+
+    def test_should_send_current_brightness_to_api_if_only_color_temperature_is_provided_and_bulb_only_supports_temperature(self):
+        original_brightness = 0.5
+        bulb = WinkBulb({
+            'brightness': original_brightness,
+            'capabilities': {
+                'color_changeable': True,
+                'fields': [{
+                    'field': 'color_temperature'
+                }]
+            }
+        }, self.api_interface)
+        bulb.set_state(True, color_kelvin=4000)
+        set_state_mock = self.api_interface.set_device_state
+        sent_desired_state = set_state_mock.call_args[0][1]['desired_state']
+        self.assertEquals(original_brightness, sent_desired_state.get('brightness'))
+
+    def test_should_send_color_temperature_to_api_if_color_temp_is_provided_and_bulb_only_supports_temperature(self):
+        bulb = WinkBulb({
+            'capabilities': {
+                'color_changeable': True,
+                'fields': [{
+                    'field': 'color_temperature'
+                }]
+            }
+        }, self.api_interface)
+        color_kelvin = 4000
+        bulb.set_state(True, color_kelvin=color_kelvin)
+        set_state_mock = self.api_interface.set_device_state
+        sent_desired_state = set_state_mock.call_args[0][1]['desired_state']
+        self.assertEquals(color_kelvin, sent_desired_state.get('color_temperature'))
+
+    def test_should_send_current_brightness_to_api_if_only_color_temperature_is_provided_and_bulb_only_supports_hue_sat(
+            self):
+        original_brightness = 0.5
+        bulb = WinkBulb({
+            'brightness': original_brightness,
+            'capabilities': {
+                'color_changeable': True,
+                'fields': [{'field': 'hue'},
+                           {'field': 'saturation'}]
+            }
+        }, self.api_interface)
+        bulb.set_state(True, color_kelvin=4000)
+        set_state_mock = self.api_interface.set_device_state
+        sent_desired_state = set_state_mock.call_args[0][1]['desired_state']
+        self.assertEquals(original_brightness, sent_desired_state.get('brightness'))
+
+    def test_should_send_current_hue_and_saturation_to_api_if_hue_and_sat_are_provided_and_bulb_only_supports_hue_sat(self):
+        bulb = WinkBulb({
+            'capabilities': {
+                'color_changeable': True,
+                'fields': [{'field': 'hue'},
+                           {'field': 'saturation'}]
+            }
+        }, self.api_interface)
+        hue = 0.2
+        saturation = 0.3
+        bulb.set_state(True, color_hue_saturation=[hue, saturation])
+        set_state_mock = self.api_interface.set_device_state
+        sent_desired_state = set_state_mock.call_args[0][1]['desired_state']
+        self.assertEquals(hue, sent_desired_state.get('hue'))
+        self.assertEquals(saturation, sent_desired_state.get('saturation'))
+
+
 class LightTests(unittest.TestCase):
 
     def setUp(self):
