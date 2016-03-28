@@ -19,7 +19,7 @@ class BulbSupportsHueSaturationTest(unittest.TestCase):
 
         bulb = devices[0]
         """ :type bulb: pywink.devices.standard.WinkBulb """
-        supports_hs = bulb._bulb_supports_hue_saturation()
+        supports_hs = bulb.supports_hue_saturation()
         self.assertTrue(supports_hs,
                         msg="Expected hue and saturation to be supported")
 
@@ -30,7 +30,7 @@ class BulbSupportsHueSaturationTest(unittest.TestCase):
 
         bulb = devices[0]
         """ :type bulb: pywink.devices.standard.WinkBulb """
-        supports_hs = bulb._bulb_supports_hue_saturation()
+        supports_hs = bulb.supports_hue_saturation()
         self.assertFalse(supports_hs,
                         msg="Expected hue and saturation to be supported")
 
@@ -44,7 +44,7 @@ class BulbSupportsTemperatureTest(unittest.TestCase):
 
         bulb = devices[0]
         """ :type bulb: pywink.devices.standard.WinkBulb """
-        supports_temperature = bulb._bulb_supports_temperature()
+        supports_temperature = bulb.supports_temperature()
         self.assertTrue(supports_temperature,
                         msg="Expected temperature to be supported")
 
@@ -56,7 +56,7 @@ class BulbSupportsTemperatureTest(unittest.TestCase):
 
         bulb = devices[0]
         """ :type bulb: pywink.devices.standard.WinkBulb """
-        supports_temperature = bulb._bulb_supports_temperature()
+        supports_temperature = bulb.supports_temperature()
         self.assertFalse(supports_temperature,
                         msg="Expected temperature to be un-supported")
 

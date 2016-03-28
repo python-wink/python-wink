@@ -93,7 +93,7 @@ class WinkBulb(WinkBinarySwitch):
                 "brightness": brightness
             }
 
-        elif self._bulb_supports_rgb():
+        elif self.supports_rgb():
             rgb = _get_color_as_rgb(color_hue_saturation, color_kelvin, color_xy, brightness)
             if rgb:
                 return {
@@ -104,21 +104,21 @@ class WinkBulb(WinkBinarySwitch):
                 }
                 # TODO: Find out if this is the correct format
 
-        if color_hue_saturation is None and color_kelvin is not None and self._bulb_supports_temperature():
+        if color_hue_saturation is None and color_kelvin is not None and self.supports_temperature():
             return _format_temperature(color_kelvin, brightness)
 
-        if self._bulb_supports_hue_saturation():
+        if self.supports_hue_saturation():
             hsv = _get_color_as_hue_saturation_brightness(color_hue_saturation, brightness, color_kelvin, color_xy)
             if hsv is not None:
                 return _format_hue_saturation_brightness(hsv)
 
-        if self._bulb_supports_xy_color():
+        if self.supports_xy_color():
             if color_xy is not None:
                 return _format_xy(color_xy)
 
         return {}
 
-    def _bulb_supports_rgb(self):
+    def supports_rgb(self):
         capabilities = self._last_reading.get('capabilities', {})
         if not capabilities.get('color_changeable', False):
             return False
@@ -126,7 +126,7 @@ class WinkBulb(WinkBinarySwitch):
         # TODO: Do any wink bulbs support RGB specification?
         return False
 
-    def _bulb_supports_hue_saturation(self):
+    def supports_hue_saturation(self):
         capabilities = self.json_state.get('capabilities', {})
         if not capabilities.get('color_changeable', False):
             return False
@@ -144,11 +144,11 @@ class WinkBulb(WinkBinarySwitch):
         if supports_hue and supports_saturation:
             return True
 
-    def _bulb_supports_xy_color(self):
+    def supports_xy_color(self):
         # TODO: Do any wink bulbs support XY color?
         return self.json_state.get("todo", False)
 
-    def _bulb_supports_temperature(self):
+    def supports_temperature(self):
         capabilities = self.json_state.get('capabilities', {})
         if not capabilities.get('color_changeable', False):
             return False
