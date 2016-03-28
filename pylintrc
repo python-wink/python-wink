@@ -1,12 +1,19 @@
 [MASTER]
 max-line-length=120
+max-args=10
 ignore=test
 
 # Reasons disabled:
 # missing-docstring - Document as you like.  Good, descriptive method names and variables are preferred over docstrings.
 # global-statement - used for the on-demand requirement installation
+# invalid-name - this warning flags short names but I'm fine with short names when used correctly
+# duplicate-code - I'd like to re-enabled this but 'wait_till_desired_reached' is duplicated.  Fix this later.
+# fixme - TODOs are allowed prior to v1.0
 # locally-disabled - Because that's the whole point!
 disable=
     missing-docstring
   , global-statement
+  , invalid-name
+  , duplicate-code
+  , fixme
   , locally-disabled
