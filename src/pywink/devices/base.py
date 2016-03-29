@@ -11,6 +11,14 @@ class WinkDevice(object):
         self.api_interface = api_interface
         self.objectprefix = objectprefix
         self.json_state = device_state_as_json
+        subscription = self.json_state.get('subscription')
+        if subscription != {} and subscription is not None:
+            pubnub = subscription.get('pubnub')
+            self.pubnub_key = pubnub.get('subscribe_key')
+            self.pubnub_channel = pubnub.get('channel')
+        else:
+            self.pubnub_key = None
+            self.pubnub_channel = None
 
     def __str__(self):
         return "%s %s %s" % (self.name(), self.device_id(), self.state())
@@ -57,3 +65,6 @@ class WinkDevice(object):
         """ Update state with latest info from Wink API. """
         response = self.api_interface.get_device_state(self)
         return self._update_state_from_response(response, require_desired_state_fulfilled)
+
+    def pubnub_update(self, json_response):
+        self.json_state = json_response

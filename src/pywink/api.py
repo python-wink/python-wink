@@ -184,6 +184,10 @@ def _get_subsensors_from_sensor_pod(item, api_interface):
 
 def __get_outlets_from_powerstrip(item, api_interface):
     outlets = item['outlets']
+    for outlet in outlets:
+        if 'subscription' in item:
+            outlet['subscription'] = item['subscription']
+        outlet['last_reading']['connection'] = item['last_reading']['connection']
     return [build_device(outlet, api_interface) for outlet in outlets if __device_is_visible(outlet, 'outlet_id')]
 
 

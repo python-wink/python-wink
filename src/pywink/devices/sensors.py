@@ -93,7 +93,13 @@ class WinkHumiditySensor(_WinkCapabilitySensor):
         :return: The relative humidity detected by the sensor (0% to 100%)
         :rtype: int
         """
-        return self.last_reading()
+        # The subscription response returns a deciaml not an int
+        # Doubtful we will ever get a legitimate reading less than 1
+        # so I think this should be safe
+        if self.last_reading() <= 1.0:
+            return int(self.last_reading() * 100)
+        else:
+            return self.last_reading()
 
 
 class WinkBrightnessSensor(_WinkCapabilitySensor):

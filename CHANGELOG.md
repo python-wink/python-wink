@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.7
+- Added support for retrieving the Pubnub subscription details
+
 ## 0.7.6
 - Added ability to return the battery level if a device is battery powered
 
