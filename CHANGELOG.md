@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.2
+- Conserving brightness when setting color (temperature, hue sat, etc.)
+
 ## 0.7.1 
 - Exposed bulb color support methods (E.g. supports_hue_saturation())
 

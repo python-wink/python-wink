@@ -77,8 +77,13 @@ class WinkBulb(WinkBinarySwitch):
         """
         desired_state = {"powered": state}
 
-        color_state = self._format_color_data(color_hue_saturation, color_kelvin, color_xy, brightness or 1)
+        color_state = self._format_color_data(color_hue_saturation, color_kelvin, color_xy)
         desired_state.update(color_state)
+
+        brightness = brightness if brightness is not None else self.json_state.get('brightness', 1)
+        desired_state.update({
+            'brightness': brightness
+        })
 
         response = self.api_interface.set_device_state(self, {
             "desired_state": desired_state
@@ -87,14 +92,12 @@ class WinkBulb(WinkBinarySwitch):
 
         self._last_call = (time.time(), state)
 
-    def _format_color_data(self, color_hue_saturation, color_kelvin, color_xy, brightness):
-        if brightness and color_hue_saturation is None and color_kelvin is None and color_xy is None:
-            return {
-                "brightness": brightness
-            }
+    def _format_color_data(self, color_hue_saturation, color_kelvin, color_xy):
+        if color_hue_saturation is None and color_kelvin is None and color_xy is None:
+            return {}
 
-        elif self.supports_rgb():
-            rgb = _get_color_as_rgb(color_hue_saturation, color_kelvin, color_xy, brightness)
+        if self.supports_rgb():
+            rgb = _get_color_as_rgb(color_hue_saturation, color_kelvin, color_xy)
             if rgb:
                 return {
                     "color_model": "rgb",
@@ -105,12 +108,12 @@ class WinkBulb(WinkBinarySwitch):
                 # TODO: Find out if this is the correct format
 
         if color_hue_saturation is None and color_kelvin is not None and self.supports_temperature():
-            return _format_temperature(color_kelvin, brightness)
+            return _format_temperature(color_kelvin)
 
         if self.supports_hue_saturation():
-            hsv = _get_color_as_hue_saturation_brightness(color_hue_saturation, brightness, color_kelvin, color_xy)
+            hsv = _get_color_as_hue_saturation_brightness(color_hue_saturation, color_kelvin, color_xy)
             if hsv is not None:
-                return _format_hue_saturation_brightness(hsv)
+                return _format_hue_saturation(hsv)
 
         if self.supports_xy_color():
             if color_xy is not None:
@@ -164,21 +167,19 @@ class WinkBulb(WinkBinarySwitch):
             self.name(), self.device_id(), self.state())
 
 
-def _format_temperature(kelvin, brightness):
+def _format_temperature(kelvin):
     return {
         "color_model": "color_temperature",
         "color_temperature": kelvin,
-        "brightness": brightness
     }
 
 
-def _format_hue_saturation_brightness(hue_saturation_brightness):
-    hsv_iter = iter(hue_saturation_brightness)
+def _format_hue_saturation(hue_saturation):
+    hsv_iter = iter(hue_saturation)
     return {
         "color_model": "hsb",
         "hue": next(hsv_iter),
         "saturation": next(hsv_iter),
-        "brightness": next(hsv_iter)
     }
 
 
@@ -191,22 +192,22 @@ def _format_xy(xy):
     }
 
 
-def _get_color_as_rgb(hue_sat, brightness, kelvin, xy):
-    if hue_sat is not None and brightness is not None:
-        h, s, v = colorsys.hsv_to_rgb(hue_sat[0], hue_sat[1], brightness)
+def _get_color_as_rgb(hue_sat, kelvin, xy):
+    if hue_sat is not None:
+        h, s, v = colorsys.hsv_to_rgb(hue_sat[0], hue_sat[1], 1)
         return tuple(h, s, v)
     if kelvin is not None:
         return color_temperature_to_rgb(kelvin)
     if xy is not None:
-        return color_xy_brightness_to_rgb(xy[0], xy[1], brightness)
+        return color_xy_brightness_to_rgb(xy[0], xy[1], 1)
     return None
 
 
-def _get_color_as_hue_saturation_brightness(hue_sat, brightness, kelvin, xy):
-    if hue_sat and brightness:
+def _get_color_as_hue_saturation_brightness(hue_sat, kelvin, xy):
+    if hue_sat:
         color_hs_iter = iter(hue_sat)
-        return (next(color_hs_iter), next(color_hs_iter), brightness)
-    rgb = _get_color_as_rgb(None, brightness, kelvin, xy)
+        return (next(color_hs_iter), next(color_hs_iter), 1)
+    rgb = _get_color_as_rgb(None, kelvin, xy)
     if not rgb:
         return None
     h, s, v = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])

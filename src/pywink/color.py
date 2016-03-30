@@ -68,7 +68,10 @@ def color_temperature_to_rgb(color_temperature_kelvin):
 # Copyright (c) 2014 Benjamin Knight / MIT License.
 # pylint: disable=bad-builtin
 def color_xy_brightness_to_rgb(vX, vY, brightness):
-    """Convert from XYZ to RGB."""
+    """
+    Convert from XYZ to RGB.
+    :rtype: tuple of int
+    """
     brightness /= 255.
     if brightness == 0:
         return (0, 0, 0)
