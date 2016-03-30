@@ -6,6 +6,7 @@ import time
 from pywink.devices.base import WinkDevice
 from pywink.devices.standard.base import WinkBinarySwitch
 from pywink.devices.standard.bulb import WinkBulb
+from pywink.domain.devices import is_desired_state_reached
 
 
 class WinkEggTray(WinkDevice):
@@ -120,23 +121,20 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
     def _last_reading(self):
         return self.json_state.get('last_reading') or {}
 
-    def _update_state_from_response(self, response_json):
-        """
-        :param response_json: the json obj returned from query
-        :return:
-        """
-        power_strip = response_json.get('data')
+    def update_state(self, require_desired_state_fulfilled=False):
+        """ Update state with latest info from Wink API. """
+        response = self.api_interface.get_device_state(self, id_override=self.parent_id())
+        power_strip = response.get('data')
+        if require_desired_state_fulfilled:
+            if not is_desired_state_reached(power_strip[0]):
+                return
+
         power_strip_reading = power_strip.get('last_reading')
         outlets = power_strip.get('outlets', power_strip)
         for outlet in outlets:
             if outlet.get('outlet_id') == str(self.device_id()):
                 outlet['last_reading']['connection'] = power_strip_reading.get('connection')
                 self.json_state = outlet
-
-    def update_state(self):
-        """ Update state with latest info from Wink API. """
-        response = self.api_interface.get_device_state(self, id_override=self.parent_id())
-        self._update_state_from_response(response)
 
     def index(self):
         return self.json_state.get('outlet_index', None)

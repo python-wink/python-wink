@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.3
+- Can now require desired_state to have been reached before updating state
+
 ## 0.7.2
 - Conserving brightness when setting color (temperature, hue sat, etc.)
 
