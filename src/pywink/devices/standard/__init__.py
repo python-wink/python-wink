@@ -134,10 +134,10 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
         :param response_json: the json obj returned from query
         :return:
         """
-        if self.pubnub_key is not None:
-            power_strip = response_json
-        else:
+        if 'data' in response_json:
             power_strip = response_json.get('data')
+        else:
+            power_strip = response_json
         power_strip_reading = power_strip.get('last_reading')
         outlets = power_strip.get('outlets', power_strip)
         for outlet in outlets:
