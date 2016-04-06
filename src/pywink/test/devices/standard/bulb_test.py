@@ -130,6 +130,21 @@ class SetStateTests(unittest.TestCase):
         self.assertEquals(hue, sent_desired_state.get('hue'))
         self.assertEquals(saturation, sent_desired_state.get('saturation'))
 
+    def test_should_send_original_brightness_when_only_xy_color_given_and_only_hue_saturation_supported(self):
+        original_brightness = 0.5
+        bulb = WinkBulb({
+            'brightness': original_brightness,
+            'capabilities': {
+                'color_changeable': True,
+                'fields': [{'field': 'hue'},
+                           {'field': 'saturation'}]
+            }
+        }, self.api_interface)
+        bulb.set_state(True, color_xy=[0.5, 0.5])
+        set_state_mock = self.api_interface.set_device_state
+        sent_desired_state = set_state_mock.call_args[0][1]['desired_state']
+        self.assertEquals(original_brightness, sent_desired_state.get('brightness'))
+
 
 class LightTests(unittest.TestCase):
 

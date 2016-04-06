@@ -35,11 +35,12 @@ class _WinkCapabilitySensor(WinkDevice):
         root_name = self.json_state.get('sensor_pod_id', self.name())
         return '{}+{}'.format(root_name, self._capability)
 
-    def update_state(self):
+    def update_state(self, require_desired_state_fulfilled=False):
         """ Update state with latest info from Wink API. """
         root_name = self.json_state.get('sensor_pod_id', self.name())
         response = self.api_interface.get_device_state(self, root_name)
-        self._update_state_from_response(response)
+        self._update_state_from_response(response,
+                                         require_desired_state_fulfilled=require_desired_state_fulfilled)
 
 
 class WinkSensorPod(_WinkCapabilitySensor):

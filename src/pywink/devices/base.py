@@ -1,3 +1,5 @@
+from pywink.domain.devices import is_desired_state_reached
+
 
 class WinkDevice(object):
 
@@ -35,14 +37,18 @@ class WinkDevice(object):
     def available(self):
         return self._last_reading.get('connection', False)
 
-    def _update_state_from_response(self, response_json):
+    def _update_state_from_response(self, response_json, require_desired_state_fulfilled=False):
         """
         :param response_json: the json obj returned from query
         :return:
         """
-        self.json_state = response_json.get('data')
+        response_json = response_json.get('data')
+        if response_json and require_desired_state_fulfilled:
+            if not is_desired_state_reached(response_json[0]):
+                return
+        self.json_state = response_json
 
-    def update_state(self):
+    def update_state(self, require_desired_state_fulfilled=False):
         """ Update state with latest info from Wink API. """
         response = self.api_interface.get_device_state(self)
-        self._update_state_from_response(response)
+        self._update_state_from_response(response, require_desired_state_fulfilled)
