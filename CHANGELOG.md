@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.4 
+- Fixed bug where we shouldn't have been indexing into an object
+
 ## 0.7.3
 - Can now require desired_state to have been reached before updating state
 
