@@ -80,7 +80,8 @@ class WinkBulb(WinkBinarySwitch):
         color_state = self._format_color_data(color_hue_saturation, color_kelvin, color_xy)
         desired_state.update(color_state)
 
-        brightness = brightness if brightness is not None else self.json_state.get('brightness', 1)
+        brightness = brightness if brightness is not None \
+            else self.json_state.get('last_reading', {}).get('desired_brightness', 1)
         desired_state.update({
             'brightness': brightness
         })

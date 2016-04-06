@@ -44,7 +44,7 @@ class WinkDevice(object):
         """
         response_json = response_json.get('data')
         if response_json and require_desired_state_fulfilled:
-            if not is_desired_state_reached(response_json[0]):
+            if not is_desired_state_reached(response_json):
                 return
         self.json_state = response_json
 

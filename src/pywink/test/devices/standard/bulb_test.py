@@ -70,7 +70,9 @@ class SetStateTests(unittest.TestCase):
     def test_should_send_current_brightness_to_api_if_only_color_temperature_is_provided_and_bulb_only_supports_temperature(self):
         original_brightness = 0.5
         bulb = WinkBulb({
-            'brightness': original_brightness,
+            'last_reading': {
+                'desired_brightness': original_brightness
+            },
             'capabilities': {
                 'color_changeable': True,
                 'fields': [{
@@ -102,7 +104,9 @@ class SetStateTests(unittest.TestCase):
             self):
         original_brightness = 0.5
         bulb = WinkBulb({
-            'brightness': original_brightness,
+            'last_reading': {
+                'desired_brightness': original_brightness
+            },
             'capabilities': {
                 'color_changeable': True,
                 'fields': [{'field': 'hue'},
@@ -133,7 +137,9 @@ class SetStateTests(unittest.TestCase):
     def test_should_send_original_brightness_when_only_xy_color_given_and_only_hue_saturation_supported(self):
         original_brightness = 0.5
         bulb = WinkBulb({
-            'brightness': original_brightness,
+            'last_reading': {
+                'desired_brightness': original_brightness
+            },
             'capabilities': {
                 'color_changeable': True,
                 'fields': [{'field': 'hue'},
