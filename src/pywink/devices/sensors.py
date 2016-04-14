@@ -31,6 +31,13 @@ class _WinkCapabilitySensor(WinkDevice):
             name += " " + self._capability
         return name
 
+    @property
+    def battery_level(self):
+        if not self._last_reading.get('external_power', False):
+            return self._last_reading.get('battery', False)
+        else:
+            return False
+
     def device_id(self):
         root_name = self.json_state.get('sensor_pod_id', self.name())
         return '{}+{}'.format(root_name, self._capability)

@@ -37,6 +37,10 @@ class WinkDevice(object):
     def available(self):
         return self._last_reading.get('connection', False)
 
+    @property
+    def battery_level(self):
+        return self._last_reading.get('battery', False)
+
     def _update_state_from_response(self, response_json, require_desired_state_fulfilled=False):
         """
         :param response_json: the json obj returned from query
