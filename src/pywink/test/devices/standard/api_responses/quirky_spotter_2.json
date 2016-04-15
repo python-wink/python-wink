@@ -12,7 +12,7 @@
         "battery_updated_at": 1453188090.419577,
         "brightness": 0,
         "brightness_updated_at": 1453188090.419577,
-        "external_power": true,
+        "external_power": false,
         "external_power_updated_at": 1453188090.419577,
         "humidity": 27,
         "humidity_updated_at": 1453188090.419577,

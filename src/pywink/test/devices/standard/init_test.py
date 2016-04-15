@@ -258,6 +258,24 @@ class SensorTests(unittest.TestCase):
             device_id = sensor.device_id()
             self.assertRegex(device_id, "^[0-9]{4,6}")
 
+    def test_battery_level_should_return_none(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+
+        for sensor in sensors:
+            self.assertIsNone(sensor.battery_level)
+
+    def test_battery_level_should_return_float(self):
+        with open('{}/api_responses/quirky_spotter_2.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+
+        for sensor in sensors:
+            self.assertEqual(sensor.battery_level, 0.86)
+
 
 class WinkCapabilitySensorTests(unittest.TestCase):
 
@@ -276,3 +294,4 @@ class WinkCapabilitySensorTests(unittest.TestCase):
         sensor.update_state()
         self.api_interface.get_device_state.assert_called_once_with(sensor, expected_id)
 
+        

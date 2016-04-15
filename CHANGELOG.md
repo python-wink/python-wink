@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.6
+- Added ability to return the battery level if a device is battery powered
+
 ## 0.7.5 
 - Fixed bug where light bulb states were not updating.
 
