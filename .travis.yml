@@ -8,5 +8,7 @@ install:
   - script/before_install
 script:
   - script/test
+after_success:
+  - coveralls
 matrix:
   fast_finish: true

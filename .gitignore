@@ -4,3 +4,4 @@
 /test.py
 /.cache
 /src/python_wink.egg-info
+/.coverage
