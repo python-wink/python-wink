@@ -3,4 +3,4 @@ install:
   python3 -m pip install --upgrade requests>=2,<3
 
   echo  "Installing development dependencies.."
-  python3 -m pip install --upgrade flake8 pylint coveralls pytest pytest-cov
+  python3 -m pip install --upgrade flake8 pylint python-coveralls pytest pytest-cov
