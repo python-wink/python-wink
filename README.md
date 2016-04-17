@@ -16,5 +16,5 @@ pywink.set_bearer_token('YOUR_BEARER_TOKEN')
 
 for switch in pywink.get_switches():
     print(switch.name(), switch.state())
-    switch.set_state(!switch.state())
+    switch.set_state(not switch.state())
 ```
