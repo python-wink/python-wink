@@ -1,7 +1,7 @@
 import unittest
 
 from pywink.domain.devices import is_desired_state_reached
-
+from pywink.test.devices.standard.api_responses import ApiResponseJSONLoader
 
 class IsDesiredStateReachedTests(unittest.TestCase):
 
@@ -11,7 +11,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'brightness': brightness
             },
-            'brightness': brightness
+            'last_reading': {
+                'brightness': brightness
+            }
         }
         self.assertTrue(is_desired_state_reached(bulb_state))
 
@@ -22,7 +24,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'brightness': brightness_1
             },
-            'brightness': brightness_2
+            'last_reading': {
+                'brightness': brightness_2
+            }
         }
         self.assertFalse(is_desired_state_reached(bulb_state))
 
@@ -32,7 +36,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'hue': hue
             },
-            'hue': hue
+            'last_reading': {
+                'hue': hue
+            }
         }
         self.assertTrue(is_desired_state_reached(bulb_state))
 
@@ -43,7 +49,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'hue': hue_1
             },
-            'hue': hue_2
+            'last_reading': {
+                'hue': hue_2
+            }
         }
         self.assertFalse(is_desired_state_reached(bulb_state))
 
@@ -53,7 +61,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'saturation': saturation
             },
-            'saturation': saturation
+            'last_reading': {
+                'saturation': saturation
+            }
         }
         self.assertTrue(is_desired_state_reached(bulb_state))
 
@@ -64,7 +74,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'saturation': saturation_1
             },
-            'saturation': saturation_2
+            'last_reading': {
+                'saturation': saturation_2
+            }
         }
         self.assertFalse(is_desired_state_reached(bulb_state))
 
@@ -74,7 +86,9 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'powered': powered
             },
-            'powered': powered
+            'last_reading': {
+                'powered': powered
+            }
         }
         self.assertTrue(is_desired_state_reached(bulb_state))
 
@@ -85,7 +99,24 @@ class IsDesiredStateReachedTests(unittest.TestCase):
             'desired_state': {
                 'powered': powered_1
             },
-            'powered': powered_2
+            'last_reading': {
+                'powered': powered_2
+            }
         }
         self.assertFalse(is_desired_state_reached(bulb_state))
 
+    def test_should_return_true_for_real_state_which_where_desired_state_is_reached(self):
+        response_dict = ApiResponseJSONLoader('light_bulb_with_desired_state_reached.json').load()['data']
+        self.assertTrue(is_desired_state_reached(response_dict))
+
+    def test_should_return_true_if_device_is_disconnected(self):
+        bulb_state = {
+            'desired_state': {
+                'powered': True
+            },
+            'last_reading': {
+                'connection': False,
+                'powered': False
+            }
+        }
+        self.assertTrue(is_desired_state_reached(bulb_state))
