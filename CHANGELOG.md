@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.5 
+- Fixed bug where light bulb states were not updating.
+
 ## 0.7.4 
 - Fixed bug where we shouldn't have been indexing into an object
 

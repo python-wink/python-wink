@@ -42,13 +42,14 @@ class WinkDevice(object):
         :param response_json: the json obj returned from query
         :return:
         """
-        response_json = response_json.get('data')
-        if response_json and require_desired_state_fulfilled:
-            if not is_desired_state_reached(response_json):
-                return
-        self.json_state = response_json
+        _response_json = response_json.get('data')
+        if _response_json and require_desired_state_fulfilled:
+            if not is_desired_state_reached(_response_json):
+                return False
+        self.json_state = _response_json
+        return True
 
     def update_state(self, require_desired_state_fulfilled=False):
         """ Update state with latest info from Wink API. """
         response = self.api_interface.get_device_state(self)
-        self._update_state_from_response(response, require_desired_state_fulfilled)
+        return self._update_state_from_response(response, require_desired_state_fulfilled)

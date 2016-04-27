@@ -22,11 +22,6 @@ class WinkBinarySwitch(WinkDevice):
     def state(self):
         if not self._last_reading.get('connection', False):
             return False
-        # Optimistic approach to setState:
-        # Within 15 seconds of a call to setState we assume it worked.
-        if self._recent_state_set():
-            return self._last_call[1]
-
         return self._last_reading.get('powered', False)
 
     def device_id(self):
