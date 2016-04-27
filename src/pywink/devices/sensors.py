@@ -33,7 +33,7 @@ class _WinkCapabilitySensor(WinkDevice):
 
     @property
     def battery_level(self):
-        if not self._last_reading.get('external_power', False):
+        if not self._last_reading.get('external_power', None):
             return self._last_reading.get('battery', None)
         else:
             return None
