@@ -316,3 +316,25 @@ class WinkCapabilitySensorTests(unittest.TestCase):
         sensor.update_state()
         self.api_interface.get_device_state.assert_called_once_with(sensor, expected_id)
 
+        
+class WinkPubnubTests(unittest.TestCase):
+
+    def setUp(self):
+        super(WinkPubnubTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_pubnub_key_and_channel_should_not_be_none(self):
+        with open('{}/api_responses/device_with_pubnub.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        device = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LOCK])[0]
+
+        self.assertIsNotNone(device.pubnub_key)
+        self.assertIsNotNone(device.pubnub_channel)
+
+    def test_pubnub_key_and_channel_should_be_none(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        device = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LOCK])[0]
+
+        self.assertIsNone(device.pubnub_key)
+        self.assertIsNone(device.pubnub_channel)
