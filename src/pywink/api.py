@@ -93,6 +93,10 @@ def get_garage_doors():
     return get_devices(device_types.GARAGE_DOOR)
 
 
+def get_shades():
+    return get_devices(device_types.SHADE)
+
+
 def get_powerstrip_outlets():
     return get_devices(device_types.POWER_STRIP)
 

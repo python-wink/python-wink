@@ -234,4 +234,3 @@ class LightTests(unittest.TestCase):
         wink_light = WinkBulb(light, self.api_interface)
         device_id = wink_light.device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}$")
-
