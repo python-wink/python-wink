@@ -134,19 +134,13 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
         :param response_json: the json obj returned from query
         :return:
         """
-        if 'data' in response_json:
-            power_strip = response_json.get('data')
-        else:
-            power_strip = response_json
+        power_strip = response_json
         power_strip_reading = power_strip.get('last_reading')
         outlets = power_strip.get('outlets', power_strip)
         for outlet in outlets:
             if outlet.get('outlet_id') == str(self.device_id()):
                 outlet['last_reading']['connection'] = power_strip_reading.get('connection')
                 self.json_state = outlet
-
-    def pubnub_update(self, json_response):
-        self._update_state_from_response(json_response)
 
     def index(self):
         return self.json_state.get('outlet_index', None)
