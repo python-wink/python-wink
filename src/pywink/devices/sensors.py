@@ -93,13 +93,14 @@ class WinkHumiditySensor(_WinkCapabilitySensor):
         :return: The relative humidity detected by the sensor (0% to 100%)
         :rtype: int
         """
-        # The subscription response returns a deciaml not an int
-        # Doubtful we will ever get a legitimate reading less than 1
-        # so I think this should be safe
-        if self.last_reading() <= 1.0:
-            return int(self.last_reading() * 100)
-        else:
-            return self.last_reading()
+        return self.last_reading()
+
+    def pubnub_update(self, json_response):
+        # Pubnub returns the humidity as a decminal
+        # converting to a percentage
+        hum = json_response["last_reading"]["humidity"] * 100
+        json_response["last_reading"]["humidity"] = hum
+        self.json_state = json_response
 
 
 class WinkBrightnessSensor(_WinkCapabilitySensor):
