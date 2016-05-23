@@ -253,6 +253,44 @@ class WinkGarageDoor(WinkDevice):
         return time.time() - self._last_call[0] < 15
 
 
+class WinkShade(WinkDevice):
+    def __init__(self, device_state_as_json, api_interface, objectprefix="shades"):
+        super(WinkShade, self).__init__(device_state_as_json, api_interface,
+                                        objectprefix=objectprefix)
+        # Tuple (desired state, time)
+        self._last_call = (0, None)
+
+    def __repr__(self):
+        return "<Wink shade %s %s %s>" % (self.name(),
+                                          self.device_id(), self.state())
+
+    def device_id(self):
+        return self.json_state.get('shade_id', self.name())
+
+    def state(self):
+        # Optimistic approach to setState:
+        # Within 15 seconds of a call to setState we assume it worked.
+        if self._recent_state_set():
+            return self._last_call[1]
+
+        return self._last_reading.get('position', 0)
+
+    def set_state(self, state):
+        """
+        :param state:   a number of 1 ('open') or 0 ('close')
+        :return: nothing
+        """
+        values = {"desired_state": {"position": state}}
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
+        self._last_call = (time.time(), state)
+        # self._state = state
+
+    def _recent_state_set(self):
+        return time.time() - self._last_call[0] < 15
+
+
 class WinkSiren(WinkBinarySwitch):
     """ represents a wink.py siren
     json_obj holds the json stat at init (if there is a refresh it's updated)
@@ -280,4 +318,5 @@ __all__ = [WinkEggTray.__name__,
            WinkLock.__name__,
            WinkPowerStripOutlet.__name__,
            WinkGarageDoor.__name__,
+           WinkShade.__name__,
            WinkSiren.__name__]

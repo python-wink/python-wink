@@ -10,7 +10,7 @@ from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumi
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
      _WinkCapabilitySensor
 from pywink.devices.standard import WinkBulb, WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
-     WinkBinarySwitch, WinkEggTray
+     WinkShade, WinkBinarySwitch, WinkEggTray
 from pywink.devices.types import DEVICE_ID_KEYS
 
 
@@ -65,6 +65,28 @@ class GarageDoorTests(unittest.TestCase):
         garage_door = response_dict.get('data')[0]
         wink_garage_door = WinkGarageDoor(garage_door, self.api_interface)
         device_id = wink_garage_door.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$")
+
+
+class ShadeTests(unittest.TestCase):
+    def setUp(self):
+        super(ShadeTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_handle_shade_response(self):
+        with open('{}/api_responses/shade.json'.format(os.path.dirname(__file__))) as shade_file:
+            response_dict = json.load(shade_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SHADE])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkShade)
+
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/shade.json'.format(os.path.dirname(__file__))) as shade_file:
+            response_dict = json.load(shade_file)
+        print(response_dict)
+        shade = response_dict.get('data')[0]
+        wink_shade = WinkShade(shade, self.api_interface)
+        device_id = wink_shade.device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}$")
 
 
@@ -294,4 +316,3 @@ class WinkCapabilitySensorTests(unittest.TestCase):
         sensor.update_state()
         self.api_interface.get_device_state.assert_called_once_with(sensor, expected_id)
 
-        

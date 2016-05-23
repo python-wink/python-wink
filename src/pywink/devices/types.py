@@ -5,6 +5,7 @@ LOCK = 'lock'
 EGG_TRAY = 'eggtray'
 GARAGE_DOOR = 'garage_door'
 POWER_STRIP = 'powerstrip'
+SHADE = 'shades'
 SIREN = 'siren'
 
 DEVICE_ID_KEYS = {
@@ -15,5 +16,6 @@ DEVICE_ID_KEYS = {
     LOCK: 'lock_id',
     POWER_STRIP: 'powerstrip_id',
     SENSOR_POD: 'sensor_pod_id',
+    SHADE: 'shade_id',
     SIREN: 'siren_id'
 }
