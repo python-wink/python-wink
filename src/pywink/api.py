@@ -107,15 +107,23 @@ def get_sirens():
 
 
 def get_subscription_key():
+    response_dict = wink_api_fetch()
+    first_device = response_dict.get('data')[0]
+    return get_subscription_key_from_response_dict(first_device)
+
+
+def get_subscription_key_from_response_dict(device):
+    if "subscription" in device:
+        return device.get("subscription").get("pubnub").get("subscribe_key")
+    else:
+        return None
+
+
+def wink_api_fetch():
     arequest_url = "{}/users/me/wink_devices".format(WinkApiInterface.BASE_URL)
     response = requests.get(arequest_url, headers=API_HEADERS)
     if response.status_code == 200:
-        response_dict = response.json()
-        first_device = response_dict.get('data')[0]
-        if "subscription" in first_device:
-            return first_device.get("subscription").get("pubnub").get("subscribe_key")
-        else:
-            return None
+        return response.json()
 
     if response.status_code == 401:
         raise WinkAPIException("401 Response from Wink API.  Maybe Bearer token is expired?")
@@ -124,17 +132,9 @@ def get_subscription_key():
 
 
 def get_devices(device_type):
-    arequest_url = "{}/users/me/wink_devices".format(WinkApiInterface.BASE_URL)
-    response = requests.get(arequest_url, headers=API_HEADERS)
-    if response.status_code == 200:
-        response_dict = response.json()
-        filter_key = DEVICE_ID_KEYS.get(device_type)
-        return get_devices_from_response_dict(response_dict, filter_key)
-
-    if response.status_code == 401:
-        raise WinkAPIException("401 Response from Wink API.  Maybe Bearer token is expired?")
-    else:
-        raise WinkAPIException("Unexpected")
+    response_dict = wink_api_fetch()
+    filter_key = DEVICE_ID_KEYS.get(device_type)
+    return get_devices_from_response_dict(response_dict, filter_key)
 
 
 def get_devices_from_response_dict(response_dict, filter_key):

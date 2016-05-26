@@ -353,3 +353,9 @@ class WinkPubnubTests(unittest.TestCase):
 
         self.assertIsNone(device.pubnub_key)
         self.assertIsNone(device.pubnub_channel)
+
+    def test_pywink_api_pubnub_subscription_key_is_not_none(self):
+        with open('{}/api_responses/device_with_pubnub.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+
+        self.assertIsNotNone(self.api_interface.get_subscription_key_from_response_dict(response_dict))
