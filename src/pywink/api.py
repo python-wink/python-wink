@@ -67,6 +67,7 @@ def set_wink_credentials(client_id, client_secret, refresh_token):
     response_json = response.json()
     access_token = response_json.get('access_token')
     set_bearer_token(access_token)
+    return access_token
 
 
 def get_bulbs():
