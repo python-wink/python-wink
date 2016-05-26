@@ -1,8 +1,8 @@
 Python Wink API
 ---------------
 
-[![Join the chat at https://gitter.im/bradsk88/python-wink](https://badges.gitter.im/bradsk88/python-wink.svg)](https://gitter.im/bradsk88/python-wink?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/bradsk88/python-wink.svg?branch=master)](https://travis-ci.org/bradsk88/python-wink)
-[![Coverage Status](https://coveralls.io/repos/github/bradsk88/python-wink/badge.svg?branch=master)](https://coveralls.io/github/bradsk88/python-wink?branch=master)
+[![Join the chat at https://gitter.im/python-wink/python-wink](https://badges.gitter.im/python-wink/python-wink.svg)](https://gitter.im/bradsk88/python-wink?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/python-wink/python-wink.svg?branch=master)](https://travis-ci.org/python-wink/python-wink)
+[![Coverage Status](https://coveralls.io/repos/github/python-wink/python-wink/badge.svg?branch=master)](https://coveralls.io/github/python-wink/python-wink?branch=master)
 
 _This script used to be part of Home Assistant. It has been extracted to fit
 the goal of Home Assistant to not contain any device specific API implementations
