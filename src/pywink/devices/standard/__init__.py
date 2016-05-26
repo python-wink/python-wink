@@ -126,8 +126,11 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
         response = self.api_interface.get_device_state(self, id_override=self.parent_id())
         power_strip = response.get('data')
         if require_desired_state_fulfilled:
-            if not is_desired_state_reached(power_strip[0]):
+            if not is_desired_state_reached(self.index):
                 return
+            else:
+                self._update_state_from_response(power_strip)
+            return True
 
     def _update_state_from_response(self, response_json, require_desired_state_fulfilled=False):
         """
@@ -141,6 +144,9 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
             if outlet.get('outlet_id') == str(self.device_id()):
                 outlet['last_reading']['connection'] = power_strip_reading.get('connection')
                 self.json_state = outlet
+
+    def pubnub_update(self, json_response):
+        self._update_state_from_response(json_response)
 
     def index(self):
         return self.json_state.get('outlet_index', None)
@@ -165,7 +171,8 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
             values = {"outlets": [{}, {"desired_state": {"powered": state}}]}
 
         response = self.api_interface.set_device_state(self, values, id_override=self.parent_id())
-        self._update_state_from_response(response)
+        power_strip = response.get('data')
+        self._update_state_from_response(power_strip)
 
         self._last_call = (time.time(), state)
 
