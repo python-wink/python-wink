@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.7.7
+- Stopped duplicating door switches in `get_devices_from_response_dict`
+- Add support for Wink Shades
+
 ## 0.7.6
 - Added ability to return the battery level if a device is battery powered
 
