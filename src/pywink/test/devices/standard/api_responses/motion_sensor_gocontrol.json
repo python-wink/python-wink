@@ -1,0 +1,89 @@
+{
+  "data": [
+    {
+      "last_event": {
+        "brightness_occurred_at": null,
+        "loudness_occurred_at": null,
+        "vibration_occurred_at": null
+      },
+      "object_type": "sensor_pod",
+      "object_id": "192431",
+      "uuid": "REMOVED",
+      "icon_id": null,
+      "icon_code": null,
+      "desired_state": {},
+      "last_reading": {
+        "motion": true,
+        "motion_updated_at": 1465262763.1264362,
+        "battery": 1,
+        "battery_updated_at": 1465262763.1264362,
+        "tamper_detected": null,
+        "tamper_detected_updated_at": 1462063497.4478416,
+        "motion_true": "N/A",
+        "motion_true_updated_at": null,
+        "tamper_detected_true": null,
+        "tamper_detected_true_updated_at": null,
+        "connection": true,
+        "connection_updated_at": 1465262763.1264362,
+        "agent_session_id": null,
+        "agent_session_id_updated_at": null,
+        "connection_changed_at": 1462043954.4886937,
+        "battery_changed_at": 1462043956.216641,
+        "motion_changed_at": 1465262763.1264362,
+        "motion_true_changed_at": 1465262763.1264362
+      },
+      "subscription": {
+        "pubnub": {
+          "subscribe_key": "REMOVED",
+          "channel": "REMOVED"
+        }
+      },
+      "sensor_pod_id": "192431",
+      "name": "Brad's Room Motion",
+      "locale": "en_us",
+      "units": {},
+      "created_at": 1462043954,
+      "hidden_at": null,
+      "capabilities": {
+        "fields": [
+          {
+            "type": "boolean",
+            "field": "motion",
+            "mutability": "read-only"
+          },
+          {
+            "type": "percentage",
+            "field": "battery",
+            "mutability": "read-only"
+          },
+          {
+            "type": "boolean",
+            "field": "tamper_detected",
+            "mutability": "read-only"
+          }
+        ]
+      },
+      "triggers": [],
+      "manufacturer_device_model": "linear_wapirz_1",
+      "manufacturer_device_id": null,
+      "device_manufacturer": "linear",
+      "model_name": "Z-Wave Passive Infrared (PIR) Sensor",
+      "upc_id": "207",
+      "upc_code": "093863125102",
+      "gang_id": null,
+      "hub_id": "300039",
+      "local_id": "9",
+      "radio_type": "zwave",
+      "linked_service_id": null,
+      "lat_lng": [
+        0,
+        0
+      ],
+      "location": ""
+    }
+  ],
+  "errors": [],
+  "pagination": {
+    "count": 13
+  }
+}

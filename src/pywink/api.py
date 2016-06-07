@@ -147,6 +147,8 @@ def get_devices_from_response_dict(response_dict, filter_key):
                 subsensors = _get_subsensors_from_sensor_pod(item, api_interface)
                 if subsensors:
                     devices.extend(subsensors)
+                if len(subsensors) == 1:
+                    continue
 
             devices.append(build_device(item, api_interface))
 
@@ -157,7 +159,7 @@ def _get_subsensors_from_sensor_pod(item, api_interface):
 
     capabilities = [cap['field'] for cap in item.get('capabilities', {}).get('fields', [])]
     if not capabilities:
-        return
+        return []
 
     subsensors = []
 

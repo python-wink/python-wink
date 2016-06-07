@@ -5,3 +5,4 @@
 /.cache
 /src/python_wink.egg-info
 /.coverage
+/.idea/*

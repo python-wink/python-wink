@@ -1,17 +1,17 @@
 import json
 import mock
 import unittest
-import sys
 import os
 
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
      _WinkCapabilitySensor
-from pywink.devices.standard import WinkBulb, WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
+from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray
 from pywink.devices.types import DEVICE_ID_KEYS
+from pywink.test.devices.standard.api_responses import ApiResponseJSONLoader
 
 
 class PowerStripTests(unittest.TestCase):
@@ -155,6 +155,12 @@ class BinarySwitchTests(unittest.TestCase):
         device_id = wink_switch.device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}$")
 
+    def test_ge_switch_should_be_identified(self):
+        response = ApiResponseJSONLoader('light_switch_ge_jasco_z_wave.json').load()
+        devices = get_devices_from_response_dict(response, DEVICE_ID_KEYS[device_types.BINARY_SWITCH])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkBinarySwitch)
+
 
 class BinarySensorTests(unittest.TestCase):
 
@@ -297,6 +303,22 @@ class SensorTests(unittest.TestCase):
 
         for sensor in sensors:
             self.assertEqual(sensor.battery_level, 0.86)
+
+    def test_gocontrol_door_sensor_should_be_identified(self):
+        response = ApiResponseJSONLoader('door_sensor_gocontrol.json').load()
+        devices = get_devices_from_response_dict(response,
+                                                 DEVICE_ID_KEYS[
+                                                     device_types.SENSOR_POD])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkSensorPod)
+
+    def test_gocontrol_motion_sensor_should_be_identified(self):
+        response = ApiResponseJSONLoader('motion_sensor_gocontrol.json').load()
+        devices = get_devices_from_response_dict(response,
+                                                 DEVICE_ID_KEYS[
+                                                     device_types.SENSOR_POD])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkSensorPod)
 
 
 class WinkCapabilitySensorTests(unittest.TestCase):
