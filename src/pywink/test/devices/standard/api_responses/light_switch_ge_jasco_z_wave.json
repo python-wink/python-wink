@@ -1,0 +1,71 @@
+{
+  "data": [
+    {
+      "object_type": "binary_switch",
+      "object_id": "216721",
+      "uuid": "REMOVED",
+      "icon_id": "52",
+      "icon_code": "binary_switch-light_bulb_dumb",
+      "desired_state": {},
+      "last_reading": {
+        "connection": true,
+        "connection_updated_at": 1465261453.03461,
+        "powered": true,
+        "powered_updated_at": 1465261453.03461,
+        "desired_powered_updated_at": 1465107431.1711504,
+        "connection_changed_at": 1465259877.993167,
+        "powered_changed_at": 1465261453.03461,
+        "desired_powered_changed_at": 1465107431.1711504
+      },
+      "subscription": {
+        "pubnub": {
+          "subscribe_key": "REMOVED",
+          "channel": "REMOVED"
+        }
+      },
+      "binary_switch_id": "216721",
+      "name": "Hallway Switch",
+      "locale": "en_us",
+      "units": {},
+      "created_at": 1464309200,
+      "hidden_at": null,
+      "capabilities": {
+        "fields": [
+          {
+            "type": "boolean",
+            "field": "connection",
+            "mutability": "read-only"
+          },
+          {
+            "type": "boolean",
+            "field": "powered",
+            "mutability": "read-write"
+          }
+        ]
+      },
+      "triggers": [],
+      "manufacturer_device_model": "ge_jasco_binary",
+      "manufacturer_device_id": null,
+      "device_manufacturer": "ge",
+      "model_name": "Binary Switch",
+      "upc_id": "200",
+      "upc_code": "JASCO_ZWAVE_BINARY_POWER",
+      "gang_id": null,
+      "hub_id": "300039",
+      "local_id": "12",
+      "radio_type": "zwave",
+      "linked_service_id": null,
+      "current_budget": null,
+      "lat_lng": [
+        0,
+        0
+      ],
+      "location": "",
+      "order": 0
+    }
+  ],
+  "errors": [],
+  "pagination": {
+    "count": 1
+  }
+}
