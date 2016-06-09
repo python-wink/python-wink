@@ -336,21 +336,6 @@ class SensorTests(unittest.TestCase):
         self.assertEquals(expected_humidity, humidity_sensor.humidity_percentage())
 
 
-    def test_humidity_is_percentage_after_update(self):
-        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
-            response_dict = json.load(spotter_file)
-
-        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
-        """:type : list of WinkHumiditySensor"""
-        humidity_sensor = [sensor for sensor in sensors if sensor.capability() is WinkHumiditySensor.CAPABILITY][0]
-        
-        with open('{}/api_responses/quirky_spotter_pubnub.json'.format(os.path.dirname(__file__))) as spotter_file:
-            update_response_dict = json.load(spotter_file)
-
-        humidity_sensor.pubnub_update(update_response_dict)
-        expected_humidity = 24
-        self.assertEquals(expected_humidity, humidity_sensor.humidity_percentage())
-
 class WinkCapabilitySensorTests(unittest.TestCase):
 
     def setUp(self):
@@ -368,11 +353,7 @@ class WinkCapabilitySensorTests(unittest.TestCase):
         sensor.update_state()
         self.api_interface.get_device_state.assert_called_once_with(sensor, expected_id)
 
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 1ecbdf56dde5d8b71ff6b2d131b7fd0c8fae50c7
 class WinkPubnubTests(unittest.TestCase):
 
     def setUp(self):
