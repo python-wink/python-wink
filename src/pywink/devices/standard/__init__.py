@@ -126,7 +126,7 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
         response = self.api_interface.get_device_state(self, id_override=self.parent_id())
         power_strip = response.get('data')
         if require_desired_state_fulfilled:
-            if not is_desired_state_reached(power_strip[0]):
+            if not is_desired_state_reached(power_strip[self.index]):
                 return
 
         power_strip_reading = power_strip.get('last_reading')
