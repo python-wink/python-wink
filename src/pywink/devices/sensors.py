@@ -95,6 +95,13 @@ class WinkHumiditySensor(_WinkCapabilitySensor):
         """
         return self.last_reading()
 
+    def pubnub_update(self, json_response):
+        # Pubnub returns the humidity as a decimal
+        # converting to a percentage
+        hum = json_response["last_reading"]["humidity"] * 100
+        json_response["last_reading"]["humidity"] = hum
+        self.json_state = json_response
+
 
 class WinkBrightnessSensor(_WinkCapabilitySensor):
 

@@ -320,6 +320,21 @@ class SensorTests(unittest.TestCase):
         self.assertEqual(1, len(devices))
         self.assertIsInstance(devices[0], WinkSensorPod)
 
+    def test_humidity_is_percentage_after_update(self):
+        with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkHumiditySensor"""
+        humidity_sensor = [sensor for sensor in sensors if sensor.capability() is WinkHumiditySensor.CAPABILITY][0]
+
+        with open('{}/api_responses/quirky_spotter_pubnub.json'.format(os.path.dirname(__file__))) as spotter_file:
+            update_response_dict = json.load(spotter_file)
+
+        humidity_sensor.pubnub_update(update_response_dict)
+        expected_humidity = 24
+        self.assertEquals(expected_humidity, humidity_sensor.humidity_percentage())
+
 
 class WinkCapabilitySensorTests(unittest.TestCase):
 
@@ -338,3 +353,31 @@ class WinkCapabilitySensorTests(unittest.TestCase):
         sensor.update_state()
         self.api_interface.get_device_state.assert_called_once_with(sensor, expected_id)
 
+
+class WinkPubnubTests(unittest.TestCase):
+
+    def setUp(self):
+        super(WinkPubnubTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_pubnub_key_and_channel_should_not_be_none(self):
+        with open('{}/api_responses/device_with_pubnub.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        device = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LOCK])[0]
+
+        self.assertIsNotNone(device.pubnub_key)
+        self.assertIsNotNone(device.pubnub_channel)
+
+    def test_pubnub_key_and_channel_should_be_none(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        device = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LOCK])[0]
+
+        self.assertIsNone(device.pubnub_key)
+        self.assertIsNone(device.pubnub_channel)
+
+    def test_pywink_api_pubnub_subscription_key_is_not_none(self):
+        with open('{}/api_responses/device_with_pubnub.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+
+        self.assertIsNotNone(self.api_interface.get_subscription_key_from_response_dict(response_dict))

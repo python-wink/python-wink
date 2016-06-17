@@ -106,18 +106,35 @@ def get_sirens():
     return get_devices(device_types.SIREN)
 
 
-def get_devices(device_type):
+def get_subscription_key():
+    response_dict = wink_api_fetch()
+    first_device = response_dict.get('data')[0]
+    return get_subscription_key_from_response_dict(first_device)
+
+
+def get_subscription_key_from_response_dict(device):
+    if "subscription" in device:
+        return device.get("subscription").get("pubnub").get("subscribe_key")
+    else:
+        return None
+
+
+def wink_api_fetch():
     arequest_url = "{}/users/me/wink_devices".format(WinkApiInterface.BASE_URL)
     response = requests.get(arequest_url, headers=API_HEADERS)
     if response.status_code == 200:
-        response_dict = response.json()
-        filter_key = DEVICE_ID_KEYS.get(device_type)
-        return get_devices_from_response_dict(response_dict, filter_key)
+        return response.json()
 
     if response.status_code == 401:
         raise WinkAPIException("401 Response from Wink API.  Maybe Bearer token is expired?")
     else:
         raise WinkAPIException("Unexpected")
+
+
+def get_devices(device_type):
+    response_dict = wink_api_fetch()
+    filter_key = DEVICE_ID_KEYS.get(device_type)
+    return get_devices_from_response_dict(response_dict, filter_key)
 
 
 def get_devices_from_response_dict(response_dict, filter_key):
@@ -186,6 +203,10 @@ def _get_subsensors_from_sensor_pod(item, api_interface):
 
 def __get_outlets_from_powerstrip(item, api_interface):
     outlets = item['outlets']
+    for outlet in outlets:
+        if 'subscription' in item:
+            outlet['subscription'] = item['subscription']
+        outlet['last_reading']['connection'] = item['last_reading']['connection']
     return [build_device(outlet, api_interface) for outlet in outlets if __device_is_visible(outlet, 'outlet_id')]
 
 

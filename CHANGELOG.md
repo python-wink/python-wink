@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.8
+- Added support for retrieving the Pubnub subscription details
+
 ## 0.7.7
 - Stopped duplicating door switches in `get_devices_from_response_dict`
 - Add support for Wink Shades
