@@ -328,6 +328,49 @@ class WinkSiren(WinkBinarySwitch):
         return self.json_state.get('siren_id', self.name())
 
 
+class WinkKey(WinkDevice):
+    """ represents a wink.py key
+    json_obj holds the json stat at init (if there is a refresh it's updated)
+    it's the native format for this objects methods
+    """
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface, objectprefix="keys"):
+        super(WinkKey, self).__init__(device_state_as_json, api_interface,
+                                      objectprefix=objectprefix)
+        self._capability = "opening"
+
+    def __repr__(self):
+        return "<Wink key name:{name} id:{device}" \
+               " parent id:{parent_id} state:{state}>".format(name=self.name(),
+                                                              device=self.device_id(),
+                                                              parent_id=self.parent_id(),
+                                                              state=self.state())
+
+    def state(self):
+        if 'activity_detected' in self._last_reading:
+            return self._last_reading['activity_detected']
+        return False
+
+    def device_id(self):
+        return self.json_state.get('key_id', self.name())
+
+    def parent_id(self):
+        return self.json_state.get('parent_object_id',
+                                   self.json_state.get('lock_id'))
+
+    def capability(self):
+        """Return opening for all keys."""
+        return self._capability
+
+    @property
+    def available(self):
+        """Keys are virtual therefore they don't have a connection status
+        always return True
+        """
+        return True
+
+
 # pylint-disable: undefined-all-variable
 __all__ = [WinkEggTray.__name__,
            WinkBinarySwitch.__name__,

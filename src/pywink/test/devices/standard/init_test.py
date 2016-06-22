@@ -9,7 +9,7 @@ from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumi
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
      _WinkCapabilitySensor
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
-     WinkShade, WinkBinarySwitch, WinkEggTray
+     WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey
 from pywink.devices.types import DEVICE_ID_KEYS
 from pywink.test.devices.standard.api_responses import ApiResponseJSONLoader
 
@@ -381,3 +381,28 @@ class WinkPubnubTests(unittest.TestCase):
             response_dict = json.load(lock_file)
 
         self.assertIsNotNone(self.api_interface.get_subscription_key_from_response_dict(response_dict))
+
+
+
+class WinkKeyTests(unittest.TestCase):
+
+    def setUp(self):
+        super(WinkKeyTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/key.json'.format(os.path.dirname(__file__))) as keys_file:
+            response_dict = json.load(keys_file)
+        key = response_dict.get('data')
+
+        wink_key = WinkKey(key, self.api_interface)
+        device_id = wink_key.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}$") 
+
+    def test_state_should_be_true_or_false(self):
+        with open('{}/api_responses/key.json'.format(os.path.dirname(__file__))) as keys_file:
+            response_dict = json.load(keys_file)
+        key = response_dict.get('data')
+
+        wink_true_key = WinkKey(key, self.api_interface) 
+        self.assertTrue(wink_true_key.state())

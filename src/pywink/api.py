@@ -106,6 +106,10 @@ def get_sirens():
     return get_devices(device_types.SIREN)
 
 
+def get_keys():
+    return get_devices(device_types.KEY)
+
+
 def get_subscription_key():
     response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]
