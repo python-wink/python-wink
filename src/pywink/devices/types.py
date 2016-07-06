@@ -8,6 +8,7 @@ POWER_STRIP = 'powerstrip'
 SHADE = 'shades'
 SIREN = 'siren'
 KEY = 'key'
+PIGGY_BANK = 'piggybank'
 
 DEVICE_ID_KEYS = {
     BINARY_SWITCH: 'binary_switch_id',
@@ -19,5 +20,6 @@ DEVICE_ID_KEYS = {
     SENSOR_POD: 'sensor_pod_id',
     SHADE: 'shade_id',
     SIREN: 'siren_id',
-    KEY: 'key_id'
+    KEY: 'key_id',
+    PIGGY_BANK: 'piggy_bank_id'
 }
