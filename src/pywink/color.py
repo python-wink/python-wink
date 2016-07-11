@@ -66,7 +66,6 @@ def color_temperature_to_rgb(color_temperature_kelvin):
 # taken from
 # https://github.com/benknight/hue-python-rgb-converter/blob/master/rgb_cie.py
 # Copyright (c) 2014 Benjamin Knight / MIT License.
-# pylint: disable=bad-builtin
 def color_xy_brightness_to_rgb(vX, vY, brightness):
     """
     Convert from XYZ to RGB.
