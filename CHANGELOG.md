@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.9
+- Added Wink keys (Wink Lock user codes)
+
 ## 0.7.8
 - Added support for retrieving the Pubnub subscription details
 

@@ -1,7 +1,7 @@
 from pywink.devices.base import WinkDevice
 from pywink.devices.sensors import WinkSensorPod
 from pywink.devices.standard import WinkBulb, WinkBinarySwitch, WinkPowerStripOutlet, WinkLock, \
-    WinkEggTray, WinkGarageDoor, WinkShade, WinkSiren
+    WinkEggTray, WinkGarageDoor, WinkShade, WinkSiren, WinkKey
 
 
 def build_device(device_state_as_json, api_interface):
@@ -29,5 +29,7 @@ def build_device(device_state_as_json, api_interface):
         new_object = WinkShade(device_state_as_json, api_interface)
     elif "siren_id" in device_state_as_json:
         new_object = WinkSiren(device_state_as_json, api_interface)
+    elif "key_id" in device_state_as_json:
+        new_object = WinkKey(device_state_as_json, api_interface)
 
     return new_object or WinkDevice(device_state_as_json, api_interface)
