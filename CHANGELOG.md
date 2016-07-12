@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.10
+- Changed API URL
+
 ## 0.7.9
 - Added Wink keys (Wink Lock user codes)
 
