@@ -13,7 +13,7 @@ API_HEADERS = {}
 
 class WinkApiInterface(object):
 
-    BASE_URL = "https://winkapi.quirky.com"
+    BASE_URL = "https://api.wink.com"
 
     def set_device_state(self, device, state, id_override=None):
         """
