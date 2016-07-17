@@ -5,7 +5,7 @@ import requests
 from pywink.devices import types as device_types
 from pywink.devices.factory import build_device
 from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBrightnessSensor, WinkSoundPresenceSensor, \
-    WinkTemperatureSensor, WinkVibrationPresenceSensor
+    WinkTemperatureSensor, WinkVibrationPresenceSensor, WinkLiquidPresenceSensor
 from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
@@ -198,6 +198,9 @@ def _get_subsensors_from_sensor_pod(item, api_interface):
 
     if WinkVibrationPresenceSensor.CAPABILITY in capabilities:
         subsensors.append(WinkVibrationPresenceSensor(item, api_interface))
+
+    if WinkLiquidPresenceSensor.CAPABILITY in capabilities:
+        subsensors.append(WinkLiquidPresenceSensor(item, api_interface))
 
     if WinkSensorPod.CAPABILITY in capabilities:
         subsensors.append(WinkSensorPod(item, api_interface))

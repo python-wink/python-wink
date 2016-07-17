@@ -7,7 +7,7 @@ from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
-     _WinkCapabilitySensor
+     _WinkCapabilitySensor, WinkLiquidPresenceSensor
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey
 from pywink.devices.types import DEVICE_ID_KEYS
@@ -334,6 +334,16 @@ class SensorTests(unittest.TestCase):
         humidity_sensor.pubnub_update(update_response_dict)
         expected_humidity = 24
         self.assertEquals(expected_humidity, humidity_sensor.humidity_percentage())
+
+    def test_liquid_detected_should_have_correct_value(self):
+        with open('{}/api_responses/liquid_sensor.json'.format(os.path.dirname(__file__))) as spotter_file:
+            response_dict = json.load(spotter_file)
+
+        sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        """:type : list of WinkLiquidPresenceSensor"""
+        liquid_sensor = [sensor for sensor in sensors if sensor.capability() is WinkLiquidPresenceSensor.CAPABILITY][0]
+        expected_liquid_presence = False
+        self.assertEquals(expected_liquid_presence, liquid_sensor.liquid_boolean())
 
 
 class WinkCapabilitySensorTests(unittest.TestCase):
