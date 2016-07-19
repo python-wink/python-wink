@@ -173,3 +173,21 @@ class WinkVibrationPresenceSensor(_WinkCapabilitySensor):
         :rtype: bool
         """
         return self.last_reading()
+
+
+class WinkLiquidPresenceSensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'liquid_detected'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkLiquidPresenceSensor, self).__init__(device_state_as_json, api_interface,
+                                                       self.CAPABILITY,
+                                                       self.UNIT)
+
+    def liquid_boolean(self):
+        """
+        :return: Returns True if liquid is detected.
+        :rtype: bool
+        """
+        return self.last_reading()

@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.11
+- Added Wink leak sensor support
+
 ## 0.7.10
 - Changed API URL
 
