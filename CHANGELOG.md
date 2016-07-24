@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.12
+- Made WinkBulb constructor python 3-compatible.
+
 ## 0.7.11
 - Added Wink leak sensor support
 
