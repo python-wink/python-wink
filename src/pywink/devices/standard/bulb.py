@@ -16,8 +16,8 @@ class WinkBulb(WinkBinarySwitch):
     json_state = {}
 
     def __init__(self, device_state_as_json, api_interface):
-        super().__init__(device_state_as_json, api_interface,
-                         objectprefix="light_bulbs")
+        super(WinkBulb, self).__init__(device_state_as_json, api_interface,
+                                       objectprefix="light_bulbs")
 
     def device_id(self):
         return self.json_state.get('light_bulb_id', self.name())
