@@ -74,10 +74,8 @@ class SetStateTests(unittest.TestCase):
                 'desired_brightness': original_brightness
             },
             'capabilities': {
-                'color_changeable': True,
-                'fields': [{
-                    'field': 'color_temperature'
-                }]
+                'fields': [{'field': 'color_model',
+                           'choices':["color_temperature"]}]
             }
         }, self.api_interface)
         bulb.set_state(True, color_kelvin=4000)
@@ -88,10 +86,8 @@ class SetStateTests(unittest.TestCase):
     def test_should_send_color_temperature_to_api_if_color_temp_is_provided_and_bulb_only_supports_temperature(self):
         bulb = WinkBulb({
             'capabilities': {
-                'color_changeable': True,
-                'fields': [{
-                    'field': 'color_temperature'
-                }]
+                'fields': [{'field': 'color_model',
+                           'choices':["color_temperature"]}]
             }
         }, self.api_interface)
         color_kelvin = 4000
@@ -108,9 +104,8 @@ class SetStateTests(unittest.TestCase):
                 'desired_brightness': original_brightness
             },
             'capabilities': {
-                'color_changeable': True,
-                'fields': [{'field': 'hue'},
-                           {'field': 'saturation'}]
+                'fields': [{'field': 'color_model',
+                           'choices':["hsb"]}]
             }
         }, self.api_interface)
         bulb.set_state(True, color_kelvin=4000)
@@ -121,9 +116,8 @@ class SetStateTests(unittest.TestCase):
     def test_should_send_current_hue_and_saturation_to_api_if_hue_and_sat_are_provided_and_bulb_only_supports_hue_sat(self):
         bulb = WinkBulb({
             'capabilities': {
-                'color_changeable': True,
-                'fields': [{'field': 'hue'},
-                           {'field': 'saturation'}]
+                'fields': [{'field': 'color_model',
+                           'choices':["hsb"]}]
             }
         }, self.api_interface)
         hue = 0.2
@@ -141,9 +135,8 @@ class SetStateTests(unittest.TestCase):
                 'desired_brightness': original_brightness
             },
             'capabilities': {
-                'color_changeable': True,
-                'fields': [{'field': 'hue'},
-                           {'field': 'saturation'}]
+                'fields': [{'field': 'color_model',
+                           'choices':["hsb"]}]
             }
         }, self.api_interface)
         bulb.set_state(True, color_xy=[0.5, 0.5])
@@ -168,16 +161,9 @@ class LightTests(unittest.TestCase):
     @mock.patch('requests.put')
     def test_should_send_correct_color_hsb_values_to_wink_api(self, put_mock):
         bulb = WinkBulb({
-            "capabilities": {
-                "fields": [
-                    {
-                        "field": "hue"
-                    },
-                    {
-                        "field": "saturation"
-                    }
-                ],
-                "color_changeable": True
+            'capabilities': {
+                'fields': [{'field': 'color_model',
+                           'choices':["hsb"]}]
             }
         }, self.api_interface)
         hue = 0.75
@@ -191,13 +177,9 @@ class LightTests(unittest.TestCase):
     @mock.patch('requests.put')
     def test_should_send_correct_color_temperature_values_to_wink_api(self, put_mock):
         bulb = WinkBulb({
-            "capabilities": {
-                "fields": [
-                    {
-                        "field": "color_temperature"
-                    }
-                ],
-                "color_changeable": True
+            'capabilities': {
+                'fields': [{'field': 'color_model',
+                           'choices':["color_temperature"]}]
             }
         }, self.api_interface)
         arbitrary_kelvin_color = 4950
@@ -209,16 +191,9 @@ class LightTests(unittest.TestCase):
     @mock.patch('requests.put')
     def test_should_only_send_color_hsb_if_both_color_hsb_and_color_temperature_are_given(self, put_mock):
         bulb = WinkBulb({
-            "capabilities": {
-                "fields": [
-                    {
-                        "field": "hue"
-                    },
-                    {
-                        "field": "saturation"
-                    }
-                ],
-                "color_changeable": True
+            'capabilities': {
+                'fields': [{'field': 'color_model',
+                           'choices':["hsb"]}]
             }
         }, self.api_interface)
         arbitrary_kelvin_color = 4950

@@ -80,7 +80,8 @@
             "type": "string",
             "choices": [
               "rgb",
-              "hsb"
+              "hsb",
+              "color_temperature"
             ]
           },
           {
