@@ -123,44 +123,55 @@ class WinkBulb(WinkBinarySwitch):
         return {}
 
     def supports_rgb(self):
-        capabilities = self._last_reading.get('capabilities', {})
-        if not capabilities.get('color_changeable', False):
+        capabilities = self.json_state.get('capabilities', {})
+        cap_fields = capabilities.get('fields', False)
+        if not cap_fields:
             return False
-        # cap_fields = capabilities.get('fields', [])
-        # TODO: Do any wink bulbs support RGB specification?
+        for field in cap_fields:
+            _field = field.get('field')
+            if _field == 'color_model':
+                choices = field.get('choices')
+                if "rgb" in choices:
+                    return True
         return False
 
     def supports_hue_saturation(self):
         capabilities = self.json_state.get('capabilities', {})
-        if not capabilities.get('color_changeable', False):
+        cap_fields = capabilities.get('fields', False)
+        if not cap_fields:
             return False
-        cap_fields = capabilities.get('fields', [])
-        supports_hue = False
-        supports_saturation = False
         for field in cap_fields:
             _field = field.get('field')
-            if _field == 'hue':
-                supports_hue = True
-            if _field == 'saturation':
-                supports_saturation = True
-            if supports_hue and supports_saturation:
-                return True
-        if supports_hue and supports_saturation:
-            return True
+            if _field == 'color_model':
+                choices = field.get('choices')
+                if "hsb" in choices:
+                    return True
+        return False
 
     def supports_xy_color(self):
-        # TODO: Do any wink bulbs support XY color?
-        return self.json_state.get("todo", False)
+        capabilities = self.json_state.get('capabilities', {})
+        cap_fields = capabilities.get('fields', False)
+        if not cap_fields:
+            return False
+        for field in cap_fields:
+            _field = field.get('field')
+            if _field == 'color_model':
+                choices = field.get('choices')
+                if "xy" in choices:
+                    return True
+        return False
 
     def supports_temperature(self):
         capabilities = self.json_state.get('capabilities', {})
-        if not capabilities.get('color_changeable', False):
+        cap_fields = capabilities.get('fields', False)
+        if not cap_fields:
             return False
-        cap_fields = capabilities.get('fields', [])
         for field in cap_fields:
             _field = field.get('field')
-            if _field == 'color_temperature':
-                return True
+            if _field == 'color_model':
+                choices = field.get('choices')
+                if "color_temperature" in choices:
+                    return True
         return False
 
     def __repr__(self):
