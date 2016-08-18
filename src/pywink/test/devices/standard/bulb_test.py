@@ -61,6 +61,55 @@ class BulbSupportsTemperatureTest(unittest.TestCase):
                         msg="Expected temperature to be un-supported")
 
 
+class BulbSupportsXYTest(unittest.TestCase):
+
+    def test_should_be_false_if_response_does_not_contain_xy_capabilities(self):
+        with open('{}/api_responses/xy_absent.json'.format(os.path.dirname(__file__))) as light_file:
+            response_dict = json.load(light_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
+
+        bulb = devices[0]
+        """ :type bulb: pywink.devices.standard.WinkBulb """
+        supports_xy = bulb.supports_xy_color()
+        self.assertFalse(supports_xy,
+                        msg="Expected xy to be un-supported")
+
+    def test_should_be_true_if_response_contains_xy_capabilities(self):
+        with open('{}/api_responses/xy_present.json'.format(os.path.dirname(__file__))) as light_file:
+            response_dict = json.load(light_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
+
+        bulb = devices[0]
+        """ :type bulb: pywink.devices.standard.WinkBulb """
+        supports_xy = bulb.supports_xy_color()
+        self.assertTrue(supports_xy,
+                        msg="Expected xy to be supported")
+
+
+class BulbSupportsRGBTest(unittest.TestCase):
+
+    def test_should_be_false_if_response_does_not_contain_rgb_capabilities(self):
+        with open('{}/api_responses/rgb_absent.json'.format(os.path.dirname(__file__))) as light_file:
+            response_dict = json.load(light_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
+
+        bulb = devices[0]
+        """ :type bulb: pywink.devices.standard.WinkBulb """
+        supports_rgb = bulb.supports_rgb()
+        self.assertFalse(supports_rgb,
+                        msg="Expected rgb to be un-supported")
+
+    def test_should_be_true_if_response_contains_rgb_capabilities(self):
+        with open('{}/api_responses/rgb_present.json'.format(os.path.dirname(__file__))) as light_file:
+            response_dict = json.load(light_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.LIGHT_BULB])
+
+        bulb = devices[0]
+        """ :type bulb: pywink.devices.standard.WinkBulb """
+        supports_rgb = bulb.supports_rgb()
+        self.assertTrue(supports_rgb,
+                        msg="Expected rgb to be supported")
+
 class SetStateTests(unittest.TestCase):
 
     def setUp(self):
