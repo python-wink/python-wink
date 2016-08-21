@@ -80,8 +80,7 @@
             "type": "string",
             "choices": [
               "rgb",
-              "hsb",
-              "color_temperature"
+              "hsb"
             ]
           },
           {
@@ -92,15 +91,6 @@
           {
             "field": "saturation",
             "type": "percentage",
-            "mutability": "read-write"
-          },
-          {
-            "field": "color_temperature",
-            "range": [
-              1900,
-              6500
-            ],
-            "type": "integer",
             "mutability": "read-write"
           }
         ],

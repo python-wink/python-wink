@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.13
+- Changed method of detecting WinkBulb capabilities
+
 ## 0.7.12
 - Made WinkBulb constructor python 3-compatible.
 
