@@ -124,7 +124,7 @@ class WinkBulb(WinkBinarySwitch):
 
     def supports_rgb(self):
         capabilities = self.json_state.get('capabilities', {})
-        cap_fields = capabilities.get('fields', False)
+        cap_fields = capabilities.get('fields', [])
         if not cap_fields:
             return False
         for field in cap_fields:
@@ -137,7 +137,7 @@ class WinkBulb(WinkBinarySwitch):
 
     def supports_hue_saturation(self):
         capabilities = self.json_state.get('capabilities', {})
-        cap_fields = capabilities.get('fields', False)
+        cap_fields = capabilities.get('fields', [])
         if not cap_fields:
             return False
         for field in cap_fields:
@@ -150,7 +150,7 @@ class WinkBulb(WinkBinarySwitch):
 
     def supports_xy_color(self):
         capabilities = self.json_state.get('capabilities', {})
-        cap_fields = capabilities.get('fields', False)
+        cap_fields = capabilities.get('fields', [])
         if not cap_fields:
             return False
         for field in cap_fields:
@@ -163,7 +163,7 @@ class WinkBulb(WinkBinarySwitch):
 
     def supports_temperature(self):
         capabilities = self.json_state.get('capabilities', {})
-        cap_fields = capabilities.get('fields', False)
+        cap_fields = capabilities.get('fields', [])
         if not cap_fields:
             return False
         for field in cap_fields:
