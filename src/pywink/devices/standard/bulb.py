@@ -123,12 +123,15 @@ class WinkBulb(WinkBinarySwitch):
         return {}
 
     def supports_rgb(self):
+        # TODO: Find out if any bulbs actually support RGB
         capabilities = self.json_state.get('capabilities', {})
         cap_fields = capabilities.get('fields', [])
         for field in cap_fields:
             _field = field.get('field')
             if _field == 'color_model':
                 choices = field.get('choices')
+                if "hsb" in choices:
+                    return False
                 if "rgb" in choices:
                     return True
         return False
@@ -199,7 +202,7 @@ def _format_xy(xy):
 def _get_color_as_rgb(hue_sat, kelvin, xy):
     if hue_sat is not None:
         h, s, v = colorsys.hsv_to_rgb(hue_sat[0], hue_sat[1], 1)
-        return tuple(h, s, v)
+        return h, s, v
     if kelvin is not None:
         return color_temperature_to_rgb(kelvin)
     if xy is not None:
