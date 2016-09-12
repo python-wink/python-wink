@@ -371,6 +371,55 @@ class WinkKey(WinkDevice):
         return True
 
 
+class WinkPorkfolioNose(WinkDevice):
+    """
+    Represents a Wink Porkfolio nose
+    json_obj holds the json stat at init (if there is a refresh it's updated)
+    it's the native format for this objects methods
+
+    For example API responses, see unit tests.
+    """
+    json_state = {}
+
+    def __init__(self, device_state_as_json, api_interface):
+        super().__init__(device_state_as_json, api_interface,
+                         objectprefix="piggy_banks")
+
+    @property
+    def available(self):
+        """
+        connection variable isn't stable.
+        Porkfolio can be offline, but updates will continue to occur.
+        always returning True to avoid this issue.
+        """
+        return True
+
+    def device_id(self):
+        root_name = self.json_state.get('piggy_bank_id', self.name())
+        return '{}+{}'.format(root_name, "nose")
+
+    def set_state(self, color_hex):
+        """
+        :param nose_color: a hex string indicating the color of the porkfolio nose
+        :return: nothing
+        From the api...
+        "the color of the nose is not in the desired_state
+        but on the object itself."
+        """
+        root_name = self.json_state.get('piggy_bank_id', self.name())
+        response = self.api_interface.set_device_state(self, {
+            "nose_color": color_hex
+        }, root_name)
+        self._update_state_from_response(response)
+
+    def state(self):
+        """
+        Hex colour value: String or None
+        :rtype: list float
+        """
+        return self.json_state.get('nose_color', None)
+
+
 # pylint-disable: undefined-all-variable
 __all__ = [WinkEggTray.__name__,
            WinkBinarySwitch.__name__,
@@ -379,4 +428,5 @@ __all__ = [WinkEggTray.__name__,
            WinkPowerStripOutlet.__name__,
            WinkGarageDoor.__name__,
            WinkShade.__name__,
-           WinkSiren.__name__]
+           WinkSiren.__name__,
+           WinkPorkfolioNose.__name__]

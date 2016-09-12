@@ -7,9 +7,9 @@ from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
-     _WinkCapabilitySensor, WinkLiquidPresenceSensor
+     _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
-     WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey
+     WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey, WinkPorkfolioNose
 from pywink.devices.types import DEVICE_ID_KEYS
 from pywink.test.devices.standard.api_responses import ApiResponseJSONLoader
 
@@ -393,7 +393,6 @@ class WinkPubnubTests(unittest.TestCase):
         self.assertIsNotNone(self.api_interface.get_subscription_key_from_response_dict(response_dict))
 
 
-
 class WinkKeyTests(unittest.TestCase):
 
     def setUp(self):
@@ -416,3 +415,28 @@ class WinkKeyTests(unittest.TestCase):
 
         wink_true_key = WinkKey(key, self.api_interface) 
         self.assertTrue(wink_true_key.state())
+
+
+class PorkfolioTests(unittest.TestCase):
+
+    def setUp(self):
+        super(PorkfolioTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_handle_porkfolio_response(self):
+        with open('{}/api_responses/porkfolio.json'.format(os.path.dirname(__file__))) as porkfolio_file:
+            response_dict = json.load(porkfolio_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.PIGGY_BANK])
+        self.assertEqual(2, len(devices))
+        self.assertIsInstance(devices[0], WinkCurrencySensor)
+        self.assertIsInstance(devices[1], WinkPorkfolioNose)
+
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/porkfolio.json'.format(os.path.dirname(__file__))) as porkfolio_file:
+            response_dict = json.load(porkfolio_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.PIGGY_BANK])
+        device_id = devices[0].device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}")
+
+        device_id = devices[1].device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}")

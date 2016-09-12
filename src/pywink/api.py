@@ -4,8 +4,10 @@ import requests
 
 from pywink.devices import types as device_types
 from pywink.devices.factory import build_device
+from pywink.devices.standard import WinkPorkfolioNose
 from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBrightnessSensor, WinkSoundPresenceSensor, \
-    WinkTemperatureSensor, WinkVibrationPresenceSensor, WinkLiquidPresenceSensor
+    WinkTemperatureSensor, WinkVibrationPresenceSensor, \
+    WinkLiquidPresenceSensor, WinkCurrencySensor
 from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
@@ -110,6 +112,10 @@ def get_keys():
     return get_devices(device_types.KEY)
 
 
+def get_piggy_banks():
+    return get_devices(device_types.PIGGY_BANK)
+
+
 def get_subscription_key():
     response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]
@@ -171,6 +177,10 @@ def get_devices_from_response_dict(response_dict, filter_key):
                 if len(subsensors) == 1:
                     continue
 
+            if key == "piggy_bank_id":
+                devices.extend(__get_devices_from_piggy_bank(item, api_interface))
+                continue  # Don't capture the porkfolio itself as a device
+
             devices.append(build_device(item, api_interface))
 
     return devices
@@ -215,6 +225,13 @@ def __get_outlets_from_powerstrip(item, api_interface):
             outlet['subscription'] = item['subscription']
         outlet['last_reading']['connection'] = item['last_reading']['connection']
     return [build_device(outlet, api_interface) for outlet in outlets if __device_is_visible(outlet, 'outlet_id')]
+
+
+def __get_devices_from_piggy_bank(item, api_interface):
+    subdevices = []
+    subdevices.append(WinkCurrencySensor(item, api_interface))
+    subdevices.append(WinkPorkfolioNose(item, api_interface))
+    return subdevices
 
 
 def __device_is_visible(item, key):

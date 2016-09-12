@@ -191,3 +191,25 @@ class WinkLiquidPresenceSensor(_WinkCapabilitySensor):
         :rtype: bool
         """
         return self.last_reading()
+
+
+class WinkCurrencySensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'balance'
+    UNIT = 'USD'
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkCurrencySensor, self).__init__(device_state_as_json, api_interface,
+                                                 self.CAPABILITY,
+                                                 self.UNIT)
+
+    def device_id(self):
+        root_name = self.json_state.get('piggy_bank_id', self.name())
+        return '{}+{}'.format(root_name, self._capability)
+
+    def balance(self):
+        """
+        :return: Returns the balance in cents.
+        :rtype: int
+        """
+        return self.last_reading()
