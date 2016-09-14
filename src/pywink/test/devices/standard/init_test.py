@@ -7,7 +7,7 @@ from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
-     _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor
+     _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey, WinkPorkfolioNose
 from pywink.devices.types import DEVICE_ID_KEYS
@@ -217,14 +217,14 @@ class SensorTests(unittest.TestCase):
             response_dict = json.load(spotter_file)
 
         sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
-        self.assertEquals(1 + 5, len(sensors))
+        self.assertEquals(5, len(sensors))
 
     def test_alternative_quirky_spotter_api_response_should_create_one_primary_sensor_and_five_subsensors(self):
         with open('{}/api_responses/quirky_spotter_2.json'.format(os.path.dirname(__file__))) as spotter_file:
             response_dict = json.load(spotter_file)
 
         sensors = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
-        self.assertEquals(1 + 5, len(sensors))
+        self.assertEquals(5, len(sensors))
 
     def test_brightness_should_have_correct_value(self):
         with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:
@@ -317,8 +317,9 @@ class SensorTests(unittest.TestCase):
         devices = get_devices_from_response_dict(response,
                                                  DEVICE_ID_KEYS[
                                                      device_types.SENSOR_POD])
-        self.assertEqual(1, len(devices))
-        self.assertIsInstance(devices[0], WinkSensorPod)
+        self.assertEqual(2, len(devices))
+        self.assertIsInstance(devices[1], WinkMotionSensor)
+        self.assertIsInstance(devices[0], WinkTemperatureSensor)
 
     def test_humidity_is_percentage_after_update(self):
         with open('{}/api_responses/quirky_spotter.json'.format(os.path.dirname(__file__))) as spotter_file:

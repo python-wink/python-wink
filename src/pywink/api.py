@@ -7,7 +7,7 @@ from pywink.devices.factory import build_device
 from pywink.devices.standard import WinkPorkfolioNose
 from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBrightnessSensor, WinkSoundPresenceSensor, \
     WinkTemperatureSensor, WinkVibrationPresenceSensor, \
-    WinkLiquidPresenceSensor, WinkCurrencySensor
+    WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor
 from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
@@ -174,6 +174,7 @@ def get_devices_from_response_dict(response_dict, filter_key):
                 subsensors = _get_subsensors_from_sensor_pod(item, api_interface)
                 if subsensors:
                     devices.extend(subsensors)
+                    continue  # Don't capture the base device
                 if len(subsensors) == 1:
                     continue
 
@@ -189,6 +190,7 @@ def get_devices_from_response_dict(response_dict, filter_key):
 def _get_subsensors_from_sensor_pod(item, api_interface):
 
     capabilities = [cap['field'] for cap in item.get('capabilities', {}).get('fields', [])]
+
     if not capabilities:
         return []
 
@@ -211,6 +213,9 @@ def _get_subsensors_from_sensor_pod(item, api_interface):
 
     if WinkLiquidPresenceSensor.CAPABILITY in capabilities:
         subsensors.append(WinkLiquidPresenceSensor(item, api_interface))
+
+    if WinkMotionSensor.CAPABILITY in capabilities:
+        subsensors.append(WinkMotionSensor(item, api_interface))
 
     if WinkSensorPod.CAPABILITY in capabilities:
         subsensors.append(WinkSensorPod(item, api_interface))

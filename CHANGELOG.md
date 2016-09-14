@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.7.15
+- Fix for PIR multisensors
+
 ## 0.7.14
 - Return False on RGB support if HSB is also supported.
 
