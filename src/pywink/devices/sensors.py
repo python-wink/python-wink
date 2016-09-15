@@ -70,8 +70,6 @@ class WinkSensorPod(_WinkCapabilitySensor):
     def state(self):
         if 'opened' in self._last_reading:
             return self._last_reading['opened']
-        elif 'motion' in self._last_reading:
-            return self._last_reading['motion']
         return False
 
     def device_id(self):
@@ -188,6 +186,24 @@ class WinkLiquidPresenceSensor(_WinkCapabilitySensor):
     def liquid_boolean(self):
         """
         :return: Returns True if liquid is detected.
+        :rtype: bool
+        """
+        return self.last_reading()
+
+
+class WinkMotionSensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'motion'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkMotionSensor, self).__init__(device_state_as_json, api_interface,
+                                               self.CAPABILITY,
+                                               self.UNIT)
+
+    def motion_boolean(self):
+        """
+        :return: Returns True if motion is detected.
         :rtype: bool
         """
         return self.last_reading()
