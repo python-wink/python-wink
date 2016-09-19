@@ -3,11 +3,12 @@ import mock
 import unittest
 import os
 
-from pywink.api import get_devices_from_response_dict
+from pywink.api import get_devices_from_response_dict, set_bearer_token
 from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
-     _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor
+     _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
+     WinkProximitySensor, WinkPresenceSensor
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey, WinkPorkfolioNose
 from pywink.devices.types import DEVICE_ID_KEYS
@@ -441,3 +442,20 @@ class PorkfolioTests(unittest.TestCase):
 
         device_id = devices[1].device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}")
+
+class RelaySensorTests(unittest.TestCase):
+
+    def setUp(self):
+        super(RelaySensorTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_handle_relay_response(self):
+        with open('{}/api_responses/wink_relay_sensor.json'.format(os.path.dirname(__file__))) as relay_file:
+            response_dict = json.load(relay_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        self.assertEqual(4, len(devices))
+        self.assertIsInstance(devices[0], WinkHumiditySensor)
+        self.assertIsInstance(devices[1], WinkTemperatureSensor)
+        self.assertIsInstance(devices[2], WinkPresenceSensor)
+        self.assertIsInstance(devices[3], WinkProximitySensor)
+
