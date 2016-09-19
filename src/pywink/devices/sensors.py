@@ -255,6 +255,15 @@ class WinkCurrencySensor(_WinkCapabilitySensor):
                                                  self.CAPABILITY,
                                                  self.UNIT)
 
+    @property
+    def available(self):
+        """
+        connection variable isn't stable.
+        Porkfolio can be offline, but updates will continue to occur.
+        always returning True to avoid this issue.
+        """
+        return True
+
     def device_id(self):
         root_name = self.json_state.get('piggy_bank_id', self.name())
         return '{}+{}'.format(root_name, self._capability)
