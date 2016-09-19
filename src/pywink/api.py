@@ -12,6 +12,10 @@ from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBright
 from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
+CLIENT_ID = None
+CLIENT_SECRET = None
+REFRESH_TOKEN = None
+USER_AGENT = None
 
 
 class WinkApiInterface(object):
@@ -32,6 +36,14 @@ class WinkApiInterface(object):
         arequest = requests.put(url_string,
                                 data=json.dumps(state),
                                 headers=API_HEADERS)
+        if arequest.status == 401:
+            new_token = refresh_access_token()
+            if new_token:
+                arequest = requests.put(url_string,
+                                        data=json.dumps(state),
+                                        headers=API_HEADERS)
+            else:
+                raise WinkAPIException("Failed to refresh access token.")
         return arequest.json()
 
     def get_device_state(self, device, id_override=None):
@@ -45,23 +57,35 @@ class WinkApiInterface(object):
         return arequest.json()
 
 
-def set_bearer_token(token, user_agent=None):
+def set_bearer_token(token):
     global API_HEADERS
 
     API_HEADERS = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(token)
     }
-    if user_agent:
-        API_HEADERS["User-Agent"] = user_agent
+    if USER_AGENT:
+        API_HEADERS["User-Agent"] = USER_AGENT
 
 
-def set_wink_credentials(client_id, client_secret, refresh_token):
+def set_user_agent(user_agent):
+    global USER_AGENT
+
+    USER_AGENT = user_agent
+
+
+def set_wink_credentials(email, password, client_id, client_secret):
+    global CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
+
+    CLIENT_ID = client_id
+    CLIENT_SECRET = client_secret
+
     data = {
         "client_id": client_id,
         "client_secret": client_secret,
-        "grant_type": "refresh_token",
-        "refresh_token": refresh_token
+        "grant_type": "password",
+        "email": email,
+        "password": password
     }
     headers = {
         'Content-Type': 'application/json'
@@ -71,8 +95,30 @@ def set_wink_credentials(client_id, client_secret, refresh_token):
                              headers=headers)
     response_json = response.json()
     access_token = response_json.get('access_token')
+    REFRESH_TOKEN = response_json.get('refresh_token')
     set_bearer_token(access_token)
-    return access_token
+
+
+def refresh_access_token():
+    if CLIENT_ID and CLIENT_SECRET and REFRESH_TOKEN:
+        data = {
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": REFRESH_TOKEN
+        }
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        response = requests.post('{}/oauth2/token'.format(WinkApiInterface.BASE_URL),
+                                 data=json.dumps(data),
+                                 headers=headers)
+        response_json = response.json()
+        access_token = response_json.get('access_token')
+        set_bearer_token(access_token)
+        return access_token
+    else:
+        return None
 
 
 def get_bulbs():
