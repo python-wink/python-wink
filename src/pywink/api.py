@@ -7,7 +7,8 @@ from pywink.devices.factory import build_device
 from pywink.devices.standard import WinkPorkfolioNose
 from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBrightnessSensor, WinkSoundPresenceSensor, \
     WinkTemperatureSensor, WinkVibrationPresenceSensor, \
-    WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor
+    WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
+    WinkPresenceSensor, WinkProximitySensor
 from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
@@ -44,13 +45,15 @@ class WinkApiInterface(object):
         return arequest.json()
 
 
-def set_bearer_token(token):
+def set_bearer_token(token, user_agent=None):
     global API_HEADERS
 
     API_HEADERS = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(token)
     }
+    if user_agent:
+        API_HEADERS["User-Agent"] = user_agent
 
 
 def set_wink_credentials(client_id, client_secret, refresh_token):
@@ -190,6 +193,7 @@ def get_devices_from_response_dict(response_dict, filter_key):
 def _get_subsensors_from_sensor_pod(item, api_interface):
 
     capabilities = [cap['field'] for cap in item.get('capabilities', {}).get('fields', [])]
+    capabilities.extend([cap['field'] for cap in item.get('capabilities', {}).get('sensor_types', [])])
 
     if not capabilities:
         return []
@@ -216,6 +220,12 @@ def _get_subsensors_from_sensor_pod(item, api_interface):
 
     if WinkMotionSensor.CAPABILITY in capabilities:
         subsensors.append(WinkMotionSensor(item, api_interface))
+
+    if WinkPresenceSensor.CAPABILITY in capabilities:
+        subsensors.append(WinkPresenceSensor(item, api_interface))
+
+    if WinkProximitySensor.CAPABILITY in capabilities:
+        subsensors.append(WinkProximitySensor(item, api_interface))
 
     if WinkSensorPod.CAPABILITY in capabilities:
         subsensors.append(WinkSensorPod(item, api_interface))

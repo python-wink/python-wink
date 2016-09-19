@@ -209,6 +209,42 @@ class WinkMotionSensor(_WinkCapabilitySensor):
         return self.last_reading()
 
 
+class WinkPresenceSensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'presence'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkPresenceSensor, self).__init__(device_state_as_json, api_interface,
+                                                 self.CAPABILITY,
+                                                 self.UNIT)
+
+    def presence_boolean(self):
+        """
+        :return: Returns True if presence is detected.
+        :rtype: bool
+        """
+        return self.last_reading()
+
+
+class WinkProximitySensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'proximity'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkProximitySensor, self).__init__(device_state_as_json, api_interface,
+                                                  self.CAPABILITY,
+                                                  self.UNIT)
+
+    def proximity_float(self):
+        """
+        :return: A float indicating the proximity.
+        :rtype: float
+        """
+        return self.last_reading()
+
+
 class WinkCurrencySensor(_WinkCapabilitySensor):
 
     CAPABILITY = 'balance'
