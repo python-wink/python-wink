@@ -36,7 +36,7 @@ class WinkApiInterface(object):
         arequest = requests.put(url_string,
                                 data=json.dumps(state),
                                 headers=API_HEADERS)
-        if arequest.status == 401:
+        if arequest.status_code == 401:
             new_token = refresh_access_token()
             if new_token:
                 arequest = requests.put(url_string,

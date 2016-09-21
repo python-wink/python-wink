@@ -91,7 +91,11 @@ class WinkHumiditySensor(_WinkCapabilitySensor):
         :return: The relative humidity detected by the sensor (0% to 100%)
         :rtype: int
         """
-        return self.last_reading()
+        # Relay returns humidity as a decimal
+        if self.last_reading() < 1.0:
+            return int(round(self.last_reading() * 100))
+        else:
+            return self.last_reading()
 
     def pubnub_update(self, json_response):
         # Pubnub returns the humidity as a decimal

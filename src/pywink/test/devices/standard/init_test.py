@@ -459,3 +459,9 @@ class RelaySensorTests(unittest.TestCase):
         self.assertIsInstance(devices[2], WinkPresenceSensor)
         self.assertIsInstance(devices[3], WinkProximitySensor)
 
+    def test_should_convert_humidity_to_percentage(self):
+        with open('{}/api_responses/wink_relay_sensor.json'.format(os.path.dirname(__file__))) as relay_file:
+            response_dict = json.load(relay_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
+        self.assertEqual(devices[0].humidity_percentage(), 69)
+
