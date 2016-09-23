@@ -91,7 +91,11 @@ class WinkHumiditySensor(_WinkCapabilitySensor):
         :return: The relative humidity detected by the sensor (0% to 100%)
         :rtype: int
         """
-        return self.last_reading()
+        # Relay returns humidity as a decimal
+        if self.last_reading() < 1.0:
+            return int(round(self.last_reading() * 100))
+        else:
+            return self.last_reading()
 
     def pubnub_update(self, json_response):
         # Pubnub returns the humidity as a decimal
@@ -209,6 +213,42 @@ class WinkMotionSensor(_WinkCapabilitySensor):
         return self.last_reading()
 
 
+class WinkPresenceSensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'presence'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkPresenceSensor, self).__init__(device_state_as_json, api_interface,
+                                                 self.CAPABILITY,
+                                                 self.UNIT)
+
+    def presence_boolean(self):
+        """
+        :return: Returns True if presence is detected.
+        :rtype: bool
+        """
+        return self.last_reading()
+
+
+class WinkProximitySensor(_WinkCapabilitySensor):
+
+    CAPABILITY = 'proximity'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkProximitySensor, self).__init__(device_state_as_json, api_interface,
+                                                  self.CAPABILITY,
+                                                  self.UNIT)
+
+    def proximity_float(self):
+        """
+        :return: A float indicating the proximity.
+        :rtype: float
+        """
+        return self.last_reading()
+
+
 class WinkCurrencySensor(_WinkCapabilitySensor):
 
     CAPABILITY = 'balance'
@@ -218,6 +258,15 @@ class WinkCurrencySensor(_WinkCapabilitySensor):
         super(WinkCurrencySensor, self).__init__(device_state_as_json, api_interface,
                                                  self.CAPABILITY,
                                                  self.UNIT)
+
+    @property
+    def available(self):
+        """
+        connection variable isn't stable.
+        Porkfolio can be offline, but updates will continue to occur.
+        always returning True to avoid this issue.
+        """
+        return True
 
     def device_id(self):
         root_name = self.json_state.get('piggy_bank_id', self.name())

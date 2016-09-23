@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.8.0
+- Support for Wink relay sensors and email/password auth
+
 ## 0.7.15
 - Fix for PIR multisensors
 

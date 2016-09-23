@@ -1,0 +1,107 @@
+{  
+   "data":[  
+      {  
+         "hidden_at":null,
+         "manufacturer_device_model":"wink_relay_sensor",
+         "object_id":"231234",
+         "radio_type":"project_one",
+         "manufacturer_device_id":null,
+         "locale":"en_us",
+         "upc_id":"188",
+         "location":"",
+         "gang_id":"40123",
+         "desired_state":{  
+
+         },
+         "subscription":{  
+            "pubnub":{  
+               "subscribe_key":"sub-c-f7bf7f7e-0542-11e323456-12142ddab7fe",
+               "channel":"a82816f0ddb9fa5448c5cb471d21716564871164|sensor_pod-123787|user-220271"
+            }
+         },
+         "created_at":1468460695,
+         "lat_lng":[  
+            null,
+            null
+         ],
+         "triggers":[  
+
+         ],
+         "units":{  
+
+         },
+         "model_name":"Wink Relay Sensor",
+         "name":"Great Room Relay",
+         "device_manufacturer":"wink",
+         "icon_id":null,
+         "last_event":{  
+            "vibration_occurred_at":null,
+            "loudness_occurred_at":null,
+            "brightness_occurred_at":null
+         },
+         "local_id":"3",
+         "capabilities":{  
+            "desired_state_fields":[  
+
+            ],
+            "sensor_types":[  
+               {  
+                  "mutability":"read-only",
+                  "field":"temperature",
+                  "attribute_id":1,
+                  "type":"float"
+               },
+               {  
+                  "mutability":"read-only",
+                  "field":"humidity",
+                  "attribute_id":2,
+                  "type":"percentage"
+               },
+               {  
+                  "mutability":"read-only",
+                  "field":"presence",
+                  "attribute_id":3,
+                  "type":"boolean"
+               },
+               {  
+                  "mutability":"read-only",
+                  "field":"proximity",
+                  "attribute_id":4,
+                  "type":"float"
+               }
+            ]
+         },
+         "sensor_pod_id":"212345",
+         "last_reading":{  
+            "temperature_updated_at":1474295085.8156993,
+            "agent_session_id_updated_at":null,
+            "presence":false,
+            "agent_session_id":null,
+            "temperature":19.87,
+            "humidity_changed_at":1474295085.8156993,
+            "proximity":2512.0,
+            "presence_updated_at":1474295085.8156993,
+            "proximity_updated_at":1474295085.8156993,
+            "proximity_changed_at":1474295085.8156993,
+            "presence_changed_at":1474281889.6097996,
+            "connection":true,
+            "humidity":0.69,
+            "connection_updated_at":1474295085.8156993,
+            "temperature_changed_at":1474295085.8156993,
+            "humidity_updated_at":1474295085.8156993
+         },
+         "uuid":"9bb49bfe-0d6a-4e9b-9896-f33c37ec969b",
+         "icon_code":null,
+         "object_type":"sensor_pod",
+         "upc_code":"wink_p1_sensor",
+         "linked_service_id":null,
+         "hub_id":"451234"
+      }
+   ],
+   "errors":[  
+
+   ],
+   "pagination":{  
+      "count":13
+   }
+}
