@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.8.1
+- Support for Wink Smoke and CO detectors
+
 ## 0.8.0
 - Support for Wink relay sensors and email/password auth
 
