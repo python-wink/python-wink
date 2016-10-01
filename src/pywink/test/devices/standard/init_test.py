@@ -8,7 +8,7 @@ from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
      _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
-     WinkProximitySensor, WinkPresenceSensor
+     WinkProximitySensor, WinkPresenceSensor, WinkSmokeDetector, WinkCoDetector
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey, WinkPorkfolioNose
 from pywink.devices.types import DEVICE_ID_KEYS
@@ -464,4 +464,30 @@ class RelaySensorTests(unittest.TestCase):
             response_dict = json.load(relay_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SENSOR_POD])
         self.assertEqual(devices[0].humidity_percentage(), 69)
+
+
+class SmokeDetectorTests(unittest.TestCase):
+
+    def setUp(self):
+        super(SmokeDetectorTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_handle_smoke_detector_response(self):
+        with open('{}/api_responses/smoke_detector.json'.format(os.path.dirname(__file__))) as smoke_detector_file:
+            response_dict = json.load(smoke_detector_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SMOKE_DETECTOR])
+        self.assertEqual(2, len(devices))
+        smoke = devices[0]
+        co = devices[1]
+        self.assertIsInstance(smoke, WinkSmokeDetector)
+        self.assertIsInstance(co, WinkCoDetector)
+        self.assertFalse(smoke.smoke_detected_boolean())
+        self.assertTrue(co.co_detected_boolean())
+
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/smoke_detector.json'.format(os.path.dirname(__file__))) as smoke_detector_file:
+            response_dict = json.load(smoke_detector_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.SMOKE_DETECTOR])
+        device_id = devices[0].device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}")
 

@@ -39,7 +39,9 @@ class _WinkCapabilitySensor(WinkDevice):
             return None
 
     def device_id(self):
-        root_name = self.json_state.get('sensor_pod_id', self.name())
+        root_name = self.json_state.get('sensor_pod_id', None)
+        if root_name is None:
+            root_name = self.json_state.get('smoke_detector_id', self.name())
         return '{}+{}'.format(root_name, self._capability)
 
     def update_state(self, require_desired_state_fulfilled=False):
@@ -276,5 +278,41 @@ class WinkCurrencySensor(_WinkCapabilitySensor):
         """
         :return: Returns the balance in cents.
         :rtype: int
+        """
+        return self.last_reading()
+
+
+class WinkSmokeDetector(_WinkCapabilitySensor):
+
+    CAPABILITY = 'smoke_detected'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkSmokeDetector, self).__init__(device_state_as_json, api_interface,
+                                                self.CAPABILITY,
+                                                self.UNIT)
+
+    def smoke_detected_boolean(self):
+        """
+        :return: Returns True if smoke is detected.
+        :rtype: bool
+        """
+        return self.last_reading()
+
+
+class WinkCoDetector(_WinkCapabilitySensor):
+
+    CAPABILITY = 'co_detected'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkCoDetector, self).__init__(device_state_as_json, api_interface,
+                                             self.CAPABILITY,
+                                             self.UNIT)
+
+    def co_detected_boolean(self):
+        """
+        :return: Returns True if CO is detected.
+        :rtype: bool
         """
         return self.last_reading()

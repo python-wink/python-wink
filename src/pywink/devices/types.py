@@ -9,6 +9,7 @@ SHADE = 'shades'
 SIREN = 'siren'
 KEY = 'key'
 PIGGY_BANK = 'piggybank'
+SMOKE_DETECTOR = 'smoke_detector'
 
 DEVICE_ID_KEYS = {
     BINARY_SWITCH: 'binary_switch_id',
@@ -21,5 +22,6 @@ DEVICE_ID_KEYS = {
     SHADE: 'shade_id',
     SIREN: 'siren_id',
     KEY: 'key_id',
-    PIGGY_BANK: 'piggy_bank_id'
+    PIGGY_BANK: 'piggy_bank_id',
+    SMOKE_DETECTOR: 'smoke_detector_id'
 }

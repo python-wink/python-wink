@@ -1,0 +1,61 @@
+{  
+   "data":[  
+      {  
+         "object_type":"smoke_detector",
+         "object_id":"12345",
+         "uuid":"54feac93-327e-4f04-a8ba-500c88e95245",
+         "icon_id":null,
+         "icon_code":null,
+         "last_reading":{  
+            "connection":true,
+            "connection_updated_at":1462586187.9383092,
+            "battery":0.9,
+            "battery_updated_at":1462586188.4449866,
+            "co_detected":true,
+            "co_detected_updated_at":1462586188.4449866,
+            "smoke_detected":false,
+            "smoke_detected_updated_at":1471015253.2221863,
+            "test_activated":false,
+            "test_activated_updated_at":1462997176.8458738
+         },
+         "subscription":{  
+            "pubnub":{  
+               "subscribe_key":"REMOVED",
+               "channel":"Removed|smoke_detector-REMOVED|user-REMOVED"
+            }
+         },
+         "smoke_detector_id":"12345",
+         "name":"Hallway Smoke Detector",
+         "locale":"en_us",
+         "units":{  
+
+         },
+         "created_at":1462586187,
+         "hidden_at":null,
+         "capabilities":{  
+
+         },
+         "manufacturer_device_model":"kidde_smoke_alarm",
+         "manufacturer_device_id":null,
+         "device_manufacturer":"kidde",
+         "model_name":"Smoke Alarm",
+         "upc_id":"524",
+         "upc_code":"kidde_smoke_alarm",
+         "hub_id":"REMOVED",
+         "local_id":null,
+         "radio_type":"kidde",
+         "linked_service_id":null,
+         "lat_lng":[  
+            39.00000,
+            -77.00000
+         ],
+         "location":"REMOVED"
+      }
+   ],
+   "errors":[  
+
+   ],
+   "pagination":{  
+      "count":13
+   }
+}
