@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.8.1
+## 0.9.0
 - Support for Wink Smoke and CO detectors
 
 ## 0.8.0
