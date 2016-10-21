@@ -206,7 +206,7 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
 
 
 class WinkGarageDoor(WinkDevice):
-    r""" represents a wink.py garage door
+    """ represents a wink.py garage door
     json_obj holds the json stat at init (and if there is a refresh it's updated
     it's the native format for this objects methods
     and looks like so:
