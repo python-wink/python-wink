@@ -6,6 +6,7 @@ import time
 from pywink.devices.base import WinkDevice
 from pywink.devices.standard.base import WinkBinarySwitch
 from pywink.devices.standard.bulb import WinkBulb
+from pywink.devices.standard.thermostat import WinkThermostat
 from pywink.domain.devices import is_desired_state_reached
 
 
@@ -429,4 +430,5 @@ __all__ = [WinkEggTray.__name__,
            WinkGarageDoor.__name__,
            WinkShade.__name__,
            WinkSiren.__name__,
-           WinkPorkfolioNose.__name__]
+           WinkPorkfolioNose.__name__,
+           WinkThermostat.__name__]

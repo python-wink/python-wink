@@ -10,6 +10,7 @@ SIREN = 'siren'
 KEY = 'key'
 PIGGY_BANK = 'piggybank'
 SMOKE_DETECTOR = 'smoke_detector'
+THERMOSTAT = 'thermostat'
 
 DEVICE_ID_KEYS = {
     BINARY_SWITCH: 'binary_switch_id',
@@ -23,5 +24,6 @@ DEVICE_ID_KEYS = {
     SIREN: 'siren_id',
     KEY: 'key_id',
     PIGGY_BANK: 'piggy_bank_id',
-    SMOKE_DETECTOR: 'smoke_detector_id'
+    SMOKE_DETECTOR: 'smoke_detector_id',
+    THERMOSTAT: 'thermostat_id'
 }

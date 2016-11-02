@@ -58,6 +58,14 @@ class WinkApiInterface(object):
         return arequest.json()
 
 
+def get_set_access_token():
+    auth = API_HEADERS.get("Authorization")
+    if auth is not None:
+        return auth.split()[1]
+    else:
+        return None
+
+
 def set_bearer_token(token):
     global API_HEADERS
 
@@ -168,6 +176,10 @@ def get_piggy_banks():
 
 def get_smoke_and_co_detectors():
     return get_devices(device_types.SMOKE_DETECTOR)
+
+
+def get_thermostats():
+    return get_devices(device_types.THERMOSTAT)
 
 
 def get_subscription_key():
