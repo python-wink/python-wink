@@ -1,4 +1,6 @@
 # Change Log
+## 0.10.0
+- Support for Thermostats
 
 ## 0.9.0
 - Support for Wink Smoke and CO detectors
