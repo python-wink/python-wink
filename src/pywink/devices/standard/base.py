@@ -43,28 +43,3 @@ class WinkBinarySwitch(WinkDevice):
         self._update_state_from_response(response)
 
         self._last_call = (time.time(), state)
-
-    def wait_till_desired_reached(self):
-        """ Wait till desired state reached. Max 10s. """
-        # TODO: Get rid of this.  Busy-wait loops can go in whatever project is making use of this library.
-        if self._recent_state_set():
-            return
-
-        # self.refresh_state_at_hub()
-        tries = 1
-
-        while True:
-            self.update_state()
-            last_read = self._last_reading
-
-            if last_read.get('desired_powered') == last_read.get('powered') or tries == 5:
-                break
-
-            time.sleep(2)
-
-            tries += 1
-            self.update_state()
-            last_read = self._last_reading
-
-    def _recent_state_set(self):
-        return time.time() - self._last_call[0] < 15

@@ -1,4 +1,3 @@
-from pywink.domain.devices import is_desired_state_reached
 
 
 class WinkDevice(object):
@@ -49,22 +48,19 @@ class WinkDevice(object):
     def battery_level(self):
         return self._last_reading.get('battery', None)
 
-    def _update_state_from_response(self, response_json, require_desired_state_fulfilled=False):
+    def _update_state_from_response(self, response_json):
         """
         :param response_json: the json obj returned from query
         :return:
         """
         _response_json = response_json.get('data')
-        if _response_json and require_desired_state_fulfilled:
-            if not is_desired_state_reached(_response_json):
-                return False
         self.json_state = _response_json
         return True
 
-    def update_state(self, require_desired_state_fulfilled=False):
+    def update_state(self):
         """ Update state with latest info from Wink API. """
         response = self.api_interface.get_device_state(self)
-        return self._update_state_from_response(response, require_desired_state_fulfilled)
+        return self._update_state_from_response(response)
 
     def pubnub_update(self, json_response):
         self.json_state = json_response

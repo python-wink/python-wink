@@ -7,7 +7,6 @@ from pywink.devices.base import WinkDevice
 from pywink.devices.standard.base import WinkBinarySwitch
 from pywink.devices.standard.bulb import WinkBulb
 from pywink.devices.standard.thermostat import WinkThermostat
-from pywink.domain.devices import is_desired_state_reached
 
 
 class WinkEggTray(WinkDevice):
@@ -52,11 +51,6 @@ class WinkLock(WinkDevice):
                                          self.device_id(), self.state())
 
     def state(self):
-        # Optimistic approach to setState:
-        # Within 15 seconds of a call to setState we assume it worked.
-        if self._recent_state_set():
-            return self._last_call[1]
-
         return self._last_reading.get('locked', False)
 
     def device_id(self):
@@ -71,31 +65,6 @@ class WinkLock(WinkDevice):
         response = self.api_interface.set_device_state(self, values)
         self._update_state_from_response(response)
         self._last_call = (time.time(), state)
-
-    # pylint: disable=duplicate-code
-    def wait_till_desired_reached(self):
-        """ Wait till desired state reached. Max 10s. """
-        if self._recent_state_set():
-            return
-
-        # self.refresh_state_at_hub()
-        tries = 1
-
-        while True:
-            self.update_state()
-            last_read = self._last_reading
-
-            if last_read.get('desired_locked') == last_read.get('locked') or tries == 5:
-                break
-
-            time.sleep(2)
-
-            tries += 1
-            self.update_state()
-            last_read = self._last_reading
-
-    def _recent_state_set(self):
-        return time.time() - self._last_call[0] < 15
 
 
 class WinkPowerStripOutlet(WinkBinarySwitch):
@@ -122,13 +91,10 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
     def _last_reading(self):
         return self.json_state.get('last_reading') or {}
 
-    def update_state(self, require_desired_state_fulfilled=False):
+    def update_state(self):
         """ Update state with latest info from Wink API. """
         response = self.api_interface.get_device_state(self, id_override=self.parent_id())
         power_strip = response.get('data')
-        if require_desired_state_fulfilled:
-            if not is_desired_state_reached(power_strip[self.index]):
-                return
 
         power_strip_reading = power_strip.get('last_reading')
         outlets = power_strip.get('outlets', power_strip)
@@ -137,7 +103,7 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
                 outlet['last_reading']['connection'] = power_strip_reading.get('connection')
                 self.json_state = outlet
 
-    def _update_state_from_response(self, response_json, require_desired_state_fulfilled=False):
+    def _update_state_from_response(self, response_json):
         """
         :param response_json: the json obj returned from query
         :return:
@@ -181,30 +147,6 @@ class WinkPowerStripOutlet(WinkBinarySwitch):
 
         self._last_call = (time.time(), state)
 
-    def wait_till_desired_reached(self):
-        """ Wait till desired state reached. Max 10s. """
-        if self._recent_state_set():
-            return
-
-        # self.refresh_state_at_hub()
-        tries = 1
-
-        while True:
-            self.update_state()
-            last_read = self._last_reading
-
-            if last_read.get('desired_powered') == last_read.get('powered') or tries == 5:
-                break
-
-            time.sleep(2)
-
-            tries += 1
-            self.update_state()
-            last_read = self._last_reading
-
-    def _recent_state_set(self):
-        return time.time() - self._last_call[0] < 15
-
 
 class WinkGarageDoor(WinkDevice):
     """ represents a wink.py garage door
@@ -223,11 +165,6 @@ class WinkGarageDoor(WinkDevice):
         return "<Wink garage door %s %s %s>" % (self.name(), self.device_id(), self.state())
 
     def state(self):
-        # Optimistic approach to setState:
-        # Within 15 seconds of a call to setState we assume it worked.
-        if self._recent_state_set():
-            return self._last_call[1]
-
         return self._last_reading.get('position', 0)
 
     def device_id(self):
@@ -243,32 +180,6 @@ class WinkGarageDoor(WinkDevice):
         self._update_state_from_response(response)
 
         self._last_call = (time.time(), state)
-
-    # pylint: disable=duplicate-code
-    def wait_till_desired_reached(self):
-        """ Wait till desired state reached. Max 10s. """
-        if self._recent_state_set():
-            return
-
-        # self.refresh_state_at_hub()
-        tries = 1
-
-        while True:
-            self.update_state()
-            last_read = self._last_reading
-
-            if last_read.get('desired_position') == last_read.get('0.0') \
-               or tries == 5:
-                break
-
-            time.sleep(2)
-
-            tries += 1
-            self.update_state()
-            last_read = self._last_reading
-
-    def _recent_state_set(self):
-        return time.time() - self._last_call[0] < 15
 
 
 class WinkShade(WinkDevice):
@@ -286,11 +197,6 @@ class WinkShade(WinkDevice):
         return self.json_state.get('shade_id', self.name())
 
     def state(self):
-        # Optimistic approach to setState:
-        # Within 15 seconds of a call to setState we assume it worked.
-        if self._recent_state_set():
-            return self._last_call[1]
-
         return self._last_reading.get('position', 0)
 
     def set_state(self, state):
@@ -303,10 +209,6 @@ class WinkShade(WinkDevice):
         self._update_state_from_response(response)
 
         self._last_call = (time.time(), state)
-        # self._state = state
-
-    def _recent_state_set(self):
-        return time.time() - self._last_call[0] < 15
 
 
 class WinkSiren(WinkBinarySwitch):
@@ -392,6 +294,7 @@ class WinkPorkfolioNose(WinkDevice):
         connection variable isn't stable.
         Porkfolio can be offline, but updates will continue to occur.
         always returning True to avoid this issue.
+        This is the same for the PorkFolio balance sensor.
         """
         return True
 
