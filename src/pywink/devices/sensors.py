@@ -339,3 +339,40 @@ class WinkCoDetector(_WinkCapabilitySensor):
         root_name = self.json_state.get('smoke_detector_id', self.name())
         response = self.api_interface.get_device_state(self, root_name)
         self._update_state_from_response(response)
+
+
+class WinkHub(WinkDevice):
+
+    def __init__(self, device_state_as_json, api_interface, objectprefix="hub_id"):
+        super(WinkHub, self).__init__(device_state_as_json, api_interface)
+
+    def state(self):
+        return self._last_reading.get('connection', False)
+
+    def name(self):
+        name = self.json_state.get('name', "Unknown Name")
+        name += " hub"
+        return name
+
+    def device_id(self):
+        root_name = self.json_state.get('hub_id', None)
+        return '{}+{}'.format(root_name, 'hub')
+
+    def kidde_radio_code(self):
+        config = self.json_state.get('configuration')
+        return config.get('kidde_radio_code')
+
+    def update_needed(self):
+        return self._last_reading.get('update_needed')
+
+    def ip_address(self):
+        return self._last_reading.get('ip_address')
+
+    def firmware_version(self):
+        return self._last_reading.get('firmware_version')
+
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        root_name = self.json_state.get('hub_id', self.name())
+        response = self.api_interface.get_device_state(self, root_name)
+        self._update_state_from_response(response)

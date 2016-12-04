@@ -12,4 +12,5 @@ from pywink.api import get_bulbs, get_garage_doors, get_locks, \
     get_switches, get_thermostats
 
 from pywink.api import get_eggtrays, get_sensors, \
-    get_keys, get_piggy_banks, get_smoke_and_co_detectors
+    get_keys, get_piggy_banks, get_smoke_and_co_detectors, \
+    get_hubs

@@ -1,4 +1,9 @@
 # Change Log
+
+## 0.11.0
+- Support for Wink hubs as sensors
+- Added more generic attributes to base Wink device (manufacturer_device_model, manufacturer_device_id, device_manufacturer, model_name)
+
 ## 0.10.1
 - Set the correct objectprefix for Wink Smoke/CO detectors and Piggy banks
 - Remove all desired state code

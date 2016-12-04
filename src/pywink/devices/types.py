@@ -11,6 +11,7 @@ KEY = 'key'
 PIGGY_BANK = 'piggybank'
 SMOKE_DETECTOR = 'smoke_detector'
 THERMOSTAT = 'thermostat'
+HUB = 'hub'
 
 DEVICE_ID_KEYS = {
     BINARY_SWITCH: 'binary_switch_id',
@@ -25,5 +26,6 @@ DEVICE_ID_KEYS = {
     KEY: 'key_id',
     PIGGY_BANK: 'piggy_bank_id',
     SMOKE_DETECTOR: 'smoke_detector_id',
-    THERMOSTAT: 'thermostat_id'
+    THERMOSTAT: 'thermostat_id',
+    HUB: 'hub_id'
 }

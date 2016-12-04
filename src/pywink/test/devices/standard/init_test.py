@@ -8,7 +8,8 @@ from pywink.devices import types as device_types
 from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumiditySensor, \
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
      _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
-     WinkProximitySensor, WinkPresenceSensor, WinkSmokeDetector, WinkCoDetector
+     WinkProximitySensor, WinkPresenceSensor, WinkSmokeDetector, WinkCoDetector, \
+     WinkHub
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey, WinkPorkfolioNose
 from pywink.devices.types import DEVICE_ID_KEYS
@@ -509,3 +510,88 @@ class SmokeDetectorTests(unittest.TestCase):
         objectprefix = devices[1].objectprefix
         self.assertRegex(objectprefix, "smoke_detectors")
 
+
+class HubTests(unittest.TestCase):
+
+    def setUp(self):
+        super(HubTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_hub_response(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.HUB])
+        self.assertEqual(1, len(devices))
+        self.assertIsInstance(devices[0], WinkHub)
+
+    def test_device_id_should_be_number(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        device_id = wink_hub.device_id()
+        self.assertRegex(device_id, "^[0-9]{4,6}")
+
+    def test_kidde_radio_code(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        code = wink_hub.kidde_radio_code()
+        self.assertEqual(code, 0)
+
+    def test_update_needed(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        update = wink_hub.update_needed()
+        self.assertFalse(update)
+
+    def test_ip_address(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        ip = wink_hub.ip_address()
+        self.assertEqual(ip, '192.168.1.2')
+
+    def test_firmware_version(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        firmware = wink_hub.firmware_version()
+        self.assertEqual(firmware, '3.3.26-0-gf4fa1428f9')
+
+    def test_manufacturer_device_id(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        id = wink_hub.manufacturer_device_id
+        self.assertEqual(id, None)
+
+    def test_manufacturer(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        manufacturer = wink_hub.device_manufacturer
+        self.assertEqual(manufacturer, 'wink')
+
+    def test_model(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        model = wink_hub.manufacturer_device_model
+        self.assertEqual(model, 'wink_hub')
+
+    def test_model_name(self):
+        with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
+            response_dict = json.load(hub_file)
+        hub = response_dict.get('data')[0]
+        wink_hub = WinkHub(hub, self.api_interface)
+        model_name = wink_hub.model_name
+        self.assertEqual(model_name, 'Hub')

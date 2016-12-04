@@ -48,6 +48,22 @@ class WinkDevice(object):
     def battery_level(self):
         return self._last_reading.get('battery', None)
 
+    @property
+    def manufacturer_device_model(self):
+        return self.json_state.get('manufacturer_device_model', None)
+
+    @property
+    def manufacturer_device_id(self):
+        return self.json_state.get('manufacturer_device_id', None)
+
+    @property
+    def device_manufacturer(self):
+        return self.json_state.get('device_manufacturer', None)
+
+    @property
+    def model_name(self):
+        return self.json_state.get('model_name', None)
+
     def _update_state_from_response(self, response_json):
         """
         :param response_json: the json obj returned from query
