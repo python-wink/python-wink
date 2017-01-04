@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.12.0
+- Wink fan support
+
+
 ## 0.11.0
 - Support for Wink hubs as sensors
 - Added more generic attributes to base Wink device (manufacturer_device_model, manufacturer_device_id, device_manufacturer, model_name)
