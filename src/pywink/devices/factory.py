@@ -1,14 +1,15 @@
 from pywink.devices.base import WinkDevice
 from pywink.devices.sensors import WinkSensorPod, WinkHub
 from pywink.devices.standard import WinkBulb, WinkBinarySwitch, WinkPowerStripOutlet, WinkLock, \
-    WinkEggTray, WinkGarageDoor, WinkShade, WinkSiren, WinkKey, WinkThermostat
+    WinkEggTray, WinkGarageDoor, WinkShade, WinkSiren, WinkKey, WinkThermostat, \
+    WinkFan
 
 
+# pylint: disable=redefined-variable-type,too-many-branches
 def build_device(device_state_as_json, api_interface):
 
     new_object = None
 
-    # pylint: disable=redefined-variable-type
     # These objects all share the same base class: WinkDevice
 
     if "light_bulb_id" in device_state_as_json:
@@ -33,6 +34,10 @@ def build_device(device_state_as_json, api_interface):
         new_object = WinkKey(device_state_as_json, api_interface)
     elif "thermostat_id" in device_state_as_json:
         new_object = WinkThermostat(device_state_as_json, api_interface)
+    elif "fan_id" in device_state_as_json:
+        new_object = WinkFan(device_state_as_json, api_interface)
+    # This must be at the bottom most devices have a hub_id listed
+    # as their associated hub.
     elif "hub_id" in device_state_as_json:
         new_object = WinkHub(device_state_as_json, api_interface)
 

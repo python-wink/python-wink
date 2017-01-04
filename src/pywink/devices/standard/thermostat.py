@@ -111,6 +111,10 @@ class WinkThermostat(WinkDevice):
         return False
 
     def has_fan(self):
+        cap_fields = self.json_state.get('capabilities').get('fields')
+        for field in cap_fields:
+            if field.get('field') == "fan_mode":
+                return True
         return self._last_reading.get('has_fan', False)
 
     def is_on(self):

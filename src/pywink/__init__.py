@@ -9,7 +9,7 @@ from pywink.api import set_bearer_token, refresh_access_token, \
 
 from pywink.api import get_bulbs, get_garage_doors, get_locks, \
     get_powerstrip_outlets, get_shades, get_sirens, \
-    get_switches, get_thermostats
+    get_switches, get_thermostats, get_fans
 
 from pywink.api import get_eggtrays, get_sensors, \
     get_keys, get_piggy_banks, get_smoke_and_co_detectors, \

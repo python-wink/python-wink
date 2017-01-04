@@ -7,6 +7,7 @@ from pywink.devices.base import WinkDevice
 from pywink.devices.standard.base import WinkBinarySwitch
 from pywink.devices.standard.bulb import WinkBulb
 from pywink.devices.standard.thermostat import WinkThermostat
+from pywink.devices.standard.fan import WinkFan
 
 
 class WinkEggTray(WinkDevice):
@@ -334,4 +335,5 @@ __all__ = [WinkEggTray.__name__,
            WinkShade.__name__,
            WinkSiren.__name__,
            WinkPorkfolioNose.__name__,
-           WinkThermostat.__name__]
+           WinkThermostat.__name__,
+           WinkFan.__name__]
