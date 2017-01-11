@@ -13,6 +13,8 @@ SMOKE_DETECTOR = 'smoke_detector'
 THERMOSTAT = 'thermostat'
 HUB = 'hub'
 FAN = 'fan'
+BUTTON = 'button'
+REMOTE = 'remote'
 
 DEVICE_ID_KEYS = {
     BINARY_SWITCH: 'binary_switch_id',
@@ -29,5 +31,7 @@ DEVICE_ID_KEYS = {
     SMOKE_DETECTOR: 'smoke_detector_id',
     THERMOSTAT: 'thermostat_id',
     HUB: 'hub_id',
-    FAN: 'fan_id'
+    FAN: 'fan_id',
+    BUTTON: 'button_id',
+    REMOTE: 'remote_id'
 }

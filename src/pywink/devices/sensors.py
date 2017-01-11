@@ -32,6 +32,13 @@ class _WinkCapabilitySensor(WinkDevice):
         return name
 
     @property
+    def tamper_detected(self):
+        tamper = self._last_reading.get('tamper_detected', False)
+        if tamper is None:
+            tamper = False
+        return tamper
+
+    @property
     def battery_level(self):
         if not self._last_reading.get('external_power', None):
             return self._last_reading.get('battery', None)

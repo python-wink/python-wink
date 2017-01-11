@@ -69,6 +69,14 @@ class GarageDoorTests(unittest.TestCase):
         device_id = wink_garage_door.device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}$")
 
+    def test_tamper_detected_should_be_false(self):
+        with open('{}/api_responses/garage_door.json'.format(os.path.dirname(__file__))) as garage_door_file:
+            response_dict = json.load(garage_door_file)
+        garage_door = response_dict.get('data')[0]
+        wink_garage_door = WinkGarageDoor(garage_door, self.api_interface)
+        tamper = wink_garage_door.tamper_detected
+        self.assertFalse(tamper)
+
 
 class ShadeTests(unittest.TestCase):
     def setUp(self):
@@ -113,6 +121,22 @@ class SirenTests(unittest.TestCase):
         device_id = wink_siren.device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}$")
 
+    def test_auto_shutoff_should_be_30(self):
+        with open('{}/api_responses/siren.json'.format(os.path.dirname(__file__))) as siren_file:
+            response_dict = json.load(siren_file)
+        siren = response_dict.get('data')[0]
+        wink_siren = WinkSiren(siren, self.api_interface)
+        auto_shutoff = wink_siren.auto_shutoff
+        self.assertEqual(auto_shutoff, 30)
+
+    def test_mode_should_be_siren_and_strobe(self):
+        with open('{}/api_responses/siren.json'.format(os.path.dirname(__file__))) as siren_file:
+            response_dict = json.load(siren_file)
+        siren = response_dict.get('data')[0]
+        wink_siren = WinkSiren(siren, self.api_interface)
+        mode = wink_siren.mode
+        self.assertEqual(mode, "siren_and_strobe")
+
 
 class LockTests(unittest.TestCase):
 
@@ -134,6 +158,46 @@ class LockTests(unittest.TestCase):
         wink_lock = WinkLock(lock, self.api_interface)
         device_id = wink_lock.device_id()
         self.assertRegex(device_id, "^[0-9]{4,6}$")
+
+    def test_alarm_mode_should_be_null(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        lock = response_dict.get('data')[0]
+        wink_lock = WinkLock(lock, self.api_interface)
+        alarm_mode = wink_lock.alarm_mode
+        self.assertEqual(alarm_mode, None)
+
+    def test_alarm_sensitivity_should_be_6(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        lock = response_dict.get('data')[0]
+        wink_lock = WinkLock(lock, self.api_interface)
+        alarm_sensitivity = wink_lock.alarm_sensitivity
+        self.assertEqual(alarm_sensitivity, 0.6)
+
+    def test_alarm_enabled_should_be_true(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        lock = response_dict.get('data')[0]
+        wink_lock = WinkLock(lock, self.api_interface)
+        alarm_enabled = wink_lock.alarm_enabled
+        self.assertTrue(alarm_enabled)
+
+    def test_beeper_enabled_should_be_true(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        lock = response_dict.get('data')[0]
+        wink_lock = WinkLock(lock, self.api_interface)
+        beeper_enabled = wink_lock.beeper_enabled
+        self.assertTrue(beeper_enabled)
+
+    def test_vacation_mode_enabled_should_be_false(self):
+        with open('{}/api_responses/lock.json'.format(os.path.dirname(__file__))) as lock_file:
+            response_dict = json.load(lock_file)
+        lock = response_dict.get('data')[0]
+        wink_lock = WinkLock(lock, self.api_interface)
+        vacation_mode_enabled = wink_lock.vacation_mode_enabled
+        self.assertFalse(vacation_mode_enabled)
 
 
 class BinarySwitchTests(unittest.TestCase):
@@ -305,6 +369,14 @@ class SensorTests(unittest.TestCase):
 
         for sensor in sensors:
             self.assertEqual(sensor.battery_level, 0.86)
+
+    def test_sensor_tamper_detected_should_be_false(self):
+        response = ApiResponseJSONLoader('door_sensor_gocontrol.json').load()
+        devices = get_devices_from_response_dict(response,
+                                                 DEVICE_ID_KEYS[
+                                                     device_types.SENSOR_POD])
+        tamper = devices[0].tamper_detected
+        self.assertFalse(tamper)
 
     def test_gocontrol_door_sensor_should_be_identified(self):
         response = ApiResponseJSONLoader('door_sensor_gocontrol.json').load()

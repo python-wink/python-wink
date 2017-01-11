@@ -57,6 +57,76 @@ class WinkLock(WinkDevice):
     def device_id(self):
         return self.json_state.get('lock_id', self.name())
 
+    @property
+    def alarm_enabled(self):
+        return self._last_reading.get('alarm_enabled', False)
+
+    @property
+    def alarm_mode(self):
+        return self._last_reading.get('alarm_mode', None)
+
+    @property
+    def vacation_mode_enabled(self):
+        return self._last_reading.get('vacation_mode_enabled', False)
+
+    @property
+    def beeper_enabled(self):
+        return self._last_reading.get('beeper_enabled', False)
+
+    @property
+    def auto_lock_enabled(self):
+        return self._last_reading.get('auto_lock_enabled', False)
+
+    @property
+    def alarm_sensitivity(self):
+        return self._last_reading.get('alarm_sensitivity', None)
+
+    def set_alarm_sensitivity(self, mode):
+        """
+        :param mode: 1.0 for Very sensitive, 0.2 for not sensitive.
+                     Steps in values of 0.2.
+        :return: nothing
+        """
+        values = {"desired_state": {"alarm_sensitivity": mode}}
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
+    def set_alarm_mode(self, mode):
+        """
+        :param mode: one of [None, "activity", "tamper", "forced_entry"]
+        :return: nothing
+        """
+        values = {"desired_state": {"alarm_mode": mode}}
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
+    def set_alarm_state(self, state):
+        """
+        :param state: a boolean of ture (on) or false ('off')
+        :return: nothing
+        """
+        values = {"desired_state": {"alarm_enabled": state}}
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
+    def set_vacation_mode(self, state):
+        """
+        :param state: a boolean of ture (on) or false ('off')
+        :return: nothing
+        """
+        values = {"desired_state": {"vacation_mode_enabled": state}}
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
+    def set_beeper_mode(self, state):
+        """
+        :param state: a boolean of ture (on) or false ('off')
+        :return: nothing
+        """
+        values = {"desired_state": {"beeper_enabled": state}}
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
     def set_state(self, state):
         """
         :param state:   a boolean of true (on) or false ('off')
@@ -171,6 +241,13 @@ class WinkGarageDoor(WinkDevice):
     def device_id(self):
         return self.json_state.get('garage_door_id', self.name())
 
+    @property
+    def tamper_detected(self):
+        tamper = self._last_reading.get('tamper_detected_true', False)
+        if tamper is None:
+            tamper = False
+        return tamper
+
     def set_state(self, state):
         """
         :param state:   a number of 1 ('open') or 0 ('close')
@@ -230,6 +307,40 @@ class WinkSiren(WinkBinarySwitch):
 
     def device_id(self):
         return self.json_state.get('siren_id', self.name())
+
+    @property
+    def mode(self):
+        return self._last_reading.get('mode', None)
+
+    @property
+    def auto_shutoff(self):
+        return self._last_reading.get('auto_shutoff', None)
+
+    def set_mode(self, mode):
+        """
+        :param mode:  a str, one of [siren_only, strobe_only, siren_and_strobe]
+        :return: nothing
+        """
+        values = {
+            "desired_state": {
+                "mode": mode
+            }
+        }
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
+
+    def set_auto_shutoff(self, timer):
+        """
+        :param time: an int, one of [None (never), 30, 60, 120]
+        :return: nothing
+        """
+        values = {
+            "desired_state": {
+                "auto_shutoff": timer
+            }
+        }
+        response = self.api_interface.set_device_state(self, values)
+        self._update_state_from_response(response)
 
 
 class WinkKey(WinkDevice):

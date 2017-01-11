@@ -1,8 +1,10 @@
 # Change Log
 
+## 0.12.1
+- Added support for additional lock, garage door, siren, and sensor attributes/features
+
 ## 0.12.0
 - Wink fan support
-
 
 ## 0.11.0
 - Support for Wink hubs as sensors

@@ -1,5 +1,5 @@
 from pywink.devices.base import WinkDevice
-from pywink.devices.sensors import WinkSensorPod, WinkHub
+from pywink.devices.sensors import WinkSensorPod
 from pywink.devices.standard import WinkBulb, WinkBinarySwitch, WinkPowerStripOutlet, WinkLock, \
     WinkEggTray, WinkGarageDoor, WinkShade, WinkSiren, WinkKey, WinkThermostat, \
     WinkFan
@@ -36,9 +36,5 @@ def build_device(device_state_as_json, api_interface):
         new_object = WinkThermostat(device_state_as_json, api_interface)
     elif "fan_id" in device_state_as_json:
         new_object = WinkFan(device_state_as_json, api_interface)
-    # This must be at the bottom most devices have a hub_id listed
-    # as their associated hub.
-    elif "hub_id" in device_state_as_json:
-        new_object = WinkHub(device_state_as_json, api_interface)
 
     return new_object or WinkDevice(device_state_as_json, api_interface)
