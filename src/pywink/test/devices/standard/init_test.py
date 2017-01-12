@@ -9,7 +9,7 @@ from pywink.devices.sensors import WinkSensorPod, WinkBrightnessSensor, WinkHumi
      WinkSoundPresenceSensor, WinkVibrationPresenceSensor, WinkTemperatureSensor, \
      _WinkCapabilitySensor, WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
      WinkProximitySensor, WinkPresenceSensor, WinkSmokeDetector, WinkCoDetector, \
-     WinkHub
+     WinkHub, WinkDoorBellMotion, WinkDoorBellButton
 from pywink.devices.standard import WinkGarageDoor, WinkPowerStripOutlet, WinkSiren, WinkLock, \
      WinkShade, WinkBinarySwitch, WinkEggTray, WinkKey, WinkPorkfolioNose
 from pywink.devices.types import DEVICE_ID_KEYS
@@ -589,7 +589,7 @@ class HubTests(unittest.TestCase):
         super(HubTests, self).setUp()
         self.api_interface = mock.MagicMock()
 
-    def test_should_hub_response(self):
+    def test_should_handle_hub_response(self):
         with open('{}/api_responses/v1_hub.json'.format(os.path.dirname(__file__))) as hub_file:
             response_dict = json.load(hub_file)
         devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.HUB])
@@ -667,3 +667,32 @@ class HubTests(unittest.TestCase):
         wink_hub = WinkHub(hub, self.api_interface)
         model_name = wink_hub.model_name
         self.assertEqual(model_name, 'Hub')
+
+
+class DoorBellTests(unittest.TestCase):
+
+    def setUp(self):
+        super(DoorBellTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+
+    def test_should_handle_door_bell_response(self):
+        with open('{}/api_responses/ring_door_bell.json'.format(os.path.dirname(__file__))) as door_bell_file:
+            response_dict = json.load(door_bell_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.DOOR_BELL])
+        self.assertEqual(2, len(devices))
+        self.assertIsInstance(devices[0], WinkDoorBellMotion)
+        self.assertIsInstance(devices[1], WinkDoorBellButton)
+
+    def test_door_bell_motion_should_be_false(self):
+        with open('{}/api_responses/ring_door_bell.json'.format(os.path.dirname(__file__))) as door_bell_file:
+            response_dict = json.load(door_bell_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.DOOR_BELL])
+        door_bell_motion = devices[0].motion_boolean()
+        self.assertFalse(door_bell_motion)
+
+    def test_door_bell_button_pressed_should_be_false(self):
+        with open('{}/api_responses/ring_door_bell.json'.format(os.path.dirname(__file__))) as door_bell_file:
+            response_dict = json.load(door_bell_file)
+        devices = get_devices_from_response_dict(response_dict, DEVICE_ID_KEYS[device_types.DOOR_BELL])
+        door_bell_button_pressed = devices[1].button_pressed_boolean()
+        self.assertFalse(door_bell_button_pressed)

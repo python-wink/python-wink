@@ -383,3 +383,59 @@ class WinkHub(WinkDevice):
         root_name = self.json_state.get('hub_id', self.name())
         response = self.api_interface.get_device_state(self, root_name)
         self._update_state_from_response(response)
+
+
+class WinkDoorBellButton(_WinkCapabilitySensor):
+
+    CAPABILITY = 'button_pressed'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkDoorBellButton, self).__init__(device_state_as_json, api_interface,
+                                                 self.CAPABILITY,
+                                                 self.UNIT, 'door_bells')
+
+    def button_pressed_boolean(self):
+        """
+        :return: Returns True if button was pressed.
+        :rtype: bool
+        """
+        return self.last_reading()
+
+    def device_id(self):
+        root_name = self.json_state.get('door_bell_id', None)
+        return '{}+{}'.format(root_name, self._capability)
+
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        root_name = self.json_state.get('door_bell_id', self.name())
+        response = self.api_interface.get_device_state(self, root_name)
+        self._update_state_from_response(response)
+
+
+class WinkDoorBellMotion(_WinkCapabilitySensor):
+
+    CAPABILITY = 'motion'
+    UNIT = None
+
+    def __init__(self, device_state_as_json, api_interface):
+        super(WinkDoorBellMotion, self).__init__(device_state_as_json, api_interface,
+                                                 self.CAPABILITY,
+                                                 self.UNIT, 'door_bells')
+
+    def motion_boolean(self):
+        """
+        :return: Returns True if motion is detected.
+        :rtype: bool
+        """
+        return self.last_reading()
+
+    def device_id(self):
+        root_name = self.json_state.get('door_bell_id', None)
+        return '{}+{}'.format(root_name, self._capability)
+
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        root_name = self.json_state.get('door_bell_id', self.name())
+        response = self.api_interface.get_device_state(self, root_name)
+        self._update_state_from_response(response)

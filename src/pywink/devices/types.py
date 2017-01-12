@@ -15,6 +15,7 @@ HUB = 'hub'
 FAN = 'fan'
 BUTTON = 'button'
 REMOTE = 'remote'
+DOOR_BELL = 'door_bell'
 
 DEVICE_ID_KEYS = {
     BINARY_SWITCH: 'binary_switch_id',
@@ -33,5 +34,6 @@ DEVICE_ID_KEYS = {
     HUB: 'hub_id',
     FAN: 'fan_id',
     BUTTON: 'button_id',
-    REMOTE: 'remote_id'
+    REMOTE: 'remote_id',
+    DOOR_BELL: 'door_bell_id'
 }

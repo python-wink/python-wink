@@ -9,7 +9,7 @@ from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBright
     WinkTemperatureSensor, WinkVibrationPresenceSensor, \
     WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
     WinkPresenceSensor, WinkProximitySensor, WinkSmokeDetector, \
-    WinkCoDetector, WinkHub
+    WinkCoDetector, WinkHub, WinkDoorBellButton, WinkDoorBellMotion
 from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
@@ -190,6 +190,10 @@ def get_fans():
     return get_devices(device_types.FAN)
 
 
+def get_door_bells():
+    return get_devices(device_types.DOOR_BELL)
+
+
 def get_subscription_key():
     response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]
@@ -232,7 +236,7 @@ def get_devices_from_response_dict(response_dict, filter_key):
     api_interface = WinkApiInterface()
 
     keys = ['powerstrip_id', 'sensor_pod_id', 'piggy_bank_id',
-            'smoke_detector_id', 'hub_id']
+            'smoke_detector_id', 'hub_id', 'door_bell_id']
 
     for item in items:
         if item.get(filter_key, None) is None:
@@ -245,6 +249,7 @@ def get_devices_from_response_dict(response_dict, filter_key):
             devices.extend(__get_devices_from_piggy_bank(item, api_interface, filter_key))
             devices.extend(__get_subsensors_from_smoke_detector(item, api_interface, filter_key))
             devices.extend(__get_sensor_from_hub(item, api_interface, filter_key))
+            devices.extend(__get_subsensors_from_door_bell(item, api_interface, filter_key))
         else:
             devices.append(build_device(item, api_interface))
 
@@ -341,6 +346,24 @@ def __get_subsensors_from_smoke_detector(item, api_interface, filter_key):
     subsensors = []
     subsensors.append(WinkSmokeDetector(item, api_interface))
     subsensors.append(WinkCoDetector(item, api_interface))
+    return subsensors
+
+
+def __get_subsensors_from_door_bell(item, api_interface, filter_key):
+    if filter_key != 'door_bell_id':
+        return []
+
+    capabilities = [cap['field'] for cap in item.get('capabilities', {}).get('fields', [])]
+
+    if not capabilities:
+        return []
+
+    subsensors = []
+
+    if WinkDoorBellMotion.CAPABILITY in capabilities:
+        subsensors.append(WinkDoorBellMotion(item, api_interface))
+    if WinkDoorBellButton.CAPABILITY in capabilities:
+        subsensors.append(WinkDoorBellButton(item, api_interface))
     return subsensors
 
 

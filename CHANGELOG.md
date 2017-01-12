@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.13.0
+- Support for Ring door bell motion and button press.
+
 ## 0.12.1
 - Added support for additional lock, garage door, siren, and sensor attributes/features
 
