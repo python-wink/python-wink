@@ -1,0 +1,78 @@
+{
+  "last_event": {
+    "brightness_occurred_at": null,
+    "loudness_occurred_at": null,
+    "vibration_occurred_at": null
+  },
+  "object_type": "sensor_pod",
+  "object_id": "198184",
+  "uuid": "8cbfa16d-4507-46XXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "opened": true,
+    "opened_updated_at": 1484290084.0072639,
+    "tamper_detected": null,
+    "tamper_detected_updated_at": 1463850069.60705,
+    "battery": 1.0,
+    "battery_updated_at": 1484290084.0072639,
+    "tamper_detected_true": "N/A",
+    "tamper_detected_true_updated_at": 1463850006.8764803,
+    "connection": true,
+    "connection_updated_at": 1484290084.0072639,
+    "agent_session_id": null,
+    "agent_session_id_updated_at": null,
+    "opened_changed_at": 1484178922.6510079
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7fXXXXXXXXXXXXXXXXXX",
+      "channel": "51bc31ce6300aXXXXXXXXXXXXXXXXXXXXXXXX|sensor_pod-198184|user-123456"
+    }
+  },
+  "sensor_pod_id": "198184",
+  "name": "Bedroom door",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1463849993,
+  "hidden_at": null,
+  "capabilities": {
+    "home_security_device": true,
+    "sensor_types": [
+      {
+        "type": "boolean",
+        "field": "opened",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "tamper_detected",
+        "mutability": "read-only"
+      },
+      {
+        "type": "percentage",
+        "field": "battery",
+        "mutability": "read-only"
+      }
+    ],
+    "desired_state_fields": []
+  },
+  "triggers": [],
+  "manufacturer_device_model": "linear_wadwaz_1",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "linear",
+  "model_name": "Z-Wave Door / Window Transmitter",
+  "upc_id": "189",
+  "upc_code": "9386312509",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "17",
+  "radio_type": "zwave",
+  "linked_service_id": null,
+  "lat_lng": [
+    98.765432,
+    -12.345678
+  ],
+  "location": ""
+}

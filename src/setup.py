@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(name='python-wink',
-      version='0.13.0',
+      version='1.0.0',
       description='Access Wink devices via the Wink API',
-      url='http://github.com/bradsk88/python-wink',
+      url='http://github.com/python-wink/python-wink',
       author='Brad Johnson',
       license='MIT',
       install_requires=['requests>=2.0'],

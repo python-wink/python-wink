@@ -1,0 +1,78 @@
+{
+  "object_type": "binary_switch",
+  "object_id": "233551",
+  "uuid": "3c78d83c-b23a-4839XXXXXXXXXXX",
+  "icon_id": "52",
+  "icon_code": "binary_switch-light_bulb_dumb",
+  "desired_state": {
+    "powered": false,
+    "powering_mode": "dumb"
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484485952.7274327,
+    "powered": false,
+    "powered_updated_at": 1484485952.7274327,
+    "powering_mode": "dumb",
+    "powering_mode_updated_at": 1467647289.9218059,
+    "desired_powered_updated_at": 1484457037.7071941,
+    "desired_powering_mode_updated_at": 1484457037.7071941,
+    "desired_powered_changed_at": 1484457037.7071941,
+    "powered_changed_at": 1484345614.0569744
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+      "channel": "206005a39d13744eXXXXXXXXXXXXXXX|binary_switch-233551|user-123456"
+    }
+  },
+  "binary_switch_id": "233551",
+  "name": "Top Light Load",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1467645109,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "selection",
+        "field": "powering_mode",
+        "choices": [
+          "smart",
+          "dumb",
+          "none"
+        ],
+        "mutability": "read-write"
+      }
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "wink_relay_switch",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Wink Relay Switch",
+  "upc_id": "315",
+  "upc_code": "wink_p1_binary_switch",
+  "gang_id": "39320",
+  "hub_id": "450788",
+  "local_id": "1",
+  "radio_type": "project_one",
+  "linked_service_id": null,
+  "current_budget": null,
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "order": 0
+}

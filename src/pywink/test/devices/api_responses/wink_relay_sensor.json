@@ -1,0 +1,89 @@
+{
+  "last_event": {
+    "brightness_occurred_at": null,
+    "loudness_occurred_at": null,
+    "vibration_occurred_at": null
+  },
+  "object_type": "sensor_pod",
+  "object_id": "239787",
+  "uuid": "9bb49bfe-0d6a-4e9bXXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "temperature": 16.556,
+    "temperature_updated_at": 1484445616.4226761,
+    "humidity": 71,
+    "humidity_updated_at": 1484445616.4226761,
+    "presence": false,
+    "presence_updated_at": 1484445616.4226761,
+    "proximity": 2578.0,
+    "proximity_updated_at": 1484445616.4226761,
+    "connection": true,
+    "connection_updated_at": 1484445616.4226761,
+    "agent_session_id": null,
+    "agent_session_id_updated_at": null,
+    "temperature_changed_at": 1484445616.4226761,
+    "proximity_changed_at": 1484445616.4226761,
+    "humidity_changed_at": 1484445616.4226761,
+    "presence_changed_at": 1483227553.6322503
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-xxxxxxxxxxxxxxx",
+      "channel": "a82816f0ddbxxxxxxxxxxxxxxxxebcbd264|sensor_pod-239787|user-123456"
+    }
+  },
+  "sensor_pod_id": "239787",
+  "name": "Great Room Relay",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1468460695,
+  "hidden_at": null,
+  "capabilities": {
+    "sensor_types": [
+      {
+        "type": "float",
+        "field": "temperature",
+        "mutability": "read-only",
+        "attribute_id": 1
+      },
+      {
+        "type": "percentage",
+        "field": "humidity",
+        "mutability": "read-only",
+        "attribute_id": 2
+      },
+      {
+        "type": "boolean",
+        "field": "presence",
+        "mutability": "read-only",
+        "attribute_id": 3
+      },
+      {
+        "type": "float",
+        "field": "proximity",
+        "mutability": "read-only",
+        "attribute_id": 4
+      }
+    ],
+    "desired_state_fields": []
+  },
+  "triggers": [],
+  "manufacturer_device_model": "wink_relay_sensor",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Wink Relay Sensor",
+  "upc_id": "188",
+  "upc_code": "wink_p1_sensor",
+  "gang_id": "40406",
+  "hub_id": "456369",
+  "local_id": "3",
+  "radio_type": "project_one",
+  "linked_service_id": null,
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": ""
+}

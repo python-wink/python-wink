@@ -1,0 +1,247 @@
+{
+  "object_type": "thermostat",
+  "object_id": "151921",
+  "uuid": "6eab26b5-035b-4451-XXXXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "max_set_point": 23.888888888888889,
+    "min_set_point": 17.222222222222221,
+    "eco_max_set_point": null,
+    "eco_min_set_point": null,
+    "powered": true,
+    "users_away": false,
+    "fan_timer_active": false,
+    "mode": "heat_only",
+    "short_name": "Hallway"
+  },
+  "last_reading": {
+    "max_set_point": 23.888888888888889,
+    "max_set_point_updated_at": 1484439443.99,
+    "min_set_point": 17.222222222222221,
+    "min_set_point_updated_at": 1484439443.99,
+    "eco_max_set_point": null,
+    "eco_max_set_point_updated_at": 1484439443.99,
+    "eco_min_set_point": null,
+    "eco_min_set_point_updated_at": 1484439443.99,
+    "powered": true,
+    "powered_updated_at": 1484439443.99,
+    "users_away": true,
+    "users_away_updated_at": 1484439443.99,
+    "fan_timer_active": false,
+    "fan_timer_active_updated_at": 1484439443.99,
+    "units": {
+      "temperature": "f"
+    },
+    "units_updated_at": 1484439443.99,
+    "temperature": 17.5,
+    "temperature_updated_at": 1484439443.99,
+    "external_temperature": null,
+    "external_temperature_updated_at": null,
+    "min_min_set_point": null,
+    "min_min_set_point_updated_at": null,
+    "max_min_set_point": null,
+    "max_min_set_point_updated_at": null,
+    "min_max_set_point": null,
+    "min_max_set_point_updated_at": null,
+    "max_max_set_point": null,
+    "max_max_set_point_updated_at": null,
+    "deadband": 1.5,
+    "deadband_updated_at": 1484439443.99,
+    "eco_target": false,
+    "eco_target_updated_at": 1484439443.99,
+    "manufacturer_structure_id": "fxHU4KLXorgmVXd3QX16rQ92FlxovuUp4rCK_6QAsCeo_4sj47v6fA",
+    "manufacturer_structure_id_updated_at": 1484439443.99,
+    "has_fan": false,
+    "has_fan_updated_at": 1484439443.99,
+    "fan_duration": 0,
+    "fan_duration_updated_at": 1484439443.99,
+    "last_error": null,
+    "last_error_updated_at": 1477416155.9555283,
+    "connection": true,
+    "connection_updated_at": 1484439443.99,
+    "mode": "heat_only",
+    "mode_updated_at": 1484439443.99,
+    "short_name": "Hallway",
+    "short_name_updated_at": 1484439443.99,
+    "modes_allowed": [
+      "auto",
+      "heat_only",
+      "cool_only"
+    ],
+    "modes_allowed_updated_at": 1484439443.99,
+    "desired_max_set_point_updated_at": 1477416261.4186657,
+    "desired_min_set_point_updated_at": 1477416261.4186657,
+    "desired_eco_max_set_point": null,
+    "desired_eco_max_set_point_updated_at": null,
+    "desired_eco_min_set_point": null,
+    "desired_eco_min_set_point_updated_at": null,
+    "desired_powered_updated_at": 1477416156.6140163,
+    "desired_users_away_updated_at": 1477416261.4186657,
+    "desired_fan_timer_active_updated_at": 1477416261.4186657,
+    "desired_mode_updated_at": 1477416145.5000494,
+    "desired_short_name_updated_at": 1477416261.4186657,
+    "temperature_changed_at": 1484439443.99,
+    "mode_changed_at": 1484435206.343,
+    "fan_timer_active_changed_at": 1484439297.216,
+    "min_set_point_changed_at": 1484435206.343,
+    "users_away_changed_at": 1484435241.2193711,
+    "connection_changed_at": 1483645994.085,
+    "eco_target_changed_at": 1484382288.005
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542xxxxxxxxxxxxxxxxxxxxxx",
+      "channel": "706e52e15aa16dbc914273786be95f321e47774c|thermostat-151921|user-123456"
+    }
+  },
+  "thermostat_id": "151921",
+  "name": "Home Hallway Thermostat",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1470946957,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "float",
+        "field": "max_set_point",
+        "mutability": "read-write",
+        "clear_desired_state_tolerance": 0.5
+      },
+      {
+        "type": "float",
+        "field": "min_set_point",
+        "mutability": "read-write",
+        "clear_desired_state_tolerance": 0.5
+      },
+      {
+        "type": "float",
+        "field": "eco_max_set_point",
+        "mutability": "read-write",
+        "clear_desired_state_tolerance": 0.5
+      },
+      {
+        "type": "float",
+        "field": "eco_min_set_point",
+        "mutability": "read-write",
+        "clear_desired_state_tolerance": 0.5
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "users_away",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "fan_timer_active",
+        "mutability": "read-write"
+      },
+      {
+        "type": "nested_hash",
+        "field": "units",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "external_temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "min_min_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "max_min_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "min_max_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "max_max_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "deadband",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "eco_target",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "manufacturer_structure_id",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "has_fan",
+        "mutability": "read-only"
+      },
+      {
+        "type": "integer",
+        "field": "fan_duration",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "last_error",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "field": "mode",
+        "type": "selection",
+        "mutability": "read-write",
+        "choices": [
+          "auto",
+          "heat_only",
+          "cool_only"
+        ]
+      }
+    ],
+    "notification_robots": [
+      "aux_active_notification"
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "nest",
+  "manufacturer_device_id": "OM4YDFT3IVcXLjmLn2pZNkxx11Qobba_",
+  "device_manufacturer": "nest",
+  "model_name": "Learning Thermostat",
+  "upc_id": "557",
+  "upc_code": "nest_thermostat",
+  "hub_id": null,
+  "local_id": null,
+  "radio_type": null,
+  "linked_service_id": "413881",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "smart_schedule_enabled": false
+}

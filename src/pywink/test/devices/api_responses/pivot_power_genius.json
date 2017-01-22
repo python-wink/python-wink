@@ -1,0 +1,87 @@
+{
+  "object_type": "powerstrip",
+  "object_id": "24313",
+  "uuid": "d5e7ca94-117e-495XXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484187252.9797638
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7eXXXXXXXXXXXXX",
+      "channel": "79e5bf7da7521b337648b92a9dXXXXXXXXXXXXX|powerstrip-24313|user-123456"
+    }
+  },
+  "powerstrip_id": "24313",
+  "name": "Power strip",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1451578768,
+  "hidden_at": null,
+  "capabilities": {
+    "needs_wifi_network_list": true
+  },
+  "triggers": [],
+  "device_manufacturer": "quirky_ge",
+  "model_name": "Pivot Power Genius",
+  "upc_id": "24",
+  "upc_code": "814434017226",
+  "lat_lng": [
+    89.7654,
+    -12.564543
+  ],
+  "location": "",
+  "mac_address": "0c2a69012345",
+  "serial": "AAAA00012345",
+  "outlets": [
+    {
+      "powered": false,
+      "scheduled_outlet_states": [],
+      "name": "office lamp #1",
+      "outlet_index": 0,
+      "outlet_id": "48628",
+      "icon_id": "8",
+      "object_type": "outlet",
+      "object_id": "48628",
+      "uuid": "d5e7ca94-117e-4954-b5d8-XXXXXXXXXXXXXX",
+      "parent_object_type": "powerstrip",
+      "parent_object_id": "24313",
+      "icon_code": "outlet-lamp",
+      "desired_state": {
+        "powered": false
+      },
+      "last_reading": {
+        "powered": false,
+        "powered_updated_at": 1484278867.9380207,
+        "powered_changed_at": 1484270396.0431936,
+        "desired_powered_updated_at": 1484278999.3652444
+      }
+    },
+    {
+      "powered": true,
+      "scheduled_outlet_states": [],
+      "name": "office lamp #2",
+      "outlet_index": 1,
+      "outlet_id": "48629",
+      "icon_id": "4",
+      "object_type": "outlet",
+      "object_id": "48629",
+      "uuid": "d5e7ca94-117e-4954-bXXXXXXXXXXXXXXX",
+      "parent_object_type": "powerstrip",
+      "parent_object_id": "24313",
+      "icon_code": "outlet-default",
+      "desired_state": {
+        "powered": true
+      },
+      "last_reading": {
+        "powered": true,
+        "powered_updated_at": 1484278867.9380207,
+        "powered_changed_at": 1484277422.8034022,
+        "desired_powered_updated_at": 1484278867.9489951
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "object_type": "gang",
+  "object_id": "39320",
+  "uuid": "cc6fe63d-3de8-4d1XXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1467645106.3497777
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+      "channel": "aa22033a2154d82847f7d2fd2f21165b10b13e12|gang-39320|user-123456"
+    }
+  },
+  "gang_id": "39320",
+  "name": "Gang",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1467645106,
+  "hidden_at": null,
+  "capabilities": {},
+  "manufacturer_device_model": "wink_project_one",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Wink Relay Gang",
+  "upc_id": "317",
+  "upc_code": "wink_project_one_gang",
+  "hub_id": "450788",
+  "local_id": null,
+  "radio_type": null,
+  "linked_service_id": null,
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": ""
+}

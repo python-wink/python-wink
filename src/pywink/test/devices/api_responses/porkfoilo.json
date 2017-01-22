@@ -1,0 +1,87 @@
+{
+  "balance": 180,
+  "nose_color": "5E7E00",
+  "last_deposit_amount": 10,
+  "savings_goal": 5000,
+  "orientation": 0,
+  "vibration": true,
+  "object_type": "piggy_bank",
+  "object_id": "15215",
+  "uuid": "09e5977d-838f-XXXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "nose_color": null
+  },
+  "last_reading": {
+    "connection": false,
+    "connection_updated_at": 1467487336.1350329,
+    "amount": 10,
+    "amount_updated_at": 1481498183.4186645,
+    "battery": null,
+    "battery_updated_at": null,
+    "balance": 180,
+    "balance_updated_at": 1481851991.3046694,
+    "orientation": 0,
+    "orientation_updated_at": 1467553983.0383396,
+    "units": {
+      "currency": "USD"
+    },
+    "units_updated_at": 1467473921.6321552,
+    "vibration": true,
+    "vibration_updated_at": 1467553983.8375771
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7eXXXXXXXXXXXXXXXX",
+      "channel": "0441c5de80107a19b8fa9dac6XXXXXXXXXXXX|piggy_bank-15215|user-123456"
+    }
+  },
+  "piggy_bank_id": "15215",
+  "name": "Porkfolio",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1467473921,
+  "hidden_at": null,
+  "capabilities": {
+    "needs_wifi_network_list": true
+  },
+  "triggers": [
+    {
+      "object_type": "trigger",
+      "object_id": "223838",
+      "trigger_id": "223838",
+      "name": "Porkfolio vibration",
+      "enabled": false,
+      "trigger_configuration": {
+        "reading_type": "vibration",
+        "edge": "rising",
+        "threshold": 1.0,
+        "object_id": "15215",
+        "object_type": "piggy_bank"
+      },
+      "channel_configuration": {
+        "recipient_user_ids": [
+          "*"
+        ],
+        "channel_id": "15",
+        "object_type": null,
+        "object_id": null
+      },
+      "robot_id": "3389366",
+      "triggered_at": null,
+      "piggy_bank_alert_id": "223838"
+    }
+  ],
+  "device_manufacturer": "quirky",
+  "model_name": "Porkfolio",
+  "upc_id": "526",
+  "upc_code": "quirky_porkfolio",
+  "lat_lng": [
+    98.765432,
+    -12.34567
+  ],
+  "location": "",
+  "mac_address": "0c2a69012345",
+  "serial": "ACAA00012345"
+}

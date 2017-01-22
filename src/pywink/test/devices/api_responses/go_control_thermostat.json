@@ -1,0 +1,193 @@
+{
+  "object_type": "thermostat",
+  "object_id": "180437",
+  "uuid": "02ebfab9-b143-4d7XXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "max_set_point": 23.888888888888889,
+    "min_set_point": 21.111111111111111,
+    "powered": true,
+    "fan_mode": "auto",
+    "mode": "heat_only",
+    "units": {
+      "temperature": "f"
+    }
+  },
+  "last_reading": {
+    "max_set_point": 23.888888888888889,
+    "max_set_point_updated_at": 1484306655.1207185,
+    "min_set_point": 21.111111111111111,
+    "min_set_point_updated_at": 1484306655.1207185,
+    "powered": true,
+    "powered_updated_at": 1484306655.1207185,
+    "units": {
+      "temperature": "f"
+    },
+    "units_updated_at": 1484306655.1207185,
+    "temperature": 20.0,
+    "temperature_updated_at": 1484306655.1207185,
+    "external_temperature": null,
+    "external_temperature_updated_at": null,
+    "min_min_set_point": null,
+    "min_min_set_point_updated_at": null,
+    "max_min_set_point": null,
+    "max_min_set_point_updated_at": null,
+    "min_max_set_point": null,
+    "min_max_set_point_updated_at": null,
+    "max_max_set_point": null,
+    "max_max_set_point_updated_at": null,
+    "deadband": null,
+    "deadband_updated_at": null,
+    "connection": true,
+    "connection_updated_at": 1484306655.1207185,
+    "fan_mode": "auto",
+    "fan_mode_updated_at": 1484306655.1207185,
+    "mode": "heat_only",
+    "mode_updated_at": 1484306655.1207185,
+    "modes_allowed": [
+      "heat_only",
+      "cool_only",
+      "auto",
+      "aux"
+    ],
+    "modes_allowed_updated_at": 1484306655.1207185,
+    "desired_max_set_point_updated_at": 1483674322.833992,
+    "desired_min_set_point_updated_at": 1483674177.4763274,
+    "desired_powered_updated_at": 1483674322.833992,
+    "desired_fan_mode_updated_at": 1483674322.833992,
+    "desired_mode_updated_at": 1483674322.833992,
+    "desired_units_updated_at": 1483674322.833992,
+    "connection_changed_at": 1481846030.3876073,
+    "powered_changed_at": 1481910720.9456556,
+    "mode_changed_at": 1482284867.5793991,
+    "min_set_point_changed_at": 1484175926.448101,
+    "max_set_point_changed_at": 1483135409.1739059,
+    "modes_allowed_changed_at": 1481592666.1772993,
+    "fan_mode_changed_at": 1481666322.8171082,
+    "units_changed_at": 1481592666.1772993,
+    "temperature_changed_at": 1484306655.1207185,
+    "desired_powered_changed_at": 1482284867.7936459,
+    "desired_max_set_point_changed_at": 1481598177.4249227,
+    "desired_min_set_point_changed_at": 1483674177.4763274,
+    "desired_fan_mode_changed_at": 1481666323.3382764,
+    "desired_mode_changed_at": 1482284867.7936459,
+    "desired_units_changed_at": 1481598177.4249227
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-054XXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "ed68f119739af6328d85d42538cefff10691fbfe|thermostat-180437|user-123456"
+    }
+  },
+  "thermostat_id": "180437",
+  "name": "GoControl Thermostat",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1481592656,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "float",
+        "field": "max_set_point",
+        "mutability": "read-write"
+      },
+      {
+        "type": "float",
+        "field": "min_set_point",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "nested_hash",
+        "field": "units",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "external_temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "min_min_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "max_min_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "min_max_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "max_max_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "deadband",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "selection",
+        "field": "fan_mode",
+        "choices": [
+          "on",
+          "auto"
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "field": "mode",
+        "type": "selection",
+        "mutability": "read-write",
+        "choices": [
+          "heat_only",
+          "cool_only",
+          "auto",
+          "aux"
+        ]
+      }
+    ],
+    "notification_robots": [
+      "aux_active_notification"
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": null,
+  "manufacturer_device_id": null,
+  "device_manufacturer": null,
+  "model_name": null,
+  "upc_id": "129",
+  "upc_code": "generic_zwave_thermostat",
+  "hub_id": "302528",
+  "local_id": "31",
+  "radio_type": "zwave",
+  "linked_service_id": null,
+  "lat_lng": [
+    98.765432,
+    -12.345678
+  ],
+  "location": "",
+  "smart_schedule_enabled": false
+}

@@ -1,0 +1,131 @@
+{
+  "object_type": "light_bulb",
+  "object_id": "1972803",
+  "uuid": "e16ce71d-0e92-4ddf-9XXXXXXXXXX",
+  "icon_id": "76",
+  "icon_code": "light_bulb-sylvania_light",
+  "desired_state": {
+    "powered": true,
+    "brightness": 0.02,
+    "color_model": "hsb",
+    "hue": 0.0,
+    "saturation": 1.0,
+    "color_temperature": 2755
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484308234.6190915,
+    "powered": true,
+    "powered_updated_at": 1484308234.6190915,
+    "brightness": 0.02,
+    "brightness_updated_at": 1484308234.6190915,
+    "color_model": "hsb",
+    "color_model_updated_at": 1484308234.6190915,
+    "hue": 0.0,
+    "hue_updated_at": 1484308234.6190915,
+    "saturation": 1.0,
+    "saturation_updated_at": 1484308234.6190915,
+    "color_temperature": 2755,
+    "color_temperature_updated_at": 1484308234.6190915,
+    "firmware_version": "0.1b02 / 0.4b92",
+    "firmware_version_updated_at": 1484308234.6190915,
+    "firmware_date_code": "20151012N****",
+    "firmware_date_code_updated_at": 1484308234.6190915,
+    "desired_powered_updated_at": 1484308234.6853855,
+    "desired_brightness_updated_at": 1484308234.6853855,
+    "desired_color_model_updated_at": 1484308358.5987234,
+    "desired_hue_updated_at": 1484308358.5987234,
+    "desired_saturation_updated_at": 1484308358.5987234,
+    "desired_color_temperature_updated_at": 1484308358.5987234,
+    "desired_powered_changed_at": 1484308234.6853855,
+    "desired_brightness_changed_at": 1484308234.6853855,
+    "powered_changed_at": 1484308234.6190915,
+    "brightness_changed_at": 1484308234.6190915,
+    "desired_color_model_changed_at": 1484289242.4464757,
+    "desired_hue_changed_at": 1484289242.4464757,
+    "desired_saturation_changed_at": 1484289242.4464757,
+    "desired_color_temperature_changed_at": 1484101394.7322612,
+    "color_temperature_changed_at": 1484169623.6852453,
+    "color_model_changed_at": 1484105301.2582603,
+    "saturation_changed_at": 1483529729.3135121,
+    "hue_changed_at": 1484105315.2207379
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7fXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "17067b8d5d901196e5b1a4c623b26a057a6abc97|light_bulb-1972803|user-123456"
+    }
+  },
+  "light_bulb_id": "1972803",
+  "name": "night stand",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1472923653,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "brightness",
+        "mutability": "read-write"
+      },
+      {
+        "type": "string",
+        "field": "color_model",
+        "choices": [
+          "rgb",
+          "hsb",
+          "color_temperature"
+        ]
+      },
+      {
+        "type": "percentage",
+        "field": "hue",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "saturation",
+        "mutability": "read-write"
+      },
+      {
+        "type": "integer",
+        "field": "color_temperature",
+        "range": [
+          2000,
+          6500
+        ],
+        "mutability": "read-write"
+      }
+    ],
+    "color_changeable": true
+  },
+  "triggers": [],
+  "manufacturer_device_model": "sylvania_sylvania_rgbw",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "sylvania",
+  "model_name": "Lightify RGBW Bulb",
+  "upc_id": "593",
+  "upc_code": "046135737039",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "26",
+  "radio_type": "zigbee",
+  "linked_service_id": null,
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "order": 0
+}

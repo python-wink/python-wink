@@ -1,39 +1,36 @@
 import json
+import time
 
 import requests
 
 from pywink.devices import types as device_types
 from pywink.devices.factory import build_device
-from pywink.devices.standard import WinkPorkfolioNose
-from pywink.devices.sensors import WinkSensorPod, WinkHumiditySensor, WinkBrightnessSensor, WinkSoundPresenceSensor, \
-    WinkTemperatureSensor, WinkVibrationPresenceSensor, \
-    WinkLiquidPresenceSensor, WinkCurrencySensor, WinkMotionSensor, \
-    WinkPresenceSensor, WinkProximitySensor, WinkSmokeDetector, \
-    WinkCoDetector, WinkHub, WinkDoorBellButton, WinkDoorBellMotion
-from pywink.devices.types import DEVICE_ID_KEYS
 
 API_HEADERS = {}
 CLIENT_ID = None
 CLIENT_SECRET = None
 REFRESH_TOKEN = None
-USER_AGENT = None
+USER_AGENT = "Manufacturer/python-wink python/3 Wink/3"
+ALL_DEVICES = None
+LAST_UPDATE = None
 
 
 class WinkApiInterface(object):
 
     BASE_URL = "https://api.wink.com"
 
-    def set_device_state(self, device, state, id_override=None):
+    def set_device_state(self, device, state, id_override=None, type_override=None):
         """
         :type device: WinkDevice
         :param state:   a boolean of true (on) or false ('off')
         :return: The JSON response from the API (new device state)
         """
-        _id = device.device_id()
-        if id_override:
-            _id = id_override
-        url_string = "{}/{}/{}".format(self.BASE_URL,
-                                       device.objectprefix, _id)
+        object_id = id_override or device.object_id()
+        object_type = type_override or device.object_type()
+        url_string = "{}/{}s/{}".format(self.BASE_URL,
+                                        object_type,
+                                        object_id)
+        print(url_string)
         arequest = requests.put(url_string,
                                 data=json.dumps(state),
                                 headers=API_HEADERS)
@@ -45,15 +42,17 @@ class WinkApiInterface(object):
                                         headers=API_HEADERS)
             else:
                 raise WinkAPIException("Failed to refresh access token.")
+        print(str(arequest.json()))
         return arequest.json()
 
-    def get_device_state(self, device, id_override=None):
+    def get_device_state(self, device, id_override=None, type_override=None):
         """
         :type device: WinkDevice
         """
-        device_id = id_override or device.device_id()
-        url_string = "{}/{}/{}".format(self.BASE_URL,
-                                       device.objectprefix, device_id)
+        object_id = id_override or device.object_id()
+        object_type = type_override or device.object_type()
+        url_string = "{}/{}s/{}".format(self.BASE_URL,
+                                        object_type, object_id)
         arequest = requests.get(url_string, headers=API_HEADERS)
         return arequest.json()
 
@@ -130,7 +129,16 @@ def refresh_access_token():
         return None
 
 
-def get_bulbs():
+def is_token_set():
+    """ Returns if an auth token has been set. """
+    return bool(API_HEADERS)
+
+
+def get_all_devices():
+    return get_devices(device_types.ALL_SUPPORTED_DEVICES)
+
+
+def get_light_bulbs():
     return get_devices(device_types.LIGHT_BULB)
 
 
@@ -147,7 +155,7 @@ def get_locks():
 
 
 def get_eggtrays():
-    return get_devices(device_types.EGG_TRAY)
+    return get_devices(device_types.EGGTRAY)
 
 
 def get_garage_doors():
@@ -158,8 +166,8 @@ def get_shades():
     return get_devices(device_types.SHADE)
 
 
-def get_powerstrip_outlets():
-    return get_devices(device_types.POWER_STRIP)
+def get_powerstrips():
+    return get_devices(device_types.POWERSTRIP)
 
 
 def get_sirens():
@@ -194,6 +202,26 @@ def get_door_bells():
     return get_devices(device_types.DOOR_BELL)
 
 
+def get_remotes():
+    return get_devices(device_types.REMOTE)
+
+
+def get_sprinklers():
+    return get_devices(device_types.SPRINKLER)
+
+
+def get_buttons():
+    return get_devices(device_types.BUTTON)
+
+
+def get_gangs():
+    return get_devices(device_types.GANG)
+
+
+def get_cameras():
+    return get_devices(device_types.CAMERA)
+
+
 def get_subscription_key():
     response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]
@@ -220,12 +248,17 @@ def wink_api_fetch():
 
 
 def get_devices(device_type):
-    response_dict = wink_api_fetch()
-    filter_key = DEVICE_ID_KEYS.get(device_type)
-    return get_devices_from_response_dict(response_dict, filter_key)
+    global ALL_DEVICES, LAST_UPDATE
+
+    now = time.time()
+    # Only call the API once to obtain all devices
+    if LAST_UPDATE is None or (now - LAST_UPDATE) > 60:
+        ALL_DEVICES = wink_api_fetch()
+        LAST_UPDATE = now
+    return get_devices_from_response_dict(ALL_DEVICES, device_type)
 
 
-def get_devices_from_response_dict(response_dict, filter_key):
+def get_devices_from_response_dict(response_dict, device_type):
     """
     :rtype: list of WinkDevice
     """
@@ -235,159 +268,13 @@ def get_devices_from_response_dict(response_dict, filter_key):
 
     api_interface = WinkApiInterface()
 
-    keys = ['powerstrip_id', 'sensor_pod_id', 'piggy_bank_id',
-            'smoke_detector_id', 'hub_id', 'door_bell_id']
-
     for item in items:
-        if item.get(filter_key, None) is None:
-            continue
-        elif not __device_is_visible(item, filter_key):
-            continue
-        elif filter_key in keys:
-            devices.extend(__get_outlets_from_powerstrip(item, api_interface, filter_key))
-            devices.extend(__get_subsensors_from_sensor_pod(item, api_interface, filter_key))
-            devices.extend(__get_devices_from_piggy_bank(item, api_interface, filter_key))
-            devices.extend(__get_subsensors_from_smoke_detector(item, api_interface, filter_key))
-            devices.extend(__get_sensor_from_hub(item, api_interface, filter_key))
-            devices.extend(__get_subsensors_from_door_bell(item, api_interface, filter_key))
-        else:
-            devices.append(build_device(item, api_interface))
+        if item.get("object_type") in device_type:
+            _devices = build_device(item, api_interface)
+            for device in _devices:
+                devices.append(device)
 
     return devices
-
-
-def __get_sensor_from_hub(item, api_interface, filter_key):
-    if filter_key != 'hub_id':
-        return []
-    keys = list(DEVICE_ID_KEYS.values())
-    # Most devices have a hub_id, but we only want the actual hub.
-    # This will only return hubs by checking for any other keys
-    # being present along with the hub_id
-    skip = False
-    for key in keys:
-        if key == "hub_id":
-            continue
-        if item.get(key, None) is not None:
-            skip = True
-    if skip:
-        return []
-    else:
-        return [WinkHub(item, api_interface)]
-
-
-def __get_subsensors_from_sensor_pod(item, api_interface, filter_key):
-    if filter_key != 'sensor_pod_id':
-        return []
-
-    capabilities = [cap['field'] for cap in item.get('capabilities', {}).get('fields', [])]
-    capabilities.extend([cap['field'] for cap in item.get('capabilities', {}).get('sensor_types', [])])
-
-    if not capabilities:
-        return []
-
-    subsensors = []
-
-    if WinkHumiditySensor.CAPABILITY in capabilities:
-        subsensors.append(WinkHumiditySensor(item, api_interface))
-
-    if WinkBrightnessSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkBrightnessSensor(item, api_interface))
-
-    if WinkSoundPresenceSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkSoundPresenceSensor(item, api_interface))
-
-    if WinkTemperatureSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkTemperatureSensor(item, api_interface))
-
-    if WinkVibrationPresenceSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkVibrationPresenceSensor(item, api_interface))
-
-    if WinkLiquidPresenceSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkLiquidPresenceSensor(item, api_interface))
-
-    if WinkMotionSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkMotionSensor(item, api_interface))
-
-    if WinkPresenceSensor.CAPABILITY in capabilities:
-        subsensors.append(WinkPresenceSensor(item, api_interface))
-
-    if WinkProximitySensor.CAPABILITY in capabilities:
-        subsensors.append(WinkProximitySensor(item, api_interface))
-
-    if WinkSensorPod.CAPABILITY in capabilities:
-        subsensors.append(WinkSensorPod(item, api_interface))
-
-    return subsensors
-
-
-def __get_outlets_from_powerstrip(item, api_interface, filter_key):
-    if filter_key != 'powerstrip_id':
-        return []
-    outlets = item['outlets']
-    for outlet in outlets:
-        if 'subscription' in item:
-            outlet['subscription'] = item['subscription']
-        outlet['last_reading']['connection'] = item['last_reading']['connection']
-    return [build_device(outlet, api_interface) for outlet in outlets if __device_is_visible(outlet, 'outlet_id')]
-
-
-def __get_devices_from_piggy_bank(item, api_interface, filter_key):
-    if filter_key != 'piggy_bank_id':
-        return []
-    subdevices = []
-    subdevices.append(WinkCurrencySensor(item, api_interface))
-    subdevices.append(WinkPorkfolioNose(item, api_interface))
-    return subdevices
-
-
-def __get_subsensors_from_smoke_detector(item, api_interface, filter_key):
-    if filter_key != 'smoke_detector_id':
-        return []
-    subsensors = []
-    subsensors.append(WinkSmokeDetector(item, api_interface))
-    subsensors.append(WinkCoDetector(item, api_interface))
-    return subsensors
-
-
-def __get_subsensors_from_door_bell(item, api_interface, filter_key):
-    if filter_key != 'door_bell_id':
-        return []
-
-    capabilities = [cap['field'] for cap in item.get('capabilities', {}).get('fields', [])]
-
-    if not capabilities:
-        return []
-
-    subsensors = []
-
-    if WinkDoorBellMotion.CAPABILITY in capabilities:
-        subsensors.append(WinkDoorBellMotion(item, api_interface))
-    if WinkDoorBellButton.CAPABILITY in capabilities:
-        subsensors.append(WinkDoorBellButton(item, api_interface))
-    return subsensors
-
-
-def __device_is_visible(item, key):
-    is_correctly_structured = bool(item.get(key))
-    is_visible = not item.get('hidden_at')
-    return is_correctly_structured and is_visible
-
-
-def refresh_state_at_hub(device):
-    """
-    Tell hub to query latest status from device and upload to Wink.
-    PS: Not sure if this even works..
-    :type device: WinkDevice
-    """
-    url_string = "{}/{}/{}/refresh".format(WinkApiInterface.BASE_URL,
-                                           device.objectprefix,
-                                           device.device_id())
-    requests.get(url_string, headers=API_HEADERS)
-
-
-def is_token_set():
-    """ Returns if an auth token has been set. """
-    return bool(API_HEADERS)
 
 
 class WinkAPIException(Exception):

@@ -1,0 +1,64 @@
+{
+  "object_type": "garage_door",
+  "object_id": "55086",
+  "uuid": "7b967c4c-7484-4dd1-adf9-c410ea6caa8b",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "position": 0.0
+  },
+  "last_reading": {
+    "position_opened": "N/A",
+    "position_opened_updated_at": 1484333056.554,
+    "tamper_detected_true": null,
+    "tamper_detected_true_updated_at": null,
+    "connection": true,
+    "connection_updated_at": 1484333392.2095273,
+    "position": 0.0,
+    "position_updated_at": 1484333391.737,
+    "battery": 1.0,
+    "battery_updated_at": 1482765045.4644408,
+    "fault": false,
+    "fault_updated_at": 1482765045.4644408,
+    "disabled": null,
+    "disabled_updated_at": null,
+    "control_enabled": true,
+    "control_enabled_updated_at": 1482765045.4644408,
+    "desired_position_updated_at": 1482764972.9735985,
+    "position_changed_at": 1484333391.737,
+    "position_opened_changed_at": 1484333056.554,
+    "desired_position_changed_at": 1482764972.9735985
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-054XXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "046eed818f83b055XXXXXXXXXXXXXXXXXXXXXXX|garage_door-55086|user-123456"
+    }
+  },
+  "garage_door_id": "55086",
+  "name": "Garage Door Opener",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1466884441,
+  "hidden_at": null,
+  "capabilities": {
+    "home_security_device": true
+  },
+  "triggers": [],
+  "manufacturer_device_model": "chamberlain_vgdo",
+  "manufacturer_device_id": "9796572",
+  "device_manufacturer": "chamberlain",
+  "model_name": "3/4 HPS Wi-Fi Garage Door Opener",
+  "upc_id": "640",
+  "upc_code": "chamberlain_hd750wf",
+  "hub_id": null,
+  "local_id": null,
+  "radio_type": null,
+  "linked_service_id": "378592",
+  "lat_lng": [
+    98.765432,
+    -12.345678
+  ],
+  "location": "",
+  "order": null
+}

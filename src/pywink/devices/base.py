@@ -1,68 +1,59 @@
-
-
 class WinkDevice(object):
+    """
+    This is a generic Wink device, all other object inherit from this.
+    """
 
-    def __init__(self, device_state_as_json, api_interface, objectprefix=None):
+    def __init__(self, device_state_as_json, api_interface):
         """
         :type api_interface pywink.api.WinkApiInterface:
         :return:
         """
         self.api_interface = api_interface
-        self.objectprefix = objectprefix
         self.json_state = device_state_as_json
+        self.pubnub_key = None
+        self.pubnub_channel = None
         subscription = self.json_state.get('subscription')
         if subscription != {} and subscription is not None:
             pubnub = subscription.get('pubnub')
             self.pubnub_key = pubnub.get('subscribe_key')
             self.pubnub_channel = pubnub.get('channel')
-        else:
-            self.pubnub_key = None
-            self.pubnub_channel = None
-
-    def __str__(self):
-        return "%s %s %s" % (self.name(), self.device_id(), self.state())
-
-    def __repr__(self):
-        return "<Wink object name:{name} id:{device} state:{state}>".format(name=self.name(),
-                                                                            device=self.device_id(),
-                                                                            state=self.state())
 
     def name(self):
-        return self.json_state.get('name', "Unknown Name")
+        return self.json_state.get('name')
 
     def state(self):
         raise NotImplementedError("Must implement state")
 
-    def device_id(self):
-        raise NotImplementedError("Must implement device_id")
+    def object_id(self):
+        return self.json_state.get('object_id')
+
+    def object_type(self):
+        return self.json_state.get("object_type")
 
     @property
     def _last_reading(self):
         return self.json_state.get('last_reading') or {}
 
-    @property
     def available(self):
         return self._last_reading.get('connection', False)
 
-    @property
     def battery_level(self):
-        return self._last_reading.get('battery', None)
+        if not self._last_reading.get('external_power'):
+            return self._last_reading.get('battery')
+        else:
+            return None
 
-    @property
     def manufacturer_device_model(self):
-        return self.json_state.get('manufacturer_device_model', None)
+        return self.json_state.get('manufacturer_device_model')
 
-    @property
     def manufacturer_device_id(self):
-        return self.json_state.get('manufacturer_device_id', None)
+        return self.json_state.get('manufacturer_device_id')
 
-    @property
     def device_manufacturer(self):
-        return self.json_state.get('device_manufacturer', None)
+        return self.json_state.get('device_manufacturer')
 
-    @property
     def model_name(self):
-        return self.json_state.get('model_name', None)
+        return self.json_state.get('model_name')
 
     def _update_state_from_response(self, response_json):
         """

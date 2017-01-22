@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.0.0
+- Switch to object_type for device type detction
+- Hard coded user agent
+- Support for Lutron connected bulb remotes
+- Support for Sprinklers
+- Support for main Powerstrip device
+- Support for Wink Relay buttons
+- Support for Smoke and CO severity sensors
+- Support for Canary cameras
+- Throttle API calls to /users/me/wink_devices to once every 60 seconds
+- Sensor object are built based on capability not returned object_type
+
 ## 0.13.0
 - Support for Ring door bell motion and button press.
 

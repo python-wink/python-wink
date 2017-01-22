@@ -1,0 +1,62 @@
+{
+   "remote_id":"102782",
+   "name":"Garage Entry Remote",
+   "members":[
+      {
+         "object_type":"light_bulb",
+         "object_id":"2042090",
+         "desired_state":{
+            "powered_updated_at":1483472072.9911556,
+            "brightness_updated_at":1483472072.9911556,
+            "actor_id_updated_at":1483472072.9911556,
+            "actor_type_updated_at":1483472072.9911556,
+            "triggering_object_id_updated_at":1482936120.2109358,
+            "triggering_object_type_updated_at":1482936120.2109358,
+            "oauth_client_id_updated_at":1483472072.9911556
+         }
+      }
+   ],
+   "object_type":"remote",
+   "object_id":"102782",
+   "uuid":"93b1fa4f-21f7-404XXXXXXXXXXXXXXXXX",
+   "icon_id":null,
+   "icon_code":null,
+   "desired_state":{
+
+   },
+   "last_reading":{
+      "connection":true,
+      "connection_updated_at":1483471807.7003415,
+      "needs_repair":false,
+      "needs_repair_updated_at":1483471807.7003415,
+      "remote_pairable":true,
+      "remote_pairable_updated_at":1483474080.9908342
+   },
+   "subscription":{
+      "pubnub":{
+         "subscribe_key":"sub-c-f7bf7f7eXXXXXXXXXXXXXXXXXXX",
+         "channel":"8470447c6898a4b39XXXXXXXXXXXXXXXXXX|remote-102782|user-123456"
+      }
+   },
+   "locale":"en_ca",
+   "units":{
+
+   },
+   "created_at":1475450121,
+   "hidden_at":null,
+   "capabilities":{
+
+   },
+   "device_manufacturer":"lutron",
+   "model_name":"Pico",
+   "upc_id":"545",
+   "upc_code":"lutron_pico",
+   "hub_id":"89736",
+   "local_id":"89",
+   "radio_type":"lutron",
+   "lat_lng":[
+      98.76543,
+      12.34567
+   ],
+   "location":"Home"
+}

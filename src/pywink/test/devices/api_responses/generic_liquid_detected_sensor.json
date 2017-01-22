@@ -1,0 +1,70 @@
+{
+  "last_event": {
+    "brightness_occurred_at": null,
+    "loudness_occurred_at": null,
+    "vibration_occurred_at": null
+  },
+  "object_type": "sensor_pod",
+  "object_id": "240456",
+  "uuid": "0e614bf2-ef85-4bc9-90d8-8XXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "liquid_detected": false,
+    "liquid_detected_updated_at": 1484311499.5859754,
+    "battery": 0.7,
+    "battery_updated_at": 1484311499.5859754,
+    "liquid_detected_true": "N/A",
+    "liquid_detected_true_updated_at": 1468712105.5921495,
+    "connection": true,
+    "connection_updated_at": 1484311499.5859754,
+    "agent_session_id": null,
+    "agent_session_id_updated_at": null,
+    "battery_changed_at": 1484311499.5859754
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-XXXXXXXXXXXXXXXXXXXX",
+      "channel": "5d54ad5517ccc1c0569XXXXXXXXXXXXX|sensor_pod-240456|user-123456"
+    }
+  },
+  "sensor_pod_id": "240456",
+  "name": "Dishwasher",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1468619516,
+  "hidden_at": null,
+  "capabilities": {
+    "sensor_types": [
+      {
+        "type": "boolean",
+        "field": "liquid_detected",
+        "mutability": "read-only"
+      },
+      {
+        "type": "percentage",
+        "field": "battery",
+        "mutability": "read-only"
+      }
+    ],
+    "desired_state_fields": []
+  },
+  "triggers": [],
+  "manufacturer_device_model": "aeon_labs_dsb45_zwus",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "aeon_labs",
+  "model_name": "Z-Wave Water Sensor Sensor",
+  "upc_id": "339",
+  "upc_code": "generic_water_sensor",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "23",
+  "radio_type": "zwave",
+  "linked_service_id": null,
+  "lat_lng": [
+    98.76543,
+    -12.345678
+  ],
+  "location": ""
+}

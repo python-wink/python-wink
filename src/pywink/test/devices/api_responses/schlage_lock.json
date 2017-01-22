@@ -1,0 +1,163 @@
+{
+  "object_type": "lock",
+  "object_id": "109898",
+  "uuid": "0aa5f3f4-200c-4a93-XXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "locked": true,
+    "beeper_enabled": false,
+    "vacation_mode_enabled": false,
+    "auto_lock_enabled": false,
+    "key_code_length": 4,
+    "alarm_mode": null,
+    "alarm_sensitivity": 0.6,
+    "alarm_enabled": true
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484310269.3183775,
+    "locked": true,
+    "locked_updated_at": 1484310269.3183775,
+    "battery": 0.7,
+    "battery_updated_at": 1484310269.3183775,
+    "alarm_activated": null,
+    "alarm_activated_updated_at": null,
+    "beeper_enabled": true,
+    "beeper_enabled_updated_at": 1484310269.3183775,
+    "vacation_mode_enabled": false,
+    "vacation_mode_enabled_updated_at": 1484310269.3183775,
+    "auto_lock_enabled": true,
+    "auto_lock_enabled_updated_at": 1484310269.3183775,
+    "key_code_length": 4,
+    "key_code_length_updated_at": 1484310269.3183775,
+    "alarm_mode": "tamper",
+    "alarm_mode_updated_at": 1484310269.3183775,
+    "alarm_sensitivity": 0.6,
+    "alarm_sensitivity_updated_at": 1484310269.3183775,
+    "alarm_enabled": true,
+    "alarm_enabled_updated_at": 1484310269.3183775,
+    "last_error": null,
+    "last_error_updated_at": 1483357603.582,
+    "desired_locked_updated_at": 1484309210.3862641,
+    "desired_beeper_enabled_updated_at": 1484309356.3939486,
+    "desired_vacation_mode_enabled_updated_at": 1484309356.3939486,
+    "desired_auto_lock_enabled_updated_at": 1484309356.3939486,
+    "desired_key_code_length_updated_at": 1484309356.3939486,
+    "desired_alarm_mode_updated_at": 1484309356.3939486,
+    "desired_alarm_sensitivity_updated_at": 1484309356.3939486,
+    "desired_alarm_enabled_updated_at": 1484309356.3939486,
+    "locked_changed_at": 1484308713.9324966,
+    "battery_changed_at": 1484310269.3183775,
+    "desired_locked_changed_at": 1484309210.3862641,
+    "desired_alarm_mode_changed_at": 1483990975.2186949,
+    "alarm_mode_changed_at": 1483990975.1604912,
+    "desired_alarm_enabled_changed_at": 1483991063.34096,
+    "alarm_enabled_changed_at": 1483992890.7074449
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-XXXXXXXXXXXXX",
+      "channel": "2a3dcadbc3fffe07404XXXXXXXXXXXXXXXXX|lock-109898|user-123456"
+    }
+  },
+  "lock_id": "109898",
+  "name": "Front door",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1478398543,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "locked",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "battery",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "alarm_activated",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "beeper_enabled",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "vacation_mode_enabled",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "auto_lock_enabled",
+        "mutability": "read-write"
+      },
+      {
+        "type": "integer",
+        "field": "key_code_length",
+        "range": [
+          4,
+          8
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "string",
+        "field": "alarm_mode",
+        "choices": [
+          "alert",
+          "tamper",
+          "forced_entry",
+          null
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "alarm_sensitivity",
+        "choices": [
+          0.2,
+          0.4,
+          0.6,
+          0.8,
+          1
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "alarm_enabled",
+        "mutability": "read-write"
+      }
+    ],
+    "home_security_device": true
+  },
+  "triggers": [],
+  "manufacturer_device_model": "schlage_zwave_lock",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "schlage",
+  "model_name": "BE469",
+  "upc_id": "11",
+  "upc_code": "043156312214",
+  "hub_id": "302528",
+  "local_id": "27",
+  "radio_type": "zwave",
+  "linked_service_id": null,
+  "lat_lng": [
+    12.345678,
+    -98.675432
+  ],
+  "location": ""
+}

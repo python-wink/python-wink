@@ -1,0 +1,81 @@
+{
+  "object_type": "hub",
+  "object_id": "278026",
+  "uuid": "04f17dcc-b159-44bf-b4XXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "pairing_mode": null,
+    "pairing_device_type_selector": null
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484457292.1078665,
+    "agent_session_id": null,
+    "agent_session_id_updated_at": null,
+    "pairing_mode": null,
+    "pairing_mode_updated_at": null,
+    "pairing_device_type_selector": null,
+    "pairing_device_type_selector_updated_at": null,
+    "kidde_radio_code_updated_at": null,
+    "updating_firmware": null,
+    "updating_firmware_updated_at": null,
+    "firmware_version": null,
+    "firmware_version_updated_at": null,
+    "update_needed": false,
+    "update_needed_updated_at": 1446676515.966435,
+    "mac_address": null,
+    "mac_address_updated_at": null,
+    "zigbee_mac_address": null,
+    "zigbee_mac_address_updated_at": null,
+    "ip_address": null,
+    "ip_address_updated_at": null,
+    "hub_version": null,
+    "hub_version_updated_at": null,
+    "app_version": null,
+    "app_version_updated_at": null,
+    "transfer_mode": null,
+    "transfer_mode_updated_at": null,
+    "connection_type": null,
+    "connection_type_updated_at": null,
+    "wifi_credentials_present": null,
+    "wifi_credentials_present_updated_at": null,
+    "desired_pairing_mode": "idle",
+    "desired_pairing_mode_updated_at": null,
+    "desired_pairing_device_type_selector": null,
+    "desired_pairing_device_type_selector_updated_at": null,
+    "desired_kidde_radio_code": null,
+    "desired_kidde_radio_code_updated_at": null,
+    "connection_changed_at": 1484372222.3153114
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-054XXXXXXXXXXXXXXX",
+      "channel": "a95f0e3aed9516151de64a401b690d8a48b21bd6|hub-278026|user-123456"
+    }
+  },
+  "hub_id": "278026",
+  "name": "Philips hue",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1446676515,
+  "hidden_at": null,
+  "capabilities": {},
+  "triggers": [],
+  "manufacturer_device_model": "philips",
+  "manufacturer_device_id": "00:17:88:19:24:12",
+  "device_manufacturer": "philips",
+  "model_name": "Philips",
+  "upc_id": "321",
+  "upc_code": "philips_hue_hub",
+  "linked_service_id": "219727",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "update_needed": false,
+  "configuration": {
+    "kidde_radio_code": null
+  }
+}

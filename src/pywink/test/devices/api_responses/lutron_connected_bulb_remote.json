@@ -1,0 +1,62 @@
+{
+  "remote_id": "123012",
+  "name": "Remote",
+  "members": [],
+  "object_type": "remote",
+  "object_id": "123012",
+  "uuid": "340956b9-c530-4XXXXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "assignment_mode": "local_group"
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484289280.0345233,
+    "firmware_version": null,
+    "firmware_version_updated_at": null,
+    "firmware_date_code": " 20150708",
+    "firmware_date_code_updated_at": 1484289280.0345233,
+    "group_id": "6866747",
+    "group_id_updated_at": 1484178963.2148762,
+    "button_on_pressed": false,
+    "button_on_pressed_updated_at": 1484187923.6756396,
+    "button_off_pressed": null,
+    "button_off_pressed_updated_at": null,
+    "button_up_pressed": null,
+    "button_up_pressed_updated_at": null,
+    "button_down_pressed": null,
+    "button_down_pressed_updated_at": null,
+    "ready": true,
+    "ready_updated_at": 1484289258.3489428,
+    "assignment_mode": "local_group",
+    "assignment_mode_updated_at": 1484178964.2056146,
+    "desired_assignment_mode_updated_at": 1484178964.2578514
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7eXXXXXXXXXXXXXX",
+      "channel": "851a02ca652218b604f6XXXXXXXXXXXXX9d|remote-123012|user-123456"
+    }
+  },
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1484178962,
+  "hidden_at": null,
+  "capabilities": {
+    "is_sleepy": true,
+    "polling_interval": 0
+  },
+  "device_manufacturer": "lutron",
+  "model_name": "Connected Bulb Remote",
+  "upc_id": "312",
+  "upc_code": "lutron_zigbee_remote",
+  "hub_id": "302528",
+  "local_id": "34",
+  "radio_type": "zigbee",
+  "lat_lng": [
+    12.345678,
+    -98.765432
+  ],
+  "location": ""
+}

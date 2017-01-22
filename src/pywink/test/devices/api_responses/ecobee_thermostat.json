@@ -1,0 +1,279 @@
+{
+  "object_type": "thermostat",
+  "object_id": "151594",
+  "uuid": "95cfc6b3-e47e-49XXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "max_set_point": 25.555555555555557,
+    "min_set_point": 21.666666666666668,
+    "powered": true,
+    "fan_mode": "auto",
+    "units": {
+      "temperature": "f"
+    },
+    "profile": "away",
+    "fan_run_time": 0,
+    "mode": "heat_only"
+  },
+  "last_reading": {
+    "max_set_point": 25.555555555555557,
+    "max_set_point_updated_at": 1484495928.9564533,
+    "min_set_point": 21.666666666666668,
+    "min_set_point_updated_at": 1484495928.9564533,
+    "powered": true,
+    "powered_updated_at": 1484495928.9564533,
+    "fan_mode": "auto",
+    "fan_mode_updated_at": 1484495928.9564533,
+    "units": {
+      "temperature": "f"
+    },
+    "units_updated_at": 1484495928.9564533,
+    "temperature": 22.388888888888889,
+    "temperature_updated_at": 1484495928.9564533,
+    "external_temperature": 0.83333333333333337,
+    "external_temperature_updated_at": 1484495928.9564533,
+    "humidity": 23,
+    "humidity_updated_at": 1484495928.9564533,
+    "cool_active": null,
+    "cool_active_updated_at": null,
+    "heat_active": null,
+    "heat_active_updated_at": null,
+    "aux_active": false,
+    "aux_active_updated_at": 1484495928.9564533,
+    "fan_active": null,
+    "fan_active_updated_at": null,
+    "min_min_set_point": 18.333333333333332,
+    "min_min_set_point_updated_at": 1484495928.9564533,
+    "max_min_set_point": 25.0,
+    "max_min_set_point_updated_at": 1484495928.9564533,
+    "min_max_set_point": 18.333333333333332,
+    "min_max_set_point_updated_at": 1484495928.9564533,
+    "max_max_set_point": 33.333333333333336,
+    "max_max_set_point_updated_at": 1484495928.9564533,
+    "deadband": 2.7777777777777777,
+    "deadband_updated_at": 1484495928.9564533,
+    "connection": true,
+    "connection_updated_at": 1484495928.9564533,
+    "firmware_version": "3.7.0.950",
+    "firmware_version_updated_at": 1484495928.9564533,
+    "revision": "170115083652",
+    "revision_updated_at": 1484495928.6663239,
+    "profile": "away",
+    "profile_updated_at": 1484495928.9564533,
+    "last_error": null,
+    "last_error_updated_at": 1484495928.9564533,
+    "fan_run_time": 0,
+    "fan_run_time_updated_at": 1484495928.9564533,
+    "smart_temperature": 21.5,
+    "smart_temperature_updated_at": 1484495928.9564533,
+    "occupied": false,
+    "occupied_updated_at": 1484495928.9564533,
+    "mode": "heat_only",
+    "mode_updated_at": 1484495928.9564533,
+    "modes_allowed": [
+      "heat_only"
+    ],
+    "modes_allowed_updated_at": 1484495928.9564533,
+    "desired_max_set_point_updated_at": 1484075716.794369,
+    "desired_min_set_point_updated_at": 1484075718.4934707,
+    "desired_powered_updated_at": 1484075716.794369,
+    "desired_fan_mode_updated_at": 1484075716.794369,
+    "desired_units_updated_at": 1484075716.794369,
+    "desired_profile_updated_at": 1484075716.794369,
+    "desired_fan_run_time_updated_at": 1484075716.794369,
+    "desired_mode_updated_at": 1484075716.794369,
+    "revision_changed_at": 1484495928.6663239,
+    "temperature_changed_at": 1484495928.9564533,
+    "smart_temperature_changed_at": 1484495928.9564533,
+    "occupied_changed_at": 1484495798.3430297,
+    "external_temperature_changed_at": 1484495798.3430297,
+    "humidity_changed_at": 1484495798.3430297,
+    "max_set_point_changed_at": 1484485573.1182661,
+    "min_set_point_changed_at": 1484485573.1182661,
+    "connection_changed_at": 1481198069.3895316,
+    "last_error_changed_at": 1482772012.5994632,
+    "desired_min_set_point_changed_at": 1484075718.4934707
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-054XXXXXXXXXXX",
+      "channel": "d94450dcf3fb1ed02aXXXXXXXXXXXX08|thermostat-151594|user-123456"
+    }
+  },
+  "thermostat_id": "151594",
+  "name": "Main Floor",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1470784571,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "float",
+        "field": "max_set_point",
+        "mutability": "read-write"
+      },
+      {
+        "type": "float",
+        "field": "min_set_point",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "selection",
+        "field": "fan_mode",
+        "choices": [
+          "on",
+          "auto"
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "nested_hash",
+        "field": "units",
+        "mutability": "read-write"
+      },
+      {
+        "type": "float",
+        "field": "temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "external_temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "percentage",
+        "field": "humidity",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "cool_active",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "heat_active",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "aux_active",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "fan_active",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "min_min_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "max_min_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "min_max_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "max_max_set_point",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "deadband",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "firmware_version",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "revision",
+        "mutability": "read-only"
+      },
+      {
+        "type": "selection",
+        "field": "profile",
+        "choices": [
+          "home",
+          "away"
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "string",
+        "field": "last_error",
+        "mutability": "read-only"
+      },
+      {
+        "type": "integer",
+        "field": "fan_run_time",
+        "range": [
+          0,
+          3300
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "float",
+        "field": "smart_temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "occupied",
+        "mutability": "read-only"
+      },
+      {
+        "field": "mode",
+        "type": "selection",
+        "mutability": "read-write",
+        "choices": [
+          "heat_only"
+        ]
+      }
+    ],
+    "notification_robots": [
+      "aux_active_notification"
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "athenaSmart",
+  "manufacturer_device_id": "317422180837",
+  "device_manufacturer": "ecobee",
+  "model_name": "ecobee3",
+  "upc_id": "333",
+  "upc_code": "627988301006",
+  "hub_id": null,
+  "local_id": null,
+  "radio_type": null,
+  "linked_service_id": "412774",
+  "lat_lng": [
+    12.34567,
+    -98.76543
+  ],
+  "location": "",
+  "smart_schedule_enabled": false
+}

@@ -1,39 +1,30 @@
+"""
+These are all the devices we currently support.
+"""
+
 LIGHT_BULB = 'light_bulb'
 BINARY_SWITCH = 'binary_switch'
 SENSOR_POD = 'sensor_pod'
 LOCK = 'lock'
-EGG_TRAY = 'eggtray'
+EGGTRAY = 'eggtray'
 GARAGE_DOOR = 'garage_door'
-POWER_STRIP = 'powerstrip'
-SHADE = 'shades'
+POWERSTRIP = 'powerstrip'
+SHADE = 'shade'
 SIREN = 'siren'
 KEY = 'key'
-PIGGY_BANK = 'piggybank'
+PIGGY_BANK = 'piggy_bank'
 SMOKE_DETECTOR = 'smoke_detector'
 THERMOSTAT = 'thermostat'
 HUB = 'hub'
 FAN = 'fan'
-BUTTON = 'button'
-REMOTE = 'remote'
 DOOR_BELL = 'door_bell'
+REMOTE = 'remote'
+SPRINKLER = 'sprinkler'
+BUTTON = 'button'
+GANG = 'gang'
+CAMERA = 'camera'
 
-DEVICE_ID_KEYS = {
-    BINARY_SWITCH: 'binary_switch_id',
-    EGG_TRAY: 'eggtray_id',
-    GARAGE_DOOR: 'garage_door_id',
-    LIGHT_BULB: 'light_bulb_id',
-    LOCK: 'lock_id',
-    POWER_STRIP: 'powerstrip_id',
-    SENSOR_POD: 'sensor_pod_id',
-    SHADE: 'shade_id',
-    SIREN: 'siren_id',
-    KEY: 'key_id',
-    PIGGY_BANK: 'piggy_bank_id',
-    SMOKE_DETECTOR: 'smoke_detector_id',
-    THERMOSTAT: 'thermostat_id',
-    HUB: 'hub_id',
-    FAN: 'fan_id',
-    BUTTON: 'button_id',
-    REMOTE: 'remote_id',
-    DOOR_BELL: 'door_bell_id'
-}
+ALL_SUPPORTED_DEVICES = [LIGHT_BULB, BINARY_SWITCH, SENSOR_POD, LOCK, EGGTRAY,
+                         GARAGE_DOOR, POWERSTRIP, SHADE, SIREN, KEY, PIGGY_BANK,
+                         SMOKE_DETECTOR, THERMOSTAT, HUB, FAN, DOOR_BELL, REMOTE,
+                         SPRINKLER, BUTTON, GANG, CAMERA]

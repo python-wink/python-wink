@@ -1,0 +1,55 @@
+{
+  "object_type": "siren",
+  "object_id": "6379",
+  "uuid": "8ec0d088-86ac-40XXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "auto_shutoff": 60,
+    "mode": "siren_and_strobe",
+    "powered": false
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484310589.6596723,
+    "battery": 1.0,
+    "battery_updated_at": 1484310589.6596723,
+    "auto_shutoff": 60,
+    "auto_shutoff_updated_at": 1484310589.6596723,
+    "mode": "siren_and_strobe",
+    "mode_updated_at": 1484310589.6596723,
+    "powered": false,
+    "powered_updated_at": 1484310589.6596723,
+    "desired_auto_shutoff_updated_at": 1483989455.601872,
+    "desired_mode_updated_at": 1483989581.8294075,
+    "desired_powered_updated_at": 1483989581.8294075,
+    "battery_changed_at": 1484310589.6596723,
+    "desired_auto_shutoff_changed_at": 1483989455.601872,
+    "auto_shutoff_changed_at": 1484169637.6828098
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-1XXXXXXXXXXXX",
+      "channel": "464018bc24211fXXXXXXXXXXXXXX|siren-6379|user-123456"
+    }
+  },
+  "siren_id": "6379",
+  "name": "Siren",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1452812587,
+  "hidden_at": null,
+  "capabilities": {},
+  "device_manufacturer": "linear",
+  "model_name": "Wireless Siren & Strobe (Wireless)",
+  "upc_id": "243",
+  "upc_code": "wireless_linear_siren",
+  "hub_id": "302528",
+  "local_id": "8",
+  "radio_type": "zwave",
+  "lat_lng": [
+    98.765432,
+    -12.345678
+  ],
+  "location": ""
+}

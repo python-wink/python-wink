@@ -1,0 +1,28 @@
+{
+  "name": "w1ll1am",
+  "last_reading": {
+    "slot_id": 2,
+    "slot_id_updated_at": 1478399523.2248833,
+    "activity_detected": false,
+    "activity_detected_updated_at": 1484259955.17631,
+    "activity_detected_changed_at": 1484259955.17631
+  },
+  "key_id": "792563",
+  "icon_id": null,
+  "verified_at": null,
+  "object_type": "key",
+  "object_id": "792563",
+  "uuid": "3b408d13-47c4-41b3-XXXXXXXXXXXXXXXXXXX",
+  "parent_object_type": "lock",
+  "parent_object_id": "109898",
+  "icon_code": null,
+  "desired_state": {
+    "code": null
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7XXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "700cedef71549c8d3XXXXXXXXXXXXXXXXXXXX"
+    }
+  }
+}

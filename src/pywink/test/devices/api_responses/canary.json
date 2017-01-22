@@ -1,0 +1,100 @@
+{
+  "object_type": "camera",
+  "object_id": "44575",
+  "uuid": "03773fb5-1762-412c-9XXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "mode": "home",
+    "private": false
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1470620172.44599,
+    "mode": "home",
+    "mode_updated_at": 1484410284.5465834,
+    "private": false,
+    "private_updated_at": 1484410284.5465834,
+    "serial_number": "C100G1504230",
+    "serial_number_updated_at": 1484410284.5465834,
+    "firmware_version": "v0.2.37",
+    "firmware_version_updated_at": 1484410284.5465834,
+    "location_id": "236092",
+    "location_id_updated_at": 1484410284.5465834,
+    "location_name": "Home",
+    "location_name_updated_at": 1484410284.5465834,
+    "motion_true": null,
+    "motion_true_updated_at": null,
+    "loudness_true": null,
+    "loudness_true_updated_at": null,
+    "desired_mode_updated_at": 1482118302.2474022,
+    "desired_private_updated_at": 1482118302.2474022,
+    "mode_changed_at": 1484410284.5465834,
+    "desired_mode_changed_at": 1482118302.2474022,
+    "desired_private_changed_at": 1482118302.2474022
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7exxxxxxxxxxxxxxxxxxxxxx",
+      "channel": "camera-44575|cd9d39XXXXXXXXXXXXXX6f430671440d39008|user-123465"
+    }
+  },
+  "camera_id": "44575",
+  "name": "Kitchen",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1470620172,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "mode",
+        "choices": [
+          "armed",
+          "disarmed",
+          "privacy"
+        ],
+        "mutability": "read-write"
+      },
+      {
+        "type": "string",
+        "field": "serial_number",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "firmware_version",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "location_id",
+        "mutability": "read-only"
+      },
+      {
+        "type": "string",
+        "field": "location_name",
+        "mutability": "read-only"
+      }
+    ],
+    "home_security_device": true
+  },
+  "manufacturer_device_model": "canary",
+  "manufacturer_device_id": "104eec7a985d42999b579967bc48aeb9",
+  "device_manufacturer": "canary",
+  "model_name": "Canary",
+  "upc_id": "371",
+  "upc_code": "canary",
+  "linked_service_id": "411738",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": ""
+}

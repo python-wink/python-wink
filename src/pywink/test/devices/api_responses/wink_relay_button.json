@@ -1,0 +1,48 @@
+{
+  "object_type": "button",
+  "object_id": "78535",
+  "uuid": "65eb2cc6-72e6-4ed2-XXXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484059107.4232388,
+    "pressed": false,
+    "pressed_updated_at": 1484059107.4232388,
+    "long_pressed": null,
+    "long_pressed_updated_at": null,
+    "ifttt_connected": null,
+    "ifttt_connected_updated_at": null,
+    "ifttt_identifier": null,
+    "ifttt_identifier_updated_at": null,
+    "pressed_changed_at": 1483744049.8844638
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542XXXXXXXXXXXXXXXXX",
+      "channel": "bc3a85beec5712f25dce32b5dbdfaf1a43e0c2af|button-78535|user-123465"
+    }
+  },
+  "button_id": "78535",
+  "name": "Wink Relay's Top Button",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1467645108,
+  "hidden_at": null,
+  "capabilities": {},
+  "manufacturer_device_model": "wink_relay_button",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Wink Relay Button",
+  "upc_id": "316",
+  "upc_code": "wink_p1_button",
+  "gang_id": "39320",
+  "hub_id": "450788",
+  "local_id": "4",
+  "radio_type": "project_one",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": ""
+}

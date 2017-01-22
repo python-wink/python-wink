@@ -1,0 +1,96 @@
+{
+  "object_type": "hub",
+  "object_id": "511438",
+  "uuid": "bd9c6bbe-8acb-425XXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "pairing_mode": null,
+    "pairing_device_type_selector": null,
+    "pairing_mode_duration": 0
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484328797.3590808,
+    "agent_session_id": "10744f004cca1d3d8d1b52c6f09f950b",
+    "agent_session_id_updated_at": 1484328796.1098533,
+    "pairing_mode": null,
+    "pairing_mode_updated_at": 1484328797.3293278,
+    "pairing_device_type_selector": null,
+    "pairing_device_type_selector_updated_at": null,
+    "kidde_radio_code_updated_at": 1477618454.0359025,
+    "pairing_mode_duration": 0,
+    "pairing_mode_duration_updated_at": 1484328797.3293278,
+    "updating_firmware": false,
+    "updating_firmware_updated_at": 1484328795.718946,
+    "firmware_version": "3.4.4-0-g239bc70fc1-hub2-app",
+    "firmware_version_updated_at": 1484328797.3590808,
+    "update_needed": false,
+    "update_needed_updated_at": 1484328797.3590808,
+    "mac_address": "D8:C4:6A:5E:50:27",
+    "mac_address_updated_at": 1484328797.3590808,
+    "zigbee_mac_address": "000D6F000CD28630",
+    "zigbee_mac_address_updated_at": 1484328797.3293278,
+    "ip_address": "192.168.1.2",
+    "ip_address_updated_at": 1484328797.3590808,
+    "hub_version": "00.01",
+    "hub_version_updated_at": 1484328797.3590808,
+    "app_version": "3.4.4-0-g239bc70fc1-hub2-app",
+    "app_version_updated_at": 1484328797.3590808,
+    "transfer_mode": null,
+    "transfer_mode_updated_at": 1484328796.1098533,
+    "connection_type": null,
+    "connection_type_updated_at": null,
+    "wifi_credentials_present": null,
+    "wifi_credentials_present_updated_at": null,
+    "remote_pairable": null,
+    "remote_pairable_updated_at": null,
+    "local_control_public_key_hash": "47:9E:59:47:B4:B2:8E:00:7A:CC:37:B2:8B:02:20:EF:2D:87:10:07:E6:4E:64:20:7D:3E:3D:91:C8:BA:2F:02",
+    "local_control_public_key_hash_updated_at": 1484328797.249866,
+    "local_control_id": "3c30a131-689XXXXXXXXXXXXXXXXX",
+    "local_control_id_updated_at": 1484328797.249866,
+    "desired_pairing_mode_updated_at": 1482191959.3433225,
+    "desired_pairing_device_type_selector_updated_at": 1482192145.5871685,
+    "desired_kidde_radio_code_updated_at": 1477618454.0804579,
+    "desired_pairing_mode_duration_updated_at": 1482191959.3433225,
+    "connection_changed_at": 1484328795.718946,
+    "agent_session_id_changed_at": 1484328796.1098533
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7XXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "d19f9034b6cc8beac59b670e73fbe6a0c1eae07a|hub-511438|user-123465"
+    }
+  },
+  "hub_id": "511438",
+  "name": "Hub V2",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1477618453,
+  "hidden_at": null,
+  "capabilities": {
+    "oauth2_clients": [
+      "wink_hub_2"
+    ],
+    "home_security_device": true,
+    "provisioning_version": "1",
+    "needs_wifi_network_list": true
+  },
+  "triggers": [],
+  "manufacturer_device_model": "wink_hub2",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Hub2",
+  "upc_id": "821",
+  "upc_code": "wink_hub_2",
+  "linked_service_id": null,
+  "lat_lng": [
+    12.345678,
+    -89.765432
+  ],
+  "location": "",
+  "update_needed": false,
+  "configuration": {
+    "kidde_radio_code": 0
+  }
+}

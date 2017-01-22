@@ -1,0 +1,51 @@
+{
+  "object_type": "smoke_detector",
+  "object_id": "40885",
+  "uuid": "936cc3c2-4fdf-4XXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484456882.749,
+    "battery": 1.0,
+    "battery_updated_at": 1484456882.749,
+    "co_detected": false,
+    "co_detected_updated_at": 1484456882.749,
+    "smoke_detected": false,
+    "smoke_detected_updated_at": 1484456882.749,
+    "test_activated": null,
+    "test_activated_updated_at": 1484456882.749,
+    "smoke_severity": 0.0,
+    "smoke_severity_updated_at": 1484456882.749,
+    "co_severity": 0.0,
+    "co_severity_updated_at": 1484456882.749
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0XXXXXXXXXXXXXXx",
+      "channel": "01d6dc8aa18c17cddb6caab2c65c8df27da935f9|smoke_detector-40885|user-123456"
+    }
+  },
+  "smoke_detector_id": "40885",
+  "name": "Home Upstairs Nest Protect",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1443882923,
+  "hidden_at": null,
+  "capabilities": {},
+  "manufacturer_device_model": "nest",
+  "manufacturer_device_id": "VpXN4GQ7MUBZxXBXiitT9Exx11Qobba_",
+  "device_manufacturer": "nest",
+  "model_name": "Smoke + Carbon Monoxide Detector",
+  "upc_id": "558",
+  "upc_code": "nest_protect",
+  "hub_id": null,
+  "local_id": null,
+  "radio_type": null,
+  "linked_service_id": "200261",
+  "lat_lng": [
+    12.345678,
+    -98.76543
+  ],
+  "location": ""
+}

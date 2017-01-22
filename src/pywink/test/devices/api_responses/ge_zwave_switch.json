@@ -1,0 +1,64 @@
+{
+  "object_type": "binary_switch",
+  "object_id": "239549",
+  "uuid": "e055f78d-f865-492XXXXXXXXXXX",
+  "icon_id": "52",
+  "icon_code": "binary_switch-light_bulb_dumb",
+  "desired_state": {
+    "powered": false
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484289288.6979613,
+    "powered": false,
+    "powered_updated_at": 1484289288.6979613,
+    "desired_powered_updated_at": 1484278866.6923306,
+    "powered_changed_at": 1484278866.659353,
+    "desired_powered_changed_at": 1484278866.6923306
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-054XXXXXXXXXXXXXX",
+      "channel": "024254c58e06548f0aXXXXXXXXXXXXXXXXX0ce|binary_switch-239549|user-123456"
+    }
+  },
+  "binary_switch_id": "239549",
+  "name": "GE Zwave Switch",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1468703723,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      }
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "leviton_dzs15",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "leviton",
+  "model_name": "Switch",
+  "upc_id": "95",
+  "upc_code": "078477389362",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "24",
+  "radio_type": "zwave",
+  "linked_service_id": null,
+  "current_budget": null,
+  "lat_lng": [
+    98.765432,
+    -12.345678
+  ],
+  "location": "",
+  "order": 0
+}

@@ -1,0 +1,76 @@
+{
+  "object_type": "binary_switch",
+  "object_id": "233550",
+  "uuid": "f56ed8c5-14b7-XXXXXXXXXXXX",
+  "icon_id": "52",
+  "icon_code": "binary_switch-light_bulb_dumb",
+  "desired_state": {
+    "powered": false,
+    "powering_mode": "none"
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484485952.6648619,
+    "powered": false,
+    "powered_updated_at": 1484485952.6648619,
+    "powering_mode": "none",
+    "powering_mode_updated_at": 1467647295.4216631,
+    "desired_powered_updated_at": 1478613226.7952232,
+    "desired_powering_mode_updated_at": 1467647295.4648318
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7fXXXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "binary_switch-233550|f8662cdb80a47e0f5aXXXXXXXXXXXX|user-123465"
+    }
+  },
+  "binary_switch_id": "233550",
+  "name": "Bottom Light Load",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1467645109,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "selection",
+        "field": "powering_mode",
+        "choices": [
+          "smart",
+          "dumb",
+          "none"
+        ],
+        "mutability": "read-write"
+      }
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "wink_relay_switch",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Wink Relay Switch",
+  "upc_id": "315",
+  "upc_code": "wink_p1_binary_switch",
+  "gang_id": "39320",
+  "hub_id": "450788",
+  "local_id": "2",
+  "radio_type": "project_one",
+  "linked_service_id": null,
+  "current_budget": null,
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "order": 0
+}

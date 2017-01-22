@@ -1,0 +1,51 @@
+{
+  "object_type":"shade",
+   "object_id":"5650",
+   "uuid":"07b44f75-c7ee-48f1-XXXXXXXX",
+   "desired_state":{
+      "position":0.0
+   },
+   "last_reading":{
+      "connection":true,
+      "connection_updated_at":1463494385.449129,
+      "position":1.0,
+      "position_updated_at":1463494385.449129,
+      "desired_position_updated_at":1463500774.348026,
+      "connection_changed_at":1457674189.5065048,
+      "desired_position_changed_at":1463500774.348026
+   },
+   "subscription":{
+      "pubnub":{
+         "subscribe_key":"sub-c-f7bf7f7e-0XXXXXXXXXXXXXXXXXXXX",
+         "channel":"31be109cff295db0c6d08d411fac0133e46a6138|shade-5650|user-410445"
+      }
+   },
+   "shade_id":"5650",
+   "name":"Left Bed Shade",
+   "locale":"en_us",
+   "units":{
+
+   },
+   "created_at":1457674189,
+   "hidden_at":null,
+   "capabilities":{
+
+   },
+   "triggers":[
+
+   ],
+   "manufacturer_device_model":"somfy_bali",
+   "manufacturer_device_id":null,
+   "device_manufacturer":"somfy",
+   "model_name":"Shade",
+   "upc_id":"81",
+   "upc_code":"SOMFY",
+   "hub_id":"344883",
+   "local_id":"6",
+   "radio_type":"zwave",
+   "lat_lng":[
+      98.76543,
+      -11.654125
+   ],
+   "location":""
+}

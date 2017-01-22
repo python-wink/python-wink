@@ -1,0 +1,119 @@
+{
+  "last_event": {
+    "brightness_occurred_at": 1484199467.7482638,
+    "loudness_occurred_at": 1484310427.9610171,
+    "vibration_occurred_at": 1484276838.5191174
+  },
+  "object_type": "sensor_pod",
+  "object_id": "156012",
+  "uuid": "77ee9632-d1c6-4af7-XXXXXXXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "battery": 1.0,
+    "battery_updated_at": 1484310490.9588282,
+    "brightness": 0.0,
+    "brightness_updated_at": 1484310490.9588282,
+    "external_power": true,
+    "external_power_updated_at": 1484310490.9588282,
+    "humidity": 23,
+    "humidity_updated_at": 1484310490.9588282,
+    "loudness": false,
+    "loudness_updated_at": 1484310490.9588282,
+    "temperature": 22.0,
+    "temperature_updated_at": 1484310490.9588282,
+    "vibration": false,
+    "vibration_updated_at": 1484310490.9588282,
+    "brightness_true": "N/A",
+    "brightness_true_updated_at": 1484199467.7482638,
+    "loudness_true": "N/A",
+    "loudness_true_updated_at": 1484310427.9610171,
+    "vibration_true": "N/A",
+    "vibration_true_updated_at": 1484276838.5191174,
+    "connection": true,
+    "connection_updated_at": 1484310490.9588282,
+    "agent_session_id": null,
+    "agent_session_id_updated_at": null,
+    "humidity_changed_at": 1484305792.2123559,
+    "loudness_changed_at": 1484310490.9588282,
+    "loudness_true_changed_at": 1484310427.9610171,
+    "vibration_changed_at": 1484276843.7636323,
+    "vibration_true_changed_at": 1484276838.5191174,
+    "temperature_changed_at": 1484298646.9891379,
+    "brightness_changed_at": 1484221745.1632764,
+    "brightness_true_changed_at": 1484199467.7482638
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-054XXXXXXXXXXXXXXXXXXXX",
+      "channel": "e7c46d25d2654253567XXXXXXXXXXXXXXXXXXXXXXXXX|sensor_pod-156012|user-123456"
+    }
+  },
+  "sensor_pod_id": "156012",
+  "name": "Spotter",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1453520234,
+  "hidden_at": null,
+  "capabilities": {
+    "needs_wifi_network_list": true,
+    "sensor_types": [
+      {
+        "type": "percentage",
+        "field": "battery",
+        "mutability": "read-only"
+      },
+      {
+        "type": "percentage",
+        "field": "brightness",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "external_power",
+        "mutability": "read-only"
+      },
+      {
+        "type": "percentage",
+        "field": "humidity",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "loudness",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "temperature",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "vibration",
+        "mutability": "read-only"
+      }
+    ],
+    "desired_state_fields": []
+  },
+  "triggers": [],
+  "manufacturer_device_model": "quirky_ge_spotter",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "quirky_ge",
+  "model_name": "Spotter",
+  "upc_id": "531",
+  "upc_code": "quirky_ge_spotter",
+  "gang_id": null,
+  "hub_id": null,
+  "local_id": null,
+  "radio_type": null,
+  "linked_service_id": null,
+  "lat_lng": [
+    98.76543,
+    -12.34567
+  ],
+  "location": "",
+  "mac_address": "0c2a69012345",
+  "serial": "ABAB00012345"
+}

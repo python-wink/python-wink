@@ -1,0 +1,88 @@
+{
+  "last_event": {
+    "brightness_occurred_at": null,
+    "loudness_occurred_at": null,
+    "vibration_occurred_at": null
+  },
+  "object_type": "sensor_pod",
+  "object_id": "198198",
+  "uuid": "ac7e2368-18d9-4a0XXXXXXXXXXXX",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {},
+  "last_reading": {
+    "motion": true,
+    "motion_updated_at": 1484301541.856606,
+    "battery": 1.0,
+    "battery_updated_at": 1484301541.856606,
+    "tamper_detected": false,
+    "tamper_detected_updated_at": 1465755520.3955958,
+    "temperature": 18.888888888888889,
+    "temperature_updated_at": 1484301541.856606,
+    "motion_true": "N/A",
+    "motion_true_updated_at": 1484289240.1748033,
+    "tamper_detected_true": "N/A",
+    "tamper_detected_true_updated_at": 1463851770.2494435,
+    "connection": true,
+    "connection_updated_at": 1484301541.856606,
+    "agent_session_id": null,
+    "agent_session_id_updated_at": null,
+    "temperature_changed_at": 1484301541.856606,
+    "motion_changed_at": 1484289240.1748033,
+    "motion_true_changed_at": 1484289240.1748033
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-05XXXXXXXXXXXXXXXXXXX",
+      "channel": "a3a799039b70c913XXXXXXXXXXXXXXXXXXXXXXXXXXX|sensor_pod-198198|user-123456"
+    }
+  },
+  "sensor_pod_id": "198198",
+  "name": "Bedroom",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1463851768,
+  "hidden_at": null,
+  "capabilities": {
+    "sensor_types": [
+      {
+        "type": "boolean",
+        "field": "motion",
+        "mutability": "read-only"
+      },
+      {
+        "type": "percentage",
+        "field": "battery",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "tamper_detected",
+        "mutability": "read-only"
+      },
+      {
+        "type": "float",
+        "field": "temperature",
+        "mutability": "read-only"
+      }
+    ],
+    "desired_state_fields": []
+  },
+  "triggers": [],
+  "manufacturer_device_model": "linear_wapirz_1",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "linear",
+  "model_name": "Z-Wave Passive Infrared (PIR) Sensor",
+  "upc_id": "207",
+  "upc_code": "093863125102",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "19",
+  "radio_type": "zwave",
+  "linked_service_id": null,
+  "lat_lng": [
+    98.765432,
+    -12.345678
+  ],
+  "location": ""
+}

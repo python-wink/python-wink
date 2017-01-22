@@ -1,2 +1,10 @@
 [run]
 omit = src/setup.py, src/*/__init__.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    def __str__
+    raise AssertionError
+    raise NotImplementedError

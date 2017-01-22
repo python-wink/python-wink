@@ -1,0 +1,77 @@
+{
+   "object_type":"door_bell",
+   "object_id":"45618",
+   "uuid":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+   "icon_id":null,
+   "icon_code":null,
+   "desired_state":{
+
+   },
+   "last_reading":{
+      "battery":1.0,
+      "battery_updated_at":1483588707.0458965,
+      "motion":false,
+      "motion_updated_at":1484327164.8382845,
+      "button_pressed":false,
+      "button_pressed_updated_at":1484257789.6575472,
+      "motion_true":"N/A",
+      "motion_true_updated_at":1484327124.6115115,
+      "button_pressed_true":"N/A",
+      "button_pressed_true_updated_at":1484257783.5323548,
+      "connection":true,
+      "connection_updated_at":1442873339.2134194,
+      "last_recording_cuepoint_id":"1790157958",
+      "last_recording_cuepoint_id_updated_at":1484327268.7613738,
+      "motion_changed_at":1484327164.8382845,
+      "motion_true_changed_at":1484327124.6115115,
+      "button_pressed_changed_at":1484257789.6575472,
+      "button_pressed_true_changed_at":1484257783.5323548,
+      "battery_changed_at":1483588707.0458965,
+      "last_recording_cuepoint_id_changed_at":1484327268.7613738
+   },
+   "subscription":{
+      "pubnub":{
+         "subscribe_key":"sub-x-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+         "channel":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|door_bell-xx|user-xxxxxx"
+      }
+   },
+   "door_bell_id":"45618",
+   "name":"Ring doorbell",
+   "locale":"en_us",
+   "units":{
+
+   },
+   "created_at":1442873339,
+   "hidden_at":null,
+   "capabilities":{
+      "fields":[
+         {
+            "type":"percentage",
+            "field":"battery",
+            "mutability":"read-only"
+         },
+         {
+            "type":"boolean",
+            "field":"motion",
+            "mutability":"read-only"
+         },
+         {
+            "type":"boolean",
+            "field":"button_pressed",
+            "mutability":"read-only"
+         }
+      ]
+   },
+   "manufacturer_device_model":"doorbell",
+   "manufacturer_device_id":"xxxxx",
+   "device_manufacturer":"ring",
+   "model_name":"Ring Video Doorbell",
+   "upc_id":"xxx",
+   "upc_code":"xxxxxxxxxxxx",
+   "linked_service_id":"xxxxxx",
+   "lat_lng":[
+      98.765432,
+      12.345678
+   ],
+   "location":"1234 Main St, City, ST XXXXX, USA"
+}

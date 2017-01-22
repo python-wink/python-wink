@@ -1,0 +1,61 @@
+{
+  "object_type": "light_bulb",
+  "object_id": "2194253",
+  "uuid": "9152b9fd-94c2-4214-b4ce-723s4f6da54f",
+  "icon_id": "71",
+  "icon_code": "light_bulb-light_bulb",
+  "desired_state": {
+    "powered": false,
+    "brightness": 1.0
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484289307.4707525,
+    "firmware_version": "0.1b03 / 0.4b00",
+    "firmware_version_updated_at": 1484289307.4707525,
+    "firmware_date_code": "20140812",
+    "firmware_date_code_updated_at": 1484289307.4707525,
+    "powered": false,
+    "powered_updated_at": 1484289307.4707525,
+    "brightness": 1.0,
+    "brightness_updated_at": 1484289307.4707525,
+    "desired_powered_updated_at": 1484278871.427912,
+    "desired_brightness_updated_at": 1484278871.427912,
+    "desired_powered_changed_at": 1484278871.427912,
+    "desired_brightness_changed_at": 1484278871.427912,
+    "powered_changed_at": 1484278871.3907311,
+    "connection_changed_at": 1481852111.8699017,
+    "brightness_changed_at": 1482898401.8100445
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "7ceb972637bfc74e5XXXXXXXXXXXXXXXXXXXXXXXX|light_bulb-2194253|user-123456"
+    }
+  },
+  "light_bulb_id": "2194253",
+  "name": "Bedroom lamp",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1480089549,
+  "hidden_at": null,
+  "capabilities": {},
+  "triggers": [],
+  "manufacturer_device_model": "ge_bulb",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "ge",
+  "model_name": "GE Light Bulb",
+  "upc_id": "483",
+  "upc_code": "ge_zigbee4",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "29",
+  "radio_type": "zigbee",
+  "linked_service_id": null,
+  "lat_lng": [
+    98.76543,
+    -12.345678
+  ],
+  "location": "",
+  "order": 0
+}

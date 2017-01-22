@@ -1,0 +1,111 @@
+{
+  "object_type": "light_bulb",
+  "object_id": "2366307",
+  "uuid": "146be9cf-4dfb-XXXXXXXXXXXXXXXXXXXXX",
+  "icon_id": "76",
+  "icon_code": "light_bulb-sylvania_light",
+  "desired_state": {
+    "powered": false,
+    "brightness": 1.0,
+    "color_model": "color_temperature",
+    "color_temperature": 2703
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484289305.3739712,
+    "powered": false,
+    "powered_updated_at": 1484289305.3739712,
+    "brightness": 1.0,
+    "brightness_updated_at": 1484289305.3739712,
+    "color_model": "color_temperature",
+    "color_model_updated_at": 1484289305.3739712,
+    "color_temperature": 2703,
+    "color_temperature_updated_at": 1484289305.3739712,
+    "firmware_version": "0.1b02 / 0.4b92",
+    "firmware_version_updated_at": 1484289305.3739712,
+    "firmware_date_code": "20140331CNLS****",
+    "firmware_date_code_updated_at": 1484289305.3739712,
+    "desired_powered_updated_at": 1484277426.949424,
+    "desired_brightness_updated_at": 1484277426.949424,
+    "desired_color_model_updated_at": 1484277545.55024,
+    "desired_color_temperature_updated_at": 1484277545.55024,
+    "powered_changed_at": 1484277426.7937551,
+    "brightness_changed_at": 1484156321.553216,
+    "connection_changed_at": 1483842259.8092032,
+    "firmware_date_code_changed_at": 1483842262.803009,
+    "firmware_version_changed_at": 1484014789.5495606,
+    "color_model_changed_at": 1483842262.803009,
+    "color_temperature_changed_at": 1483842818.9068251,
+    "desired_powered_changed_at": 1484277426.949424,
+    "desired_color_model_changed_at": 1483842819.1898041,
+    "desired_color_temperature_changed_at": 1483842945.1647821,
+    "desired_brightness_changed_at": 1484277426.949424
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0XXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "57b33edf767d8ddbc970246b29f07530f4082857|light_bulb-2366307|user-123456"
+    }
+  },
+  "light_bulb_id": "2366307",
+  "name": "Office lamp",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1483842259,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "brightness",
+        "mutability": "read-write"
+      },
+      {
+        "type": "string",
+        "field": "color_model",
+        "choices": [
+          "color_temperature"
+        ],
+        "mutability": "read-write",
+        "legacy_type": "colorModel"
+      },
+      {
+        "type": "integer",
+        "field": "color_temperature",
+        "range": [
+          2700,
+          6500
+        ],
+        "mutability": "read-write"
+      }
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "sylvania_sylvania_ct",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "sylvania",
+  "model_name": "Lightify Tunable White",
+  "upc_id": "279",
+  "upc_code": "sylvania2",
+  "gang_id": null,
+  "hub_id": "302528",
+  "local_id": "33",
+  "radio_type": "zigbee",
+  "linked_service_id": null,
+  "lat_lng": [
+    12.34567,
+    -89.123456
+  ],
+  "location": "",
+  "order": 0
+}

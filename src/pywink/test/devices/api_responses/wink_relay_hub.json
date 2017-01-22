@@ -1,0 +1,93 @@
+{
+  "object_type": "hub",
+  "object_id": "456369",
+  "uuid": "7f78bb1d-78c0-4XXXXXXXXXXXXXXXXx",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "pairing_mode": null,
+    "pairing_device_type_selector": null,
+    "pairing_mode_duration": null
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1484423809.3030915,
+    "agent_session_id": "8fb2016077cd296b7620d6b1abcfe991",
+    "agent_session_id_updated_at": 1484423809.0880563,
+    "pairing_mode": null,
+    "pairing_mode_updated_at": null,
+    "pairing_device_type_selector": null,
+    "pairing_device_type_selector_updated_at": null,
+    "kidde_radio_code_updated_at": null,
+    "pairing_mode_duration": null,
+    "pairing_mode_duration_updated_at": null,
+    "updating_firmware": false,
+    "updating_firmware_updated_at": 1484423807.2065063,
+    "firmware_version": "1.0.585",
+    "firmware_version_updated_at": 1484423809.3030915,
+    "update_needed": false,
+    "update_needed_updated_at": 1484423809.3030915,
+    "mac_address": "B4:79:A7:04:9C:84",
+    "mac_address_updated_at": 1484423809.3030915,
+    "zigbee_mac_address": null,
+    "zigbee_mac_address_updated_at": null,
+    "ip_address": "192.168.1.66",
+    "ip_address_updated_at": 1484423809.3030915,
+    "hub_version": "user",
+    "hub_version_updated_at": 1484423809.3030915,
+    "app_version": "3.4.2",
+    "app_version_updated_at": 1484423809.3030915,
+    "transfer_mode": null,
+    "transfer_mode_updated_at": 1484423809.0880563,
+    "connection_type": null,
+    "connection_type_updated_at": null,
+    "wifi_credentials_present": null,
+    "wifi_credentials_present_updated_at": null,
+    "local_control_public_key_hash": "0B:BF:8D:C6:03:7E:56:CD:B6:9D:BE:DE:F2:56:0C:E2:F2:9A:38:46:7D:CB:9C:69:1E:E0:AA:88:D1:3B:68:FF",
+    "local_control_public_key_hash_updated_at": 1468461288.1613514,
+    "local_control_id": "a80f56b5-eb7XXXXXXXXXXXXXXXXX",
+    "local_control_id_updated_at": 1468461288.1613514,
+    "desired_pairing_mode_updated_at": 1468461448.067497,
+    "desired_pairing_device_type_selector": null,
+    "desired_pairing_device_type_selector_updated_at": null,
+    "desired_kidde_radio_code_updated_at": 1468461437.938937,
+    "desired_pairing_mode_duration_updated_at": 1468461448.067497,
+    "connection_changed_at": 1484423807.2065063,
+    "agent_session_id_changed_at": 1484423809.0880563
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7XXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "5adbae35747124ea1d59399f2e27401b71b6decf|hub-456369|user-132456"
+    }
+  },
+  "hub_id": "456369",
+  "name": "Great Room Relay",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1468460685,
+  "hidden_at": null,
+  "capabilities": {
+    "oauth2_clients": [
+      "wink_project_one"
+    ],
+    "home_security_device": true
+  },
+  "triggers": [],
+  "manufacturer_device_model": "wink_project_one",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "wink",
+  "model_name": "Wink Relay",
+  "upc_id": "186",
+  "upc_code": "wink_p1",
+  "linked_service_id": null,
+  "lat_lng": [
+    12.123465,
+    -89.54654
+  ],
+  "location": "",
+  "update_needed": false,
+  "configuration": {
+    "kidde_radio_code": null
+  }
+}
