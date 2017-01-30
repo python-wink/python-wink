@@ -222,6 +222,14 @@ def get_cameras():
     return get_devices(device_types.CAMERA)
 
 
+def get_air_conditioners():
+    return get_devices(device_types.AIR_CONDITIONER)
+
+
+def get_propane_tanks():
+    return get_devices(device_types.PROPANE_TANK)
+
+
 def get_subscription_key():
     response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]

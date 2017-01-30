@@ -1,109 +1,71 @@
 from pywink.devices.sensor import WinkDevice
 
 
-class WinkSmokeDetector(WinkDevice):
+class WinkBaseSmokeDetector(WinkDevice):
+    """Represents a base smoke detector sensor."""
+
+    def __init__(self, device_state_as_json, api_interface, unit_type, capability):
+        super(WinkBaseSmokeDetector, self).__init__(device_state_as_json, api_interface)
+        self._unit = None
+        self._unit_type = unit_type
+        self._cap = capability
+
+    def unit(self):
+        return self._unit
+
+    def unit_type(self):
+        return self._unit_type
+
+    def capability(self):
+        return self._cap
+
+    def name(self):
+        return self.json_state.get("name") + " " + self.capability()
+
+    def state(self):
+        return self._last_reading.get(self.capability())
+
+    def test_activated(self):
+        return self._last_reading.get("test_activated")
+
+
+class WinkSmokeDetector(WinkBaseSmokeDetector):
     """
     Represents a Wink Smoke detector.
     """
 
     def __init__(self, device_state_as_json, api_interface):
-        super(WinkSmokeDetector, self).__init__(device_state_as_json, api_interface)
-        self._unit = None
-        self._cap = "smoke_detected"
-        self._unit_type = "boolean"
-
-    def unit(self):
-        return self._unit
-
-    def unit_type(self):
-        return self._unit_type
-
-    def capability(self):
-        return self._cap
-
-    def name(self):
-        return self.json_state.get("name") + " " + self.capability()
-
-    def state(self):
-        return self._last_reading.get(self.capability())
+        capability = "smoke_detected"
+        unit_type = "boolean"
+        super(WinkSmokeDetector, self).__init__(device_state_as_json, api_interface, unit_type, capability)
 
 
-class WinkSmokeSeverity(WinkDevice):
+class WinkSmokeSeverity(WinkBaseSmokeDetector):
     """
     Represents a Wink/Nest Smoke severity sensor.
     """
 
     def __init__(self, device_state_as_json, api_interface):
-        super(WinkSmokeSeverity, self).__init__(device_state_as_json, api_interface)
-        self._unit = None
-        self._cap = "smoke_severity"
-        self._unit_type = None
-
-    def unit(self):
-        return self._unit
-
-    def unit_type(self):
-        return self._unit_type
-
-    def capability(self):
-        return self._cap
-
-    def name(self):
-        return self.json_state.get("name") + " " + self.capability()
-
-    def state(self):
-        return self._last_reading.get(self.capability())
+        capability = "smoke_severity"
+        super(WinkSmokeSeverity, self).__init__(device_state_as_json, api_interface, None, capability)
 
 
-class WinkCoDetector(WinkDevice):
+class WinkCoDetector(WinkBaseSmokeDetector):
     """
     Represents a Wink CO detector.
     """
 
     def __init__(self, device_state_as_json, api_interface):
-        super(WinkCoDetector, self).__init__(device_state_as_json, api_interface)
-        self._unit = None
-        self._cap = "co_detected"
-        self._unit_type = "boolean"
-
-    def unit(self):
-        return self._unit
-
-    def unit_type(self):
-        return self._unit_type
-
-    def capability(self):
-        return self._cap
-
-    def name(self):
-        return self.json_state.get("name") + " " + self.capability()
-
-    def state(self):
-        return self._last_reading.get(self.capability())
+        capability = "co_detected"
+        unit_type = "boolean"
+        super(WinkCoDetector, self).__init__(device_state_as_json, api_interface, unit_type, capability)
 
 
-class WinkCoSeverity(WinkDevice):
+class WinkCoSeverity(WinkBaseSmokeDetector):
     """
     Represents a Wink/Nest CO severity sensor.
     """
 
     def __init__(self, device_state_as_json, api_interface):
-        super(WinkCoSeverity, self).__init__(device_state_as_json, api_interface)
-        self._unit = None
-        self._cap = "co_severity"
-        self._unit_type = None
-
-    def unit(self):
-        return self._unit
-
-    def unit_type(self):
-        return self._unit_type
-
-    def capability(self):
-        return self._cap
-
-    def name(self):
-        return self.json_state.get("name") + " " + self.capability()
-
-    def state(self):
-        return self._last_reading.get(self.capability())
+        capability = "co_severity"
+        super(WinkCoSeverity, self).__init__(device_state_as_json, api_interface, None, capability)

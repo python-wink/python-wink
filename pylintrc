@@ -15,3 +15,4 @@ disable=
   , invalid-name
   , fixme
   , locally-disabled
+  , duplicate-code

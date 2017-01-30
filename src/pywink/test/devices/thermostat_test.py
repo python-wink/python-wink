@@ -55,7 +55,7 @@ class FanTests(unittest.TestCase):
         thermostat = get_devices_from_response_dict(response_dict, device_types.THERMOSTAT)[0]
         self.assertTrue(thermostat.away())
 
-    def test_thermostat_current_fan_modes(self):
+    def test_thermostat_current_fan_mode(self):
         device_list = []
         response_dict = {}
         _json_file = open('{}/api_responses/go_control_thermostat.json'.format(os.path.dirname(__file__)))

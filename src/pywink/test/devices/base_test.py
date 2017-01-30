@@ -22,6 +22,8 @@ from pywink.devices.sprinkler import WinkSprinkler
 from pywink.devices.button import WinkButton
 from pywink.devices.gang import WinkGang
 from pywink.devices.camera import WinkCanaryCamera
+from pywink.devices.air_conditioner import WinkAirConditioner
+from pywink.devices.propane_tank import WinkPropaneTank
 
 
 class BaseTests(unittest.TestCase):
@@ -78,12 +80,17 @@ class BaseTests(unittest.TestCase):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkFan, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkBinarySwitch, WinkHub,
                       WinkLightBulb, WinkThermostat, WinkKey, WinkPowerStrip, WinkPowerStripOutlet,
-                      WinkRemote, WinkShade, WinkSprinkler, WinkButton, WinkGang, WinkCanaryCamera]
+                      WinkRemote, WinkShade, WinkSprinkler, WinkButton, WinkGang, WinkCanaryCamera,
+                      WinkAirConditioner]
         for device in devices:
-            if type(device) in skip_types:
+            if device.manufacturer_device_model() == "leaksmart_valve":
+                self.assertIsNotNone(device.battery_level())
+            elif type(device) in skip_types:
                 self.assertIsNone(device.battery_level())
             elif device.manufacturer_device_model() == "wink_relay_sensor":
-                self.assertIsNone(device.manufacturer_device_id())
+                self.assertIsNone(device.battery_level())
+            elif device.device_manufacturer() == "dropcam":
+                self.assertIsNone(device.battery_level())
             elif device._last_reading.get('external_power'):
                 self.assertIsNone(device.battery_level())
             else:
@@ -92,7 +99,7 @@ class BaseTests(unittest.TestCase):
     def test_all_devices_manufacturer_device_model_state_is_valid(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkKey, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkPowerStripOutlet,
-                      WinkSiren, WinkEggtray, WinkRemote, WinkPowerStrip]
+                      WinkSiren, WinkEggtray, WinkRemote, WinkPowerStrip, WinkAirConditioner, WinkPropaneTank]
         for device in devices:
             if type(device) in skip_types:
                 self.assertIsNone(device.manufacturer_device_model())
@@ -104,11 +111,11 @@ class BaseTests(unittest.TestCase):
     def test_all_devices_manufacturer_device_id_state_is_valid(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkKey, WinkPowerStrip, WinkPowerStripOutlet, WinkPorkfolioBalanceSensor, WinkPorkfolioNose,
-                      WinkSiren, WinkEggtray, WinkRemote, WinkButton]
+                      WinkSiren, WinkEggtray, WinkRemote, WinkButton, WinkAirConditioner, WinkPropaneTank]
         skip_manufactuer_device_models = ["linear_wadwaz_1",  "linear_wapirz_1", "aeon_labs_dsb45_zwus", "wink_hub", "wink_hub2", "sylvania_sylvania_ct",
                                           "ge_bulb", "quirky_ge_spotter", "schlage_zwave_lock", "home_decorators_home_decorators_fan",
                                           "sylvania_sylvania_rgbw", "somfy_bali", "wink_relay_sensor", "wink_project_one", "kidde_smoke_alarm",
-                                          "wink_relay_switch"]
+                                          "wink_relay_switch", "leaksmart_valve"]
         skip_names = ["GoControl Thermostat", "GE Zwave Switch"]
         for device in devices:
             if device.name() in skip_names:

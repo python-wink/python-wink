@@ -1,0 +1,64 @@
+{
+  "object_type": "propane_tank",
+  "object_id": "13555",
+  "uuid": "e0169b3e-e12e-40e6-8ae3-d2f6ca4a7066",
+  "icon_id": null,
+  "icon_code": null,
+  "last_reading": {
+    "connection": true,
+    "battery": 1.0,
+    "remaining": 0.0
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+      "channel": "da9a307e0cfbed0f6a5814eef4504deec021f0e0|propane_tank-13555|user-377857"
+    }
+  },
+  "propane_tank_id": "13555",
+  "name": "Refuel",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1485560255,
+  "hidden_at": null,
+  "capabilities": {
+    "needs_wifi_network_list": true
+  },
+  "triggers": [
+    {
+      "object_type": "trigger",
+      "object_id": "226365",
+      "trigger_id": "226365",
+      "name": "Refuel remaining",
+      "enabled": true,
+      "trigger_configuration": {
+        "reading_type": "remaining",
+        "edge": "falling",
+        "threshold": 0.125,
+        "object_id": "13555",
+        "object_type": "propane_tank"
+      },
+      "channel_configuration": {
+        "recipient_user_ids": [],
+        "channel_id": "15",
+        "object_type": null,
+        "object_id": null
+      },
+      "robot_id": "4658878",
+      "triggered_at": null
+    }
+  ],
+  "device_manufacturer": "quirky_ge",
+  "model_name": "Refuel",
+  "upc_id": "525",
+  "upc_code": "quirky_ge_refuel",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "mac_address": "0c2a69073fda",
+  "serial": "ACAB00034466",
+  "tare": 0.0,
+  "tank_changed_at": 1485560407
+}

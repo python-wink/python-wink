@@ -33,6 +33,9 @@ from pywink.devices.button import WinkButton
 from pywink.devices.gang import WinkGang
 from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
 from pywink.devices.sprinkler import WinkSprinkler
+from pywink.devices.camera import WinkCanaryCamera
+from pywink.devices.air_conditioner import WinkAirConditioner
+from pywink.devices.propane_tank import WinkPropaneTank
 
 USERS_ME_WINK_DEVICES = {}
 
@@ -80,7 +83,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 51)
+        self.assertEqual(len(devices), 61)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -136,13 +139,19 @@ class ApiTests(unittest.TestCase):
         buttons = get_buttons()
         for button in buttons:
             self.assertTrue(isinstance(button, WinkButton))
+        acs = get_air_conditioners()
+        for ac in acs:
+            self.assertTrue(isinstance(ac, WinkAirConditioner))
+        propane_tanks = get_propane_tanks()
+        for tank in propane_tanks:
+            self.assertTrue(isinstance(tank, WinkPropaneTank))
 
     def test_get_sensor_and_binary_switch_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         sensor_types = [WinkSensor, WinkHub, WinkPorkfolioBalanceSensor, WinkKey, WinkRemote,
                         WinkGang, WinkSmokeDetector, WinkSmokeSeverity,
                         WinkCoDetector, WinkCoSeverity, WinkButton]
-        skip_types = [WinkPowerStripOutlet]
+        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera]
         devices = get_all_devices()
         old_states = {}
         for device in devices:
@@ -271,6 +280,27 @@ class ApiTests(unittest.TestCase):
         self.assertTrue(device.vacation_mode_enabled())
         self.assertTrue(device.beeper_enabled())
 
+    def test_get_air_conditioner_updated_states_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_air_conditioners()
+        old_states = {}
+        for device in devices:
+            device.api_interface = self.api_interface
+            old_states[device.object_id()] = device.state()
+            device.set_mode("cool_only")
+            device.set_temperature(70)
+            device.set_schedule_enabled(False)
+            device.set_ac_fan_speed(0.5)
+        for device in devices:
+            self.assertEqual(device.state(), "cool_only")
+            self.assertEqual(70, device.current_max_set_point())
+            self.assertFalse(device.schedule_enabled())
+            self.assertEqual(0.5, device.current_fan_speed())
+
+    def test_get_camera_updated_states_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_cameras()
+
     def test_get_thermostat_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_thermostats()
@@ -302,12 +332,14 @@ class ApiTests(unittest.TestCase):
         devices = get_cameras()
         old_states = {}
         for device in devices:
-            device.api_interface = self.api_interface
-            device.set_mode("away")
-            device.set_privacy(True)
-            device.update_state()
-        self.assertEqual(device.state(), "away")
-        self.assertTrue(device.private())
+            if isinstance(device, WinkCanaryCamera):
+                device.api_interface = self.api_interface
+                device.set_mode("away")
+                device.set_privacy(True)
+                device.update_state()
+        if isinstance(device, WinkCanaryCamera):
+            self.assertEqual(device.state(), "away")
+            self.assertTrue(device.private())
 
     def test_get_fan_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -322,6 +354,18 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(device.current_fan_speed(), "auto")
         self.assertEqual(device.current_fan_direction(), "reverse")
         self.assertEqual(device.current_timer(), 300)
+
+
+    def test_get_propane_tank_updated_states_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_propane_tanks()
+        old_states = {}
+        for device in devices:
+            device.api_interface = self.api_interface
+            device.set_tare(5.0)
+            device.update_state()
+        self.assertEqual(device.tare(), 5.0)
+
 
 
 class MockServerRequestHandler(BaseHTTPRequestHandler):
@@ -405,6 +449,8 @@ class MockApiInterface():
                 else:
                     if "nose_color" in state:
                         dict_device["nose_color"] = state.get("nose_color")
+                    elif "tare" in state:
+                        dict_device["tare"] = state.get("tare")
                     else:
                         for key, value in state.get('desired_state').items():
                             dict_device["last_reading"][key] = value

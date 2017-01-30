@@ -5,7 +5,7 @@ Build Wink devices.
 from pywink.devices import types as device_types
 from pywink.devices.sensor import WinkSensor
 from pywink.devices.light_bulb import WinkLightBulb
-from pywink.devices.binary_switch import WinkBinarySwitch
+from pywink.devices.binary_switch import WinkBinarySwitch, WinkLeakSmartValve
 from pywink.devices.lock import WinkLock
 from pywink.devices.eggtray import WinkEggtray
 from pywink.devices.garage_door import WinkGarageDoor
@@ -23,6 +23,8 @@ from pywink.devices.button import WinkButton
 from pywink.devices.gang import WinkGang
 from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
 from pywink.devices.camera import WinkCanaryCamera
+from pywink.devices.air_conditioner import WinkAirConditioner
+from pywink.devices.propane_tank import WinkPropaneTank
 
 
 # pylint: disable=redefined-variable-type,too-many-branches, too-many-statements
@@ -42,6 +44,8 @@ def build_device(device_state_as_json, api_interface):
             mode = device_state_as_json["last_reading"]["powering_mode"]
             if mode == "dumb":
                 new_object = WinkBinarySwitch(device_state_as_json, api_interface)
+        elif device_state_as_json.get("model_name") == "leakSMART Valve":
+            new_object = WinkLeakSmartValve(device_state_as_json, api_interface)
         else:
             new_object = WinkBinarySwitch(device_state_as_json, api_interface)
     elif object_type == device_types.LOCK:
@@ -87,6 +91,12 @@ def build_device(device_state_as_json, api_interface):
     elif object_type == device_types.CAMERA:
         if device_state_as_json.get("device_manufacturer") == "canary":
             new_object = WinkCanaryCamera(device_state_as_json, api_interface)
+        elif device_state_as_json.get("device_manufacturer") == "dropcam":
+            new_objects = __get_subsensors_from_device(device_state_as_json, api_interface)
+    elif object_type == device_types.AIR_CONDITIONER:
+        new_object = WinkAirConditioner(device_state_as_json, api_interface)
+    elif object_type == device_types.PROPANE_TANK:
+        new_object = WinkPropaneTank(device_state_as_json, api_interface)
 
     if new_object is not None:
         return [new_object]

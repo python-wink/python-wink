@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.0
+- Support for Quirky Aros AC units
+- Support for Quirky Refuel
+- Support for Dropcam sensors
+- Fix for leaksmart valves
+
 ## 1.0.0
 - Switch to object_type for device type detction
 - Hard coded user agent

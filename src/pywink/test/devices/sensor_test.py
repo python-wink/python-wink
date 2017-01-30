@@ -9,6 +9,7 @@ from pywink.devices import types as device_types
 from pywink.devices.sensor import WinkSensor
 from pywink.devices.piggy_bank import WinkPorkfolioBalanceSensor
 from pywink.devices.smoke_detector import WinkSmokeDetector, WinkCoDetector, WinkSmokeSeverity, WinkCoSeverity
+from pywink.devices.propane_tank import WinkPropaneTank
 
 class SensorTests(unittest.TestCase):
 
@@ -174,6 +175,11 @@ class SmokeDetectorTests(unittest.TestCase):
             _json_file.close()
         self.response_dict["data"] = device_list
 
+    def test_test_activated_is_false(self):
+        devices = get_devices_from_response_dict(self.response_dict, device_types.SMOKE_DETECTOR)
+        for device in devices:
+            self.assertFalse(device.test_activated())
+
     def test_unit_is_none(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.SMOKE_DETECTOR)
         for device in devices:
@@ -218,3 +224,24 @@ class RemoteTests(unittest.TestCase):
         remote = devices[0]
         self.assertIsNone(remote.unit())
         self.assertEqual(remote.capability(), "opened")
+
+
+class PropaneTankTests(unittest.TestCase):
+
+    def setUp(self):
+        super(PropaneTankTests, self).setUp()
+        self.api_interface = mock.MagicMock()
+        all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
+        self.response_dict = {}
+        device_list = []
+        for json_file in all_devices:
+            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+            device_list.append(json.load(_json_file))
+            _json_file.close()
+        self.response_dict["data"] = device_list
+
+    def test_unit_and_capability(self):
+        devices = get_devices_from_response_dict(self.response_dict, device_types.PROPANE_TANK)
+        tank = devices[0]
+        self.assertIsNone(tank.unit())
+        self.assertIsNone(tank.capability())
