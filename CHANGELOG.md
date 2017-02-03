@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.1
+- Bugfix for lutron lights missing object_id and object_type
+
 ## 1.1.0
 - Support for Quirky Aros AC units
 - Support for Quirky Refuel

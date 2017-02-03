@@ -12,6 +12,8 @@ class WinkDevice(object):
         self.json_state = device_state_as_json
         self.pubnub_key = None
         self.pubnub_channel = None
+        self.obj_id = self.json_state.get('object_id')
+        self.obj_type = self.json_state.get('object_type')
         subscription = self.json_state.get('subscription')
         if subscription != {} and subscription is not None:
             pubnub = subscription.get('pubnub')
@@ -25,10 +27,10 @@ class WinkDevice(object):
         raise NotImplementedError("Must implement state")
 
     def object_id(self):
-        return self.json_state.get('object_id')
+        return self.obj_id
 
     def object_type(self):
-        return self.json_state.get("object_type")
+        return self.obj_type
 
     @property
     def _last_reading(self):
@@ -61,8 +63,11 @@ class WinkDevice(object):
         :return:
         """
         _response_json = response_json.get('data')
-        self.json_state = _response_json
-        return True
+        if _response_json is not None:
+            self.json_state = _response_json
+            return True
+        else:
+            return False
 
     def update_state(self):
         """ Update state with latest info from Wink API. """
@@ -70,4 +75,7 @@ class WinkDevice(object):
         return self._update_state_from_response(response)
 
     def pubnub_update(self, json_response):
-        self.json_state = json_response
+        if json_response is not None:
+            self.json_state = json_response
+        else:
+            self.update_state()

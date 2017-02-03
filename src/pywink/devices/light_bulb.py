@@ -71,13 +71,11 @@ class WinkLightBulb(WinkDevice):
         desired_state = {"powered": state}
 
         color_state = self._format_color_data(color_hue_saturation, color_kelvin, color_xy)
-        desired_state.update(color_state)
+        if color_state is not None:
+            desired_state.update(color_state)
 
-        brightness = brightness if brightness is not None \
-            else self.json_state.get('last_reading', {}).get('desired_brightness', 1)
-        desired_state.update({
-            'brightness': brightness
-        })
+        if brightness is not None:
+            desired_state.update({'brightness': brightness})
 
         response = self.api_interface.set_device_state(self, {
             "desired_state": desired_state
@@ -86,7 +84,7 @@ class WinkLightBulb(WinkDevice):
 
     def _format_color_data(self, color_hue_saturation, color_kelvin, color_xy):
         if color_hue_saturation is None and color_kelvin is None and color_xy is None:
-            return {}
+            return None
 
         if self.supports_rgb():
             rgb = _get_color_as_rgb(color_hue_saturation, color_kelvin, color_xy)
