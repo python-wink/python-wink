@@ -8,12 +8,12 @@ class WinkEggtray(WinkDevice):
 
     def __init__(self, device_state_as_json, api_interface):
         super(WinkEggtray, self).__init__(device_state_as_json, api_interface)
-        self._cap = None
+        self._capability = None
         self._unit = "eggs"
 
     def capability(self):
         # Eggtray has no capability.
-        return self._cap
+        return self._capability
 
     def unit(self):
         return self._unit

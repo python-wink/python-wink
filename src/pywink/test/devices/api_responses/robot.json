@@ -1,0 +1,79 @@
+{
+  "robot_id": "4830303",
+  "name": "Test robot",
+  "enabled": true,
+  "creating_actor_type": "user",
+  "creating_actor_id": "377857",
+  "automation_mode": null,
+  "fired_limit": 0,
+  "last_fired": null,
+  "object_type": "robot",
+  "object_id": "4830303",
+  "uuid": "ca476195-6780-46ddXXXXXXXXXXXXXXXXXx",
+  "icon_id": "191",
+  "icon_code": "robot-robot",
+  "desired_state": {
+    "enabled": true,
+    "fired_limit": 0
+  },
+  "last_reading": {
+    "fired_true": "N/A",
+    "fired_true_updated_at": null,
+    "enabled": true,
+    "enabled_updated_at": 1487361095.4796422,
+    "fired_limit": 0,
+    "fired_limit_updated_at": null,
+    "fired_count": 0,
+    "fired_count_updated_at": null,
+    "fired": false,
+    "fired_updated_at": null,
+    "failure_email_sent": null,
+    "failure_email_sent_updated_at": null,
+    "desired_enabled_updated_at": 1487361228.0143569,
+    "desired_fired_limit_updated_at": 1487361228.0143569,
+    "desired_enabled_changed_at": 1487361095.483048,
+    "desired_fired_limit_changed_at": 1487361228.0143569
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-XXXXXXXXXXx-XXXXXXXXXXXXXXXx",
+      "channel": "1340f4f4ec705946fXXXXXXXXXXXXx"
+    }
+  },
+  "effects": [
+    {
+      "effect_id": "8966813",
+      "robot_id": "4830303",
+      "notification_type": "push",
+      "recipient_actor_type": "user",
+      "recipient_actor_id": "377857",
+      "scene": null,
+      "note": null,
+      "reference_object_type": null,
+      "reference_object_id": null,
+      "object_type": "effect",
+      "object_id": "8966813"
+    }
+  ],
+  "causes": [
+    {
+      "next_at": null,
+      "recurrence": null,
+      "object_type": "condition",
+      "object_id": "7534749",
+      "condition_id": "7534749",
+      "robot_id": "4830303",
+      "observed_object_id": "4438018",
+      "observed_object_type": "group",
+      "observed_field": "liquid_detected.or",
+      "operator": "==",
+      "value": "true",
+      "delay": null,
+      "restricted_object_id": null,
+      "restricted_object_type": null,
+      "restriction_join": null,
+      "restrictions": []
+    }
+  ],
+  "restrictions": []
+}

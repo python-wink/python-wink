@@ -18,6 +18,9 @@ class WinkLightBulb(WinkDevice):
     def brightness(self):
         return self._last_reading.get('brightness')
 
+    def color_model(self):
+        return self._last_reading.get('color_model')
+
     def color_xy(self):
         """
         XY colour value: [float, float] or None

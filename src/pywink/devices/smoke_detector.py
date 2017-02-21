@@ -8,7 +8,7 @@ class WinkBaseSmokeDetector(WinkDevice):
         super(WinkBaseSmokeDetector, self).__init__(device_state_as_json, api_interface)
         self._unit = None
         self._unit_type = unit_type
-        self._cap = capability
+        self._capability = capability
 
     def unit(self):
         return self._unit
@@ -17,7 +17,7 @@ class WinkBaseSmokeDetector(WinkDevice):
         return self._unit_type
 
     def capability(self):
-        return self._cap
+        return self._capability
 
     def name(self):
         return self.json_state.get("name") + " " + self.capability()

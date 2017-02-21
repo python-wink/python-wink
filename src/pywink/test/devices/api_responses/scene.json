@@ -1,0 +1,27 @@
+{
+  "scene_id": "5156247",
+  "name": "New Shortcut",
+  "order": 0,
+  "members": [
+    {
+      "object_type": "binary_switch",
+      "object_id": "292860",
+      "desired_state": {
+        "powered": true
+      },
+      "local_scene_id": null
+    }
+  ],
+  "icon_id": "224",
+  "automation_mode": null,
+  "object_type": "scene",
+  "object_id": "5156247",
+  "uuid": "b0e859ba-a270-4139-8XXXXXXXXXX",
+  "icon_code": "scene-shortcut",
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-XXXXXXXXXXXXXXXXXXXXXX",
+      "channel": "2c78283d58f4559a2"
+    }
+  }
+}

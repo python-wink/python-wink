@@ -8,12 +8,12 @@ class WinkPropaneTank(WinkDevice):
 
     def __init__(self, device_state_as_json, api_interface):
         super(WinkPropaneTank, self).__init__(device_state_as_json, api_interface)
-        self._cap = None
+        self._capability = None
         self._unit = None
 
     def capability(self):
         # Propane tanks have no capability.
-        return self._cap
+        return self._capability
 
     def unit(self):
         return self._unit

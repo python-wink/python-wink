@@ -25,6 +25,8 @@ from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, 
 from pywink.devices.camera import WinkCanaryCamera
 from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
+from pywink.devices.robot import WinkRobot
+from pywink.devices.scene import WinkScene
 
 
 # pylint: disable=redefined-variable-type,too-many-branches, too-many-statements
@@ -97,6 +99,10 @@ def build_device(device_state_as_json, api_interface):
         new_object = WinkAirConditioner(device_state_as_json, api_interface)
     elif object_type == device_types.PROPANE_TANK:
         new_object = WinkPropaneTank(device_state_as_json, api_interface)
+    elif object_type == device_types.ROBOT:
+        new_object = WinkRobot(device_state_as_json, api_interface)
+    elif object_type == device_types.SCENE:
+        new_object = WinkScene(device_state_as_json, api_interface)
 
     if new_object is not None:
         return [new_object]

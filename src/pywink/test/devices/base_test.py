@@ -24,6 +24,8 @@ from pywink.devices.gang import WinkGang
 from pywink.devices.camera import WinkCanaryCamera
 from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
+from pywink.devices.scene import WinkScene
+from pywink.devices.robot import WinkRobot
 
 
 class BaseTests(unittest.TestCase):
@@ -81,7 +83,7 @@ class BaseTests(unittest.TestCase):
         skip_types = [WinkFan, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkBinarySwitch, WinkHub,
                       WinkLightBulb, WinkThermostat, WinkKey, WinkPowerStrip, WinkPowerStripOutlet,
                       WinkRemote, WinkShade, WinkSprinkler, WinkButton, WinkGang, WinkCanaryCamera,
-                      WinkAirConditioner]
+                      WinkAirConditioner, WinkScene, WinkRobot]
         for device in devices:
             if device.manufacturer_device_model() == "leaksmart_valve":
                 self.assertIsNotNone(device.battery_level())
@@ -100,10 +102,11 @@ class BaseTests(unittest.TestCase):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkKey, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkPowerStripOutlet,
                       WinkSiren, WinkEggtray, WinkRemote, WinkPowerStrip, WinkAirConditioner, WinkPropaneTank]
+        devices_with_no_device_model = ["GoControl Thermostat", "New Shortcut", "Test robot"]
         for device in devices:
             if type(device) in skip_types:
                 self.assertIsNone(device.manufacturer_device_model())
-            elif device.name() == "GoControl Thermostat":
+            elif device.name() in devices_with_no_device_model:
                 self.assertIsNone(device.manufacturer_device_model())
             else:
                 self.assertIsNotNone(device.manufacturer_device_model())
@@ -116,7 +119,7 @@ class BaseTests(unittest.TestCase):
                                           "ge_bulb", "quirky_ge_spotter", "schlage_zwave_lock", "home_decorators_home_decorators_fan",
                                           "sylvania_sylvania_rgbw", "somfy_bali", "wink_relay_sensor", "wink_project_one", "kidde_smoke_alarm",
                                           "wink_relay_switch", "leaksmart_valve"]
-        skip_names = ["GoControl Thermostat", "GE Zwave Switch"]
+        skip_names = ["GoControl Thermostat", "GE Zwave Switch", "New Shortcut", "Test robot"]
         for device in devices:
             if device.name() in skip_names:
                 self.assertIsNone(device.manufacturer_device_id())
@@ -129,10 +132,11 @@ class BaseTests(unittest.TestCase):
 
     def test_all_devices_device_manufacturer_is_valid(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
+        device_with_no_manufacturer = ["GoControl Thermostat", "New Shortcut", "Test robot"]
         for device in devices:
             if type(device) is WinkKey:
                 self.assertIsNone(device.device_manufacturer())
-            elif device.name() == "GoControl Thermostat":
+            elif device.name() in device_with_no_manufacturer:
                 self.assertIsNone(device.device_manufacturer())
             elif type(device) is WinkPowerStripOutlet:
                 self.assertIsNone(device.device_manufacturer())
@@ -141,10 +145,11 @@ class BaseTests(unittest.TestCase):
 
     def test_all_devices_model_name_is_valid(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
+        devices_with_no_model_name = ["GoControl Thermostat", "New Shortcut", "Test robot"]
         for device in devices:
             if type(device) is WinkKey:
                 self.assertIsNone(device.model_name())
-            elif device.name() == "GoControl Thermostat":
+            elif device.name() in devices_with_no_model_name:
                 self.assertIsNone(device.model_name())
             elif type(device) is WinkPowerStripOutlet:
                 self.assertIsNone(device.model_name())

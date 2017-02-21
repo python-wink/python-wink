@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.0
+- Robot and Scene support
+
 ## 1.1.1
 - Bugfix for lutron lights missing object_id and object_type
 

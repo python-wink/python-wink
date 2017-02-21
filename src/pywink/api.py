@@ -30,10 +30,14 @@ class WinkApiInterface(object):
         url_string = "{}/{}s/{}".format(self.BASE_URL,
                                         object_type,
                                         object_id)
-        print(url_string)
-        arequest = requests.put(url_string,
-                                data=json.dumps(state),
-                                headers=API_HEADERS)
+        if state is None:
+            url_string += "/activate"
+            arequest = requests.post(url_string,
+                                     headers=API_HEADERS)
+        else:
+            arequest = requests.put(url_string,
+                                    data=json.dumps(state),
+                                    headers=API_HEADERS)
         if arequest.status_code == 401:
             new_token = refresh_access_token()
             if new_token:
@@ -230,8 +234,16 @@ def get_propane_tanks():
     return get_devices(device_types.PROPANE_TANK)
 
 
+def get_robots():
+    return get_devices(device_types.ROBOT, "robots")
+
+
+def get_scenes():
+    return get_devices(device_types.SCENE, "scenes")
+
+
 def get_subscription_key():
-    response_dict = wink_api_fetch()
+    response_dict = wink_api_fetch('wink_devices')
     first_device = response_dict.get('data')[0]
     return get_subscription_key_from_response_dict(first_device)
 
@@ -243,8 +255,8 @@ def get_subscription_key_from_response_dict(device):
         return None
 
 
-def wink_api_fetch():
-    arequest_url = "{}/users/me/wink_devices".format(WinkApiInterface.BASE_URL)
+def wink_api_fetch(end_point):
+    arequest_url = "{}/users/me/{}".format(WinkApiInterface.BASE_URL, end_point)
     response = requests.get(arequest_url, headers=API_HEADERS)
     if response.status_code == 200:
         return response.json()
@@ -255,15 +267,19 @@ def wink_api_fetch():
         raise WinkAPIException("Unexpected")
 
 
-def get_devices(device_type):
+def get_devices(device_type, end_point="wink_devices"):
     global ALL_DEVICES, LAST_UPDATE
 
-    now = time.time()
-    # Only call the API once to obtain all devices
-    if LAST_UPDATE is None or (now - LAST_UPDATE) > 60:
-        ALL_DEVICES = wink_api_fetch()
-        LAST_UPDATE = now
-    return get_devices_from_response_dict(ALL_DEVICES, device_type)
+    if end_point == "wink_devices":
+        now = time.time()
+        # Only call the API once to obtain all devices
+        if LAST_UPDATE is None or (now - LAST_UPDATE) > 60:
+            ALL_DEVICES = wink_api_fetch(end_point)
+            LAST_UPDATE = now
+        return get_devices_from_response_dict(ALL_DEVICES, device_type)
+    elif end_point == "robots" or end_point == "scenes":
+        json_data = wink_api_fetch(end_point)
+        return get_devices_from_response_dict(json_data, device_type)
 
 
 def get_devices_from_response_dict(response_dict, device_type):

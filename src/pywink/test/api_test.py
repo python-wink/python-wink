@@ -36,6 +36,8 @@ from pywink.devices.sprinkler import WinkSprinkler
 from pywink.devices.camera import WinkCanaryCamera
 from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
+from pywink.devices.scene import WinkScene
+from pywink.devices.robot import WinkRobot
 
 USERS_ME_WINK_DEVICES = {}
 
@@ -83,7 +85,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 61)
+        self.assertEqual(len(devices), 63)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -150,8 +152,9 @@ class ApiTests(unittest.TestCase):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         sensor_types = [WinkSensor, WinkHub, WinkPorkfolioBalanceSensor, WinkKey, WinkRemote,
                         WinkGang, WinkSmokeDetector, WinkSmokeSeverity,
-                        WinkCoDetector, WinkCoSeverity, WinkButton]
-        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera]
+                        WinkCoDetector, WinkCoSeverity, WinkButton, WinkRobot]
+        # No way to validate scene is activated, so skipping.
+        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera, WinkScene]
         devices = get_all_devices()
         old_states = {}
         for device in devices:
