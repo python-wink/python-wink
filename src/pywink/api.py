@@ -243,7 +243,7 @@ def get_scenes():
 
 
 def get_subscription_key():
-    response_dict = wink_api_fetch('wink_devices')
+    response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]
     return get_subscription_key_from_response_dict(first_device)
 
@@ -255,7 +255,7 @@ def get_subscription_key_from_response_dict(device):
         return None
 
 
-def wink_api_fetch(end_point):
+def wink_api_fetch(end_point='wink_devices'):
     arequest_url = "{}/users/me/{}".format(WinkApiInterface.BASE_URL, end_point)
     response = requests.get(arequest_url, headers=API_HEADERS)
     if response.status_code == 200:
