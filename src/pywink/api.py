@@ -133,6 +133,12 @@ def refresh_access_token():
         return None
 
 
+def get_user():
+    url_string = "{}/users/me".format(WinkApiInterface.BASE_URL)
+    arequest = requests.get(url_string, headers=API_HEADERS)
+    return arequest.json()
+
+
 def is_token_set():
     """ Returns if an auth token has been set. """
     return bool(API_HEADERS)

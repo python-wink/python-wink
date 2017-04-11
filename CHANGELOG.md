@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.4
+- Added call to return users account details /users/me
+
 ## 1.2.3
 - Wink Aros Bugfix
 

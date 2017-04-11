@@ -1,0 +1,62 @@
+{
+   "data":{
+      "user_id":"377857",
+      "first_name":"First",
+      "last_name":"Last",
+      "email":"first.last@wink.com",
+      "locale":"en_us",
+      "units":{
+
+      },
+      "tos_accepted":true,
+      "confirmed":true,
+      "last_reading":{
+         "units":{
+            "temperature":"f"
+         },
+         "units_updated_at":1453091233.737727,
+         "current_location":null,
+         "current_location_updated_at":null,
+         "home_geofence_id":null,
+         "home_geofence_id_updated_at":null,
+         "robot_subscription":null,
+         "robot_subscription_updated_at":null,
+         "current_location_data":null,
+         "current_location_data_updated_at":null,
+         "general_tos_version":"4",
+         "general_tos_version_updated_at":1466634432.1567028,
+         "premium_tos_version":null,
+         "premium_tos_version_updated_at":null,
+         "feature_flags":[
+            "faster_lights"
+         ],
+         "feature_flags_updated_at":1455056917.7954974,
+         "desired_units":null,
+         "desired_units_updated_at":1453091233.7842777,
+         "desired_current_location_updated_at":1453091393.6379838,
+         "desired_home_geofence_id_updated_at":1453091393.6379838,
+         "desired_robot_subscription":null,
+         "desired_robot_subscription_updated_at":null
+      },
+      "created_at":1449441909,
+      "uuid":"5c063d24-4ec0-4076-80ea-97b2252b4f59",
+      "desired_state":{
+         "units":null,
+         "current_location":null,
+         "home_geofence_id":null,
+         "robot_subscription":null
+      },
+      "subscription":{
+         "pubnub":{
+            "subscribe_key":"sub-c-123456789123456789",
+            "channel":"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+         }
+      }
+   },
+   "errors":[
+
+   ],
+   "pagination":{
+
+   }
+}

@@ -5,7 +5,7 @@ Top level functions
 from pywink.api import set_bearer_token, refresh_access_token, \
     set_wink_credentials, set_user_agent, wink_api_fetch, \
     get_set_access_token, is_token_set, get_devices, \
-    get_subscription_key
+    get_subscription_key, get_user
 
 from pywink.api import get_light_bulbs, get_garage_doors, get_locks, \
     get_powerstrips, get_shades, get_sirens, \
