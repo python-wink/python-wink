@@ -9,9 +9,6 @@ class WinkCanaryCamera(WinkDevice):
     are not listed in the device's JSON.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkCanaryCamera, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return self.mode()
 

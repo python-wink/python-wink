@@ -9,9 +9,6 @@ class WinkLightBulb(WinkDevice):
     Represents a Wink light bulb.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkLightBulb, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return self._last_reading.get('powered', False)
 

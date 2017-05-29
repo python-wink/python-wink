@@ -6,9 +6,6 @@ class WinkLock(WinkDevice):
     Represents a Wink lock.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkLock, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return self._last_reading.get('locked', False)
 

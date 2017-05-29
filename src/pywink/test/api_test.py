@@ -1,4 +1,3 @@
-# Standard library imports...
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import re
@@ -471,3 +470,4 @@ class MockApiInterface():
             if _object_id == object_id:
                 return_dict["data"] = device
         return return_dict
+

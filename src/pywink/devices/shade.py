@@ -6,9 +6,6 @@ class WinkShade(WinkDevice):
     Represents a Wink Shade.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkShade, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return self._last_reading.get('position', 0)
 

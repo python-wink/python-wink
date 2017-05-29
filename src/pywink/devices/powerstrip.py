@@ -8,9 +8,6 @@ class WinkPowerStrip(WinkDevice):
     Setting the state will set the state of both outlets.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkPowerStrip, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         outlets = self.json_state.get('outlets')
         state = False
@@ -34,9 +31,6 @@ class WinkPowerStripOutlet(WinkDevice):
     """
     Represents a Wink Powerstrip outlet.
     """
-
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkPowerStripOutlet, self).__init__(device_state_as_json, api_interface)
 
     def state(self):
         return self._last_reading.get('powered', False)

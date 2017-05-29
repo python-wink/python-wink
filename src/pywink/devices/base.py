@@ -42,8 +42,7 @@ class WinkDevice(object):
     def battery_level(self):
         if not self._last_reading.get('external_power'):
             return self._last_reading.get('battery')
-        else:
-            return None
+        return None
 
     def manufacturer_device_model(self):
         return self.json_state.get('manufacturer_device_model')
@@ -66,8 +65,7 @@ class WinkDevice(object):
         if _response_json is not None:
             self.json_state = _response_json
             return True
-        else:
-            return False
+        return False
 
     def update_state(self):
         """ Update state with latest info from Wink API. """

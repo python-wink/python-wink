@@ -1,5 +1,6 @@
 import json
 import time
+import urllib.parse
 
 import requests
 
@@ -13,6 +14,7 @@ REFRESH_TOKEN = None
 USER_AGENT = "Manufacturer/python-wink python/3 Wink/3"
 ALL_DEVICES = None
 LAST_UPDATE = None
+OAUTH_AUTHORIZE = "{}/oauth2/authorize?client_id={}&redirect_uri={}"
 
 
 class WinkApiInterface(object):
@@ -65,8 +67,7 @@ def get_set_access_token():
     auth = API_HEADERS.get("Authorization")
     if auth is not None:
         return auth.split()[1]
-    else:
-        return None
+    return None
 
 
 def set_bearer_token(token):
@@ -86,7 +87,7 @@ def set_user_agent(user_agent):
     USER_AGENT = user_agent
 
 
-def set_wink_credentials(email, password, client_id, client_secret):
+def legacy_set_wink_credentials(email, password, client_id, client_secret):
     global CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
 
     CLIENT_ID = client_id
@@ -111,6 +112,15 @@ def set_wink_credentials(email, password, client_id, client_secret):
     set_bearer_token(access_token)
 
 
+def set_wink_credentials(client_id, client_secret, access_token, refresh_token):
+    global CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
+
+    CLIENT_ID = client_id
+    CLIENT_SECRET = client_secret
+    REFRESH_TOKEN = refresh_token
+    set_bearer_token(access_token)
+
+
 def refresh_access_token():
     if CLIENT_ID and CLIENT_SECRET and REFRESH_TOKEN:
         data = {
@@ -129,8 +139,33 @@ def refresh_access_token():
         access_token = response_json.get('access_token')
         set_bearer_token(access_token)
         return access_token
-    else:
-        return None
+    return None
+
+
+def get_authorization_url(client_id, redirect_uri):
+    global CLIENT_ID
+
+    CLIENT_ID = client_id
+    encoded_uri = urllib.parse.quote(redirect_uri)
+    return OAUTH_AUTHORIZE.format(WinkApiInterface.BASE_URL, client_id, encoded_uri)
+
+
+def request_token(code, client_secret):
+    data = {
+        "client_secret": client_secret,
+        "grant_type": "authorization_code",
+        "code": code
+    }
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.post('{}/oauth2/token'.format(WinkApiInterface.BASE_URL),
+                             data=json.dumps(data),
+                             headers=headers)
+    response_json = response.json()
+    access_token = response_json.get('access_token')
+    refresh_token = response_json.get('refresh_token')
+    return {"access_token": access_token, "refresh_token": refresh_token}
 
 
 def get_user():
@@ -257,8 +292,7 @@ def get_subscription_key():
 def get_subscription_key_from_response_dict(device):
     if "subscription" in device:
         return device.get("subscription").get("pubnub").get("subscribe_key")
-    else:
-        return None
+    return None
 
 
 def wink_api_fetch(end_point='wink_devices'):

@@ -6,9 +6,6 @@ class WinkButton(WinkBinarySwitch):
     Represents a Wink relay button.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkButton, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return bool(self.long_pressed() or self.pressed())
 

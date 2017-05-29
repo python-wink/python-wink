@@ -29,87 +29,79 @@ from pywink.devices.robot import WinkRobot
 from pywink.devices.scene import WinkScene
 
 
-# pylint: disable=redefined-variable-type,too-many-branches, too-many-statements
+# pylint: disable=too-many-branches, too-many-statements
 def build_device(device_state_as_json, api_interface):
-
-    new_object = None
-    new_objects = None
-
-    # These objects all share the same base class: WinkDevice
+    # This is used to determine what type of object to create
     object_type = device_state_as_json.get("object_type")
+    new_objects = []
 
     if object_type == device_types.LIGHT_BULB:
-        new_object = WinkLightBulb(device_state_as_json, api_interface)
+        new_objects.append(WinkLightBulb(device_state_as_json, api_interface))
     elif object_type == device_types.BINARY_SWITCH:
         # Skip relay switches that aren't controlling a load. The binary_switch can't be used.
         if device_state_as_json.get("last_reading").get("powering_mode") is not None:
             mode = device_state_as_json["last_reading"]["powering_mode"]
             if mode == "dumb":
-                new_object = WinkBinarySwitch(device_state_as_json, api_interface)
+                new_objects.append(WinkBinarySwitch(device_state_as_json, api_interface))
         elif device_state_as_json.get("model_name") == "leakSMART Valve":
-            new_object = WinkLeakSmartValve(device_state_as_json, api_interface)
+            new_objects.append(WinkLeakSmartValve(device_state_as_json, api_interface))
         else:
-            new_object = WinkBinarySwitch(device_state_as_json, api_interface)
+            new_objects.append(WinkBinarySwitch(device_state_as_json, api_interface))
     elif object_type == device_types.LOCK:
-        new_object = WinkLock(device_state_as_json, api_interface)
+        new_objects.append(WinkLock(device_state_as_json, api_interface))
     elif object_type == device_types.EGGTRAY:
-        new_object = WinkEggtray(device_state_as_json, api_interface)
+        new_objects.append(WinkEggtray(device_state_as_json, api_interface))
     elif object_type == device_types.GARAGE_DOOR:
-        new_object = WinkGarageDoor(device_state_as_json, api_interface)
+        new_objects.append(WinkGarageDoor(device_state_as_json, api_interface))
     elif object_type == device_types.SHADE:
-        new_object = WinkShade(device_state_as_json, api_interface)
+        new_objects.append(WinkShade(device_state_as_json, api_interface))
     elif object_type == device_types.SIREN:
-        new_object = WinkSiren(device_state_as_json, api_interface)
+        new_objects.append(WinkSiren(device_state_as_json, api_interface))
     elif object_type == device_types.KEY:
-        new_object = WinkKey(device_state_as_json, api_interface)
+        new_objects.append(WinkKey(device_state_as_json, api_interface))
     elif object_type == device_types.THERMOSTAT:
-        new_object = WinkThermostat(device_state_as_json, api_interface)
+        new_objects.append(WinkThermostat(device_state_as_json, api_interface))
     elif object_type == device_types.FAN:
-        new_object = WinkFan(device_state_as_json, api_interface)
+        new_objects.append(WinkFan(device_state_as_json, api_interface))
     elif object_type == device_types.REMOTE:
         # The lutron Pico remote doesn't follow the API spec and
         # provides no benefit as a device in this library.
         if device_state_as_json.get("model_name") != "Pico":
-            new_object = WinkRemote(device_state_as_json, api_interface)
+            new_objects.append(WinkRemote(device_state_as_json, api_interface))
     elif object_type == device_types.HUB:
-        new_object = WinkHub(device_state_as_json, api_interface)
+        new_objects.append(WinkHub(device_state_as_json, api_interface))
     elif object_type == device_types.SENSOR_POD:
-        new_objects = __get_subsensors_from_device(device_state_as_json, api_interface)
+        new_objects.extend(__get_subsensors_from_device(device_state_as_json, api_interface))
     elif object_type == device_types.POWERSTRIP:
-        new_objects = __get_outlets_from_powerstrip(device_state_as_json, api_interface)
+        new_objects.extend(__get_outlets_from_powerstrip(device_state_as_json, api_interface))
         new_objects.append(WinkPowerStrip(device_state_as_json, api_interface))
     elif object_type == device_types.PIGGY_BANK:
-        new_objects = __get_devices_from_piggy_bank(device_state_as_json, api_interface)
+        new_objects.extend(__get_devices_from_piggy_bank(device_state_as_json, api_interface))
     elif object_type == device_types.DOOR_BELL:
-        new_objects = __get_subsensors_from_device(device_state_as_json, api_interface)
+        new_objects.extend(__get_subsensors_from_device(device_state_as_json, api_interface))
     elif object_type == device_types.SPRINKLER:
-        new_object = WinkSprinkler(device_state_as_json, api_interface)
+        new_objects.append(WinkSprinkler(device_state_as_json, api_interface))
     elif object_type == device_types.BUTTON:
-        new_object = WinkButton(device_state_as_json, api_interface)
+        new_objects.append(WinkButton(device_state_as_json, api_interface))
     elif object_type == device_types.GANG:
-        new_object = WinkGang(device_state_as_json, api_interface)
+        new_objects.append(WinkGang(device_state_as_json, api_interface))
     elif object_type == device_types.SMOKE_DETECTOR:
-        new_objects = __get_sensors_from_smoke_detector(device_state_as_json, api_interface)
+        new_objects.extend(__get_sensors_from_smoke_detector(device_state_as_json, api_interface))
     elif object_type == device_types.CAMERA:
         if device_state_as_json.get("device_manufacturer") == "canary":
-            new_object = WinkCanaryCamera(device_state_as_json, api_interface)
+            new_objects.append(WinkCanaryCamera(device_state_as_json, api_interface))
         elif device_state_as_json.get("device_manufacturer") == "dropcam":
-            new_objects = __get_subsensors_from_device(device_state_as_json, api_interface)
+            new_objects.extend(__get_subsensors_from_device(device_state_as_json, api_interface))
     elif object_type == device_types.AIR_CONDITIONER:
-        new_object = WinkAirConditioner(device_state_as_json, api_interface)
+        new_objects.append(WinkAirConditioner(device_state_as_json, api_interface))
     elif object_type == device_types.PROPANE_TANK:
-        new_object = WinkPropaneTank(device_state_as_json, api_interface)
+        new_objects.append(WinkPropaneTank(device_state_as_json, api_interface))
     elif object_type == device_types.ROBOT:
-        new_object = WinkRobot(device_state_as_json, api_interface)
+        new_objects.append(WinkRobot(device_state_as_json, api_interface))
     elif object_type == device_types.SCENE:
-        new_object = WinkScene(device_state_as_json, api_interface)
+        new_objects.append(WinkScene(device_state_as_json, api_interface))
 
-    if new_object is not None:
-        return [new_object]
-    elif new_objects is not None:
-        return new_objects
-    else:
-        return []
+    return new_objects
 
 
 def __get_subsensors_from_device(item, api_interface):

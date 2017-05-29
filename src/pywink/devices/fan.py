@@ -8,9 +8,6 @@ class WinkFan(WinkDevice):
     """
     json_state = {}
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkFan, self).__init__(device_state_as_json, api_interface)
-
     def fan_speeds(self):
         capabilities = self.json_state.get('capabilities', {})
         cap_fields = capabilities.get('fields', [])

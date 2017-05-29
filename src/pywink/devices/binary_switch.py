@@ -6,9 +6,6 @@ class WinkBinarySwitch(WinkDevice):
     Represents a Wink binary switch.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkBinarySwitch, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return self._last_reading.get('powered', False)
 
@@ -33,9 +30,6 @@ class WinkLeakSmartValve(WinkBinarySwitch):
     """
     Represents a Wink leaksmart valve..
     """
-
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkLeakSmartValve, self).__init__(device_state_as_json, api_interface)
 
     def state(self):
         return self._last_reading.get('opened', False)

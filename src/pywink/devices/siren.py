@@ -6,9 +6,6 @@ class WinkSiren(WinkDevice):
     Represents a Wink Siren.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkSiren, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         return self._last_reading.get('powered', False)
 

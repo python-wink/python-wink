@@ -6,9 +6,6 @@ class WinkScene(WinkDevice):
     Represents a Wink scene.
     """
 
-    def __init__(self, device_state_as_json, api_interface):
-        super(WinkScene, self).__init__(device_state_as_json, api_interface)
-
     def state(self):
         """
         Scenes don't have a state, they can only be triggered.

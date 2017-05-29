@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.5
+- Added functions for auth URL and getting token from code
+
 ## 1.2.4
 - Added call to return users account details /users/me
 
