@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.6
+- Calling set_user_agent sets the API_HEADERS user_agent
+
 ## 1.2.5
 - Added functions for auth URL and getting token from code
 

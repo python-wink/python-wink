@@ -86,6 +86,9 @@ def set_user_agent(user_agent):
 
     USER_AGENT = user_agent
 
+    if USER_AGENT:
+        API_HEADERS["User-Agent"] = USER_AGENT
+
 
 def legacy_set_wink_credentials(email, password, client_id, client_secret):
     global CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
