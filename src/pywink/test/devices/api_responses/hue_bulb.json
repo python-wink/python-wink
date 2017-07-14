@@ -1,0 +1,164 @@
+{
+  "object_type": "light_bulb",
+  "object_id": "2533887",
+  "uuid": "2df746e3-dd5a-42aa-9622-a37fd0626231",
+  "icon_id": "66",
+  "icon_code": "light_bulb-philips_hue",
+  "desired_state": {
+    "powered": true,
+    "brightness": 1.0,
+    "color_model": "xy",
+    "color": null,
+    "color_x": 0.4571,
+    "color_y": 0.4097,
+    "hue": 0.228214,
+    "saturation": 0.551181,
+    "color_temperature": 2732
+  },
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1500040929.3020744,
+    "powered": true,
+    "powered_updated_at": 1500040929.3020744,
+    "brightness": 1.0,
+    "brightness_updated_at": 1500040929.3020744,
+    "color_model": "xy",
+    "color_model_updated_at": 1500040929.3020744,
+    "color": null,
+    "color_updated_at": null,
+    "color_x": 0.4571,
+    "color_x_updated_at": 1500040929.3020744,
+    "color_y": 0.4097,
+    "color_y_updated_at": 1500040929.3020744,
+    "hue": 0.228214,
+    "hue_updated_at": 1500040929.3020744,
+    "saturation": 0.551181,
+    "saturation_updated_at": 1500040929.3020744,
+    "color_temperature": 2732,
+    "color_temperature_updated_at": 1500040929.3020744,
+    "desired_powered_updated_at": 1500004039.8124363,
+    "desired_brightness_updated_at": 1500004039.8124363,
+    "desired_color_model_updated_at": 1500004135.0675166,
+    "desired_color_updated_at": 1500004135.0675166,
+    "desired_color_x_updated_at": 1500004135.0675166,
+    "desired_color_y_updated_at": 1500004135.0675166,
+    "desired_hue_updated_at": 1500004135.0675166,
+    "desired_saturation_updated_at": 1500004135.0675166,
+    "desired_color_temperature_updated_at": 1500004135.0675166,
+    "connection_changed_at": 1500040929.3020744,
+    "powered_changed_at": 1500040929.3020744,
+    "brightness_changed_at": 1500040929.3020744,
+    "color_model_changed_at": 1499994174.3735387,
+    "color_x_changed_at": 1499994174.3735387,
+    "color_y_changed_at": 1499994174.3735387,
+    "hue_changed_at": 1499283107.906975,
+    "saturation_changed_at": 1499283107.906975,
+    "color_temperature_changed_at": 1499283107.906975,
+    "desired_powered_changed_at": 1500004039.8124363,
+    "desired_brightness_changed_at": 1500004039.8124363
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+      "channel": "(deleted)"
+    }
+  },
+  "light_bulb_id": "2533887",
+  "name": "island 1",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1489158015,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      },
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "brightness",
+        "mutability": "read-write"
+      },
+      {
+        "type": "string",
+        "field": "color_model",
+        "choices": [
+          "rgb",
+          "xy",
+          "hsb",
+          "color_temperature"
+        ],
+        "mutability": "read-write",
+        "legacy_type": "colorModel"
+      },
+      {
+        "type": "hexColorOrNil",
+        "field": "color",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "color_x",
+        "precision": 4,
+        "mutability": "read-write",
+        "legacy_type": "percentage4"
+      },
+      {
+        "type": "percentage",
+        "field": "color_y",
+        "precision": 4,
+        "mutability": "read-write",
+        "legacy_type": "percentage4"
+      },
+      {
+        "type": "percentage",
+        "field": "hue",
+        "precision": 6,
+        "mutability": "read-write",
+        "legacy_type": "percentage6"
+      },
+      {
+        "type": "percentage",
+        "field": "saturation",
+        "precision": 6,
+        "mutability": "read-write",
+        "legacy_type": "percentage6"
+      },
+      {
+        "type": "integer",
+        "field": "color_temperature",
+        "range": [
+          2000,
+          6500
+        ],
+        "mutability": "read-write"
+      }
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "philips_philips_hue_extended_color_light",
+  "manufacturer_device_id": "00:17:88:26:43:2e_9",
+  "device_manufacturer": "philips",
+  "model_name": "Hue Extended Color Light",
+  "upc_id": "477",
+  "upc_code": "philips_hue_extended_color_light",
+  "primary_upc_code": "philips_hue_extended_color_light",
+  "gang_id": null,
+  "hub_id": "614849",
+  "local_id": "9",
+  "radio_type": null,
+  "linked_service_id": "366609",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "order": 0
+}

@@ -39,21 +39,31 @@ from pywink.devices.scene import WinkScene
 from pywink.devices.robot import WinkRobot
 
 USERS_ME_WINK_DEVICES = {}
+GROUPS = {}
 
 
 class ApiTests(unittest.TestCase):
 
 
     def setUp(self):
-        global USERS_ME_WINK_DEVICES
+        global USERS_ME_WINK_DEVICES, GROUPS
         super(ApiTests, self).setUp()
         all_devices = os.listdir('{}/devices/api_responses/'.format(os.path.dirname(__file__)))
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/devices/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/devices/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/devices/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         USERS_ME_WINK_DEVICES["data"] = device_list
+        all_devices = os.listdir('{}/devices/api_responses/groups'.format(os.path.dirname(__file__)))
+        device_list = []
+        for json_file in all_devices:
+            if os.path.isfile('{}/devices/api_responses/groups/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/devices/api_responses/groups/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
+        GROUPS["data"] = device_list
         self.port = get_free_port()
         start_mock_server(self.port)
         self.api_interface = MockApiInterface()
@@ -84,7 +94,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 63)
+        self.assertEqual(len(devices), 64)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -185,8 +195,12 @@ class ApiTests(unittest.TestCase):
         # Set states
         for device in devices:
             device.api_interface = self.api_interface
+            # Test xy color and powered
+            if device.supports_xy_color():
+                old_states[device.object_id()] = device.state()
+                device.set_state(not device.state(), color_xy=[0.5, 0.5])
             # Test HSB and powered
-            if device.supports_hue_saturation():
+            elif device.supports_hue_saturation():
                 old_states[device.object_id()] = device.state()
                 device.set_state(not device.state(), 0.5, color_hue_saturation=[0.5, 0.5])
             # Test temperature and powered
@@ -199,8 +213,11 @@ class ApiTests(unittest.TestCase):
                 device.set_state(not device.state(), 0.5)
         # Check states
         for device in devices:
+            # Test xy color and power
+            if device.supports_xy_color():
+                self.assertEqual([not old_states.get(device.object_id()), [0.5, 0.5]], [device.state(), device.color_xy()])
             # Test HSB and powered
-            if device.supports_hue_saturation():
+            elif device.supports_hue_saturation():
                 self.assertEqual([old_states.get(device.object_id()), 0.5, [0.5, 0.5]],
                                  [not device.state(), device.brightness(), [device.color_saturation(), device.color_hue()]])
             # Test temperature and powered
@@ -209,6 +226,29 @@ class ApiTests(unittest.TestCase):
             # Test Brightness and powered
             else:
                 self.assertEqual([old_states.get(device.object_id()), 0.5], [not device.state(), device.brightness()])
+
+    def test_get_switch_group_updated_state_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_binary_switch_groups()
+        for device in devices:
+            device.api_interface = self.api_interface
+            # The Mock API only changes the "powered" true_count and false_count
+            device.set_state(False)
+            device.update_state()
+        for device in devices:
+            self.assertFalse(device.state())
+
+    def test_get_light_group_updated_state_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_light_groups()
+        for device in devices:
+            device.api_interface = self.api_interface
+            # The Mock API only changes the "powered" true_count and false_count
+            device.set_state(True)
+            device.update_state()
+        for device in devices:
+            self.assertTrue(device.state())
+
 
     def test_get_shade_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -299,10 +339,6 @@ class ApiTests(unittest.TestCase):
             self.assertFalse(device.schedule_enabled())
             self.assertEqual(0.5, device.current_fan_speed())
 
-    def test_get_camera_updated_states_from_api(self):
-        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
-        devices = get_cameras()
-
     def test_get_thermostat_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_thermostats()
@@ -339,9 +375,10 @@ class ApiTests(unittest.TestCase):
                 device.set_mode("away")
                 device.set_privacy(True)
                 device.update_state()
-        if isinstance(device, WinkCanaryCamera):
-            self.assertEqual(device.state(), "away")
-            self.assertTrue(device.private())
+        for device in devices:
+            if isinstance(device, WinkCanaryCamera):
+                self.assertEqual(device.state(), "away")
+                self.assertTrue(device.private())
 
     def test_get_fan_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -376,6 +413,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
     NOT_FOUND_PATTERN = re.compile(r'/404/')
     REFRESH_TOKEN_PATTERN = re.compile(r'/oauth2/token')
     DEVICE_SPECIFIC_PATTERN = re.compile(r'/*/[0-9]*')
+    GROUPS_PATTERN = re.compile(r'/groups')
 
     def do_GET(self):
         if re.search(self.BAD_STATUS_PATTERN, self.path):
@@ -408,6 +446,18 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
             response_content = json.dumps(USERS_ME_WINK_DEVICES)
             self.wfile.write(response_content.encode('utf-8'))
             return
+        elif re.search(self.GROUPS_PATTERN, self.path):
+            # Add response status code.
+            self.send_response(requests.codes.ok)
+
+            # Add response headers.
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+
+            # Add response content.
+            response_content = json.dumps(GROUPS)
+            self.wfile.write(response_content.encode('utf-8'))
+            return
 
 
 def get_free_port():
@@ -435,28 +485,42 @@ class MockApiInterface():
         device_object_type = device.object_type()
         object_type = type_override or device_object_type
         return_dict = {}
-        for dict_device in USERS_ME_WINK_DEVICES.get('data'):
-            _object_id = dict_device.get("object_id")
-            if _object_id == object_id:
-                if device_object_type == "powerstrip":
-                    set_state = state["outlets"][0]["desired_state"]["powered"]
-                    dict_device["outlets"][0]["last_reading"]["powered"] = set_state
-                    dict_device["outlets"][1]["last_reading"]["powered"] = set_state
-                    return_dict["data"] = dict_device
-                elif device_object_type == "outlet":
-                    index = device.index()
-                    set_state = state["outlets"][index]["desired_state"]["powered"]
-                    dict_device["outlets"][index]["last_reading"]["powered"] = set_state
-                    return_dict["data"] = dict_device
-                else:
-                    if "nose_color" in state:
-                        dict_device["nose_color"] = state.get("nose_color")
-                    elif "tare" in state:
-                        dict_device["tare"] = state.get("tare")
+        if object_type != "group":
+            for dict_device in USERS_ME_WINK_DEVICES.get('data'):
+                _object_id = dict_device.get("object_id")
+                if _object_id == object_id:
+                    if device_object_type == "powerstrip":
+                        set_state = state["outlets"][0]["desired_state"]["powered"]
+                        dict_device["outlets"][0]["last_reading"]["powered"] = set_state
+                        dict_device["outlets"][1]["last_reading"]["powered"] = set_state
+                        return_dict["data"] = dict_device
+                    elif device_object_type == "outlet":
+                        index = device.index()
+                        set_state = state["outlets"][index]["desired_state"]["powered"]
+                        dict_device["outlets"][index]["last_reading"]["powered"] = set_state
+                        return_dict["data"] = dict_device
                     else:
-                        for key, value in state.get('desired_state').items():
-                            dict_device["last_reading"][key] = value
+                        if "nose_color" in state:
+                            dict_device["nose_color"] = state.get("nose_color")
+                        elif "tare" in state:
+                            dict_device["tare"] = state.get("tare")
+                        else:
+                            for key, value in state.get('desired_state').items():
+                                dict_device["last_reading"][key] = value
+                        return_dict["data"] = dict_device
+        else:
+            for dict_device in GROUPS.get('data'):
+                _object_id = dict_device.get("object_id")
+                if _object_id == object_id:
+                    set_state = state["desired_state"]["powered"]
+                    if set_state:
+                        dict_device["reading_aggregation"]["powered"]["true_count"] = 1
+                        dict_device["reading_aggregation"]["powered"]["false_count"] = 0
+                    else:
+                        dict_device["reading_aggregation"]["powered"]["true_count"] = 0
+                        dict_device["reading_aggregation"]["powered"]["false_count"] = 1
                     return_dict["data"] = dict_device
+
         return return_dict
 
     def get_device_state(self, device, id_override=None, type_override=None):

@@ -1,4 +1,5 @@
 import json
+import sys
 import time
 import urllib.parse
 
@@ -32,10 +33,17 @@ class WinkApiInterface(object):
         url_string = "{}/{}s/{}".format(self.BASE_URL,
                                         object_type,
                                         object_id)
-        if state is None:
+        if state is None or object_type == "group":
             url_string += "/activate"
-            arequest = requests.post(url_string,
-                                     headers=API_HEADERS)
+            if state is None:
+                arequest = requests.post(url_string,
+                                         headers=API_HEADERS)
+            else:
+                print(url_string)
+                print(state)
+                arequest = requests.post(url_string,
+                                         data=json.dumps(state),
+                                         headers=API_HEADERS)
         else:
             arequest = requests.put(url_string,
                                     data=json.dumps(state),
@@ -112,6 +120,7 @@ def legacy_set_wink_credentials(email, password, client_id, client_secret):
     response_json = response.json()
     access_token = response_json.get('access_token')
     REFRESH_TOKEN = response_json.get('refresh_token')
+    sys.stdout.write(access_token)
     set_bearer_token(access_token)
 
 
@@ -286,6 +295,24 @@ def get_scenes():
     return get_devices(device_types.SCENE, "scenes")
 
 
+def get_light_groups():
+    light_groups = []
+    for group in get_devices(device_types.GROUP, "groups"):
+        # Only light groups have brightness
+        if group.json_state.get("reading_aggregation").get("brightness") is not None:
+            light_groups.append(group)
+    return light_groups
+
+
+def get_binary_switch_groups():
+    switch_groups = []
+    for group in get_devices(device_types.GROUP, "groups"):
+        # Switches don't have brightness
+        if group.json_state.get("reading_aggregation").get("brightness") is None:
+            switch_groups.append(group)
+    return switch_groups
+
+
 def get_subscription_key():
     response_dict = wink_api_fetch()
     first_device = response_dict.get('data')[0]
@@ -320,7 +347,7 @@ def get_devices(device_type, end_point="wink_devices"):
             ALL_DEVICES = wink_api_fetch(end_point)
             LAST_UPDATE = now
         return get_devices_from_response_dict(ALL_DEVICES, device_type)
-    elif end_point == "robots" or end_point == "scenes":
+    elif end_point == "robots" or end_point == "scenes" or end_point == "groups":
         json_data = wink_api_fetch(end_point)
         return get_devices_from_response_dict(json_data, device_type)
 

@@ -1,0 +1,46 @@
+{
+   "group_id":"7945692",
+   "name":"Just switches",
+   "order":0,
+   "icon_id":"28",
+   "members":[
+      {
+         "object_type":"binary_switch",
+         "object_id":"292860",
+         "local_id":"28",
+         "hub_id":"302528",
+         "blacklisted_readings":[
+
+         ]
+      }
+   ],
+   "reading_aggregation":{
+      "connection":{
+         "or":true,
+         "and":true,
+         "true_count":1,
+         "false_count":0,
+         "updated_at":1499633027.9122903,
+         "changed_at":null
+      },
+      "powered":{
+         "or":false,
+         "and":false,
+         "true_count":0,
+         "false_count":1,
+         "updated_at":1499633027.9122903,
+         "changed_at":1499633024.4108276
+      }
+   },
+   "automation_mode":null,
+   "hidden_at":null,
+   "object_type":"group",
+   "object_id":"7945692",
+   "icon_code":"group-light_group",
+   "subscription":{
+      "pubnub":{
+         "subscribe_key":"sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+         "channel":"j8a90sfdjasdkfkl;asdfj;akljsdf"
+      }
+   }
+}

@@ -1,7 +1,4 @@
-import colorsys
-
 from pywink.devices.base import WinkDevice
-from pywink.color import color_temperature_to_rgb, color_xy_brightness_to_rgb
 
 
 class WinkLightBulb(WinkDevice):
@@ -25,10 +22,8 @@ class WinkLightBulb(WinkDevice):
         """
         color_x = self._last_reading.get('color_x')
         color_y = self._last_reading.get('color_y')
-
         if color_x is not None and color_y is not None:
             return [float(color_x), float(color_y)]
-
         return None
 
     def color_temperature_kelvin(self):
@@ -62,7 +57,7 @@ class WinkLightBulb(WinkDevice):
         :param color_kelvin: an integer greater than 0 which is a color in
          degrees Kelvin
         :param color_xy: a pair of floats in a list which specify the desired
-         CIE 1931 x,y color coordinates
+        CIE 1931 x,y color coordinates
         :param color_hue_saturation: a pair of floats in a list which specify
         the desired hue and saturation in that order.  Brightness can be
         supplied via the brightness param
@@ -86,22 +81,11 @@ class WinkLightBulb(WinkDevice):
         if color_hue_saturation is None and color_kelvin is None and color_xy is None:
             return None
 
-        if self.supports_rgb():
-            rgb = _get_color_as_rgb(color_hue_saturation, color_kelvin, color_xy)
-            if rgb:
-                return {
-                    "color_model": "rgb",
-                    "color_r": rgb[0],
-                    "color_g": rgb[1],
-                    "color_b": rgb[2]
-                }
-                # TODO: Find out if this is the correct format
-
         if color_hue_saturation is None and color_kelvin is not None and self.supports_temperature():
             return _format_temperature(color_kelvin)
 
         if self.supports_hue_saturation():
-            hsv = _get_color_as_hue_saturation_brightness(color_hue_saturation, color_kelvin, color_xy)
+            hsv = _get_color_as_hue_saturation_brightness(color_hue_saturation)
             if hsv is not None:
                 return _format_hue_saturation(hsv)
 
@@ -110,20 +94,6 @@ class WinkLightBulb(WinkDevice):
                 return _format_xy(color_xy)
 
         return {}
-
-    def supports_rgb(self):
-        # TODO: Find out if any bulbs actually support RGB
-        capabilities = self.json_state.get('capabilities', {})
-        cap_fields = capabilities.get('fields', [])
-        for field in cap_fields:
-            _field = field.get('field')
-            if _field == 'color_model':
-                choices = field.get('choices')
-                if "hsb" in choices:
-                    return False
-                if "rgb" in choices:
-                    return True
-        return False
 
     def supports_hue_saturation(self):
         capabilities = self.json_state.get('capabilities', {})
@@ -184,23 +154,7 @@ def _format_xy(xy):
     }
 
 
-def _get_color_as_rgb(hue_sat, kelvin, xy):
-    if hue_sat is not None:
-        h, s, v = colorsys.hsv_to_rgb(hue_sat[0], hue_sat[1], 1)
-        return h, s, v
-    if kelvin is not None:
-        return color_temperature_to_rgb(kelvin)
-    if xy is not None:
-        return color_xy_brightness_to_rgb(xy[0], xy[1], 1)
-    return None
-
-
-def _get_color_as_hue_saturation_brightness(hue_sat, kelvin, xy):
+def _get_color_as_hue_saturation_brightness(hue_sat):
     if hue_sat:
         color_hs_iter = iter(hue_sat)
         return (next(color_hs_iter), next(color_hs_iter), 1)
-    rgb = _get_color_as_rgb(None, kelvin, xy)
-    if not rgb:
-        return None
-    h, s, v = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
-    return (h, s, v)

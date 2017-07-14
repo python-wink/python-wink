@@ -1,0 +1,23 @@
+{
+   "group_id":"4438022",
+   "name":"@window_sensors",
+   "order":0,
+   "icon_id":"28",
+   "members":[
+
+   ],
+   "reading_aggregation":{
+
+   },
+   "automation_mode":"user_category",
+   "hidden_at":null,
+   "object_type":"group",
+   "object_id":"4438022",
+   "icon_code":"group-light_group",
+   "subscription":{
+      "pubnub":{
+         "subscribe_key":"sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+         "channel":"5db3fce7c1bea34481c86e5acad218be4dd81390"
+      }
+   }
+}

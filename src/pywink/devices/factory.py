@@ -27,6 +27,8 @@ from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
 from pywink.devices.robot import WinkRobot
 from pywink.devices.scene import WinkScene
+from pywink.devices.light_group import WinkLightGroup
+from pywink.devices.binary_switch_group import WinkBinarySwitchGroup
 
 
 # pylint: disable=too-many-branches, too-many-statements
@@ -100,6 +102,15 @@ def build_device(device_state_as_json, api_interface):
         new_objects.append(WinkRobot(device_state_as_json, api_interface))
     elif object_type == device_types.SCENE:
         new_objects.append(WinkScene(device_state_as_json, api_interface))
+    elif object_type == device_types.GROUP:
+        # This will skip auto created groups that Wink creates.
+        if device_state_as_json.get("name")[0] not in [".", "@"]:
+            # This is a group of swithces
+            if device_state_as_json.get("reading_aggregation").get("brightness") is None:
+                new_objects.append(WinkBinarySwitchGroup(device_state_as_json, api_interface))
+            # This is a group of lights
+            else:
+                new_objects.append(WinkLightGroup(device_state_as_json, api_interface))
 
     return new_objects
 

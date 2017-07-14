@@ -20,9 +20,10 @@ class SensorTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_capability_should_not_be_none(self):
@@ -53,15 +54,26 @@ class EggtrayTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_state_should_be_2(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.EGGTRAY)
         for device in devices:
             self.assertEqual(device.state(), 2)
+
+    def test_capability_is_none(self):
+        devices = get_devices_from_response_dict(self.response_dict, device_types.EGGTRAY)
+        for device in devices:
+            self.assertEqual(device.capability(), None)
+
+    def test_unit_is_eggs(self):
+        devices = get_devices_from_response_dict(self.response_dict, device_types.EGGTRAY)
+        for device in devices:
+            self.assertEqual(device.unit(), "eggs")
 
 class KeyTests(unittest.TestCase):
 
@@ -72,9 +84,10 @@ class KeyTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_state_should_be_false(self):
@@ -112,9 +125,10 @@ class PorkfolioTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_unit_is_usd(self):
@@ -151,9 +165,10 @@ class GangTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_unit_is_none(self):
@@ -170,9 +185,10 @@ class SmokeDetectorTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_test_activated_is_false(self):
@@ -206,9 +222,10 @@ class RemoteTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_buttons_press_is_false(self):
@@ -235,9 +252,10 @@ class PropaneTankTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_unit_and_capability(self):

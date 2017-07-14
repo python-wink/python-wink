@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.3.0
+- Support for switch and light groups
+
 ## 1.2.6
 - Calling set_user_agent sets the API_HEADERS user_agent
 

@@ -18,9 +18,10 @@ class GarageDoorTests(unittest.TestCase):
         self.response_dict = {}
         device_list = []
         for json_file in all_devices:
-            _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
-            device_list.append(json.load(_json_file))
-            _json_file.close()
+            if os.path.isfile('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file)):
+                _json_file = open('{}/api_responses/{}'.format(os.path.dirname(__file__), json_file))
+                device_list.append(json.load(_json_file))
+                _json_file.close()
         self.response_dict["data"] = device_list
 
     def test_tamper_detected_is_false(self):
