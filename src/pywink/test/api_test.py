@@ -386,7 +386,7 @@ class ApiTests(unittest.TestCase):
         old_states = {}
         for device in devices:
             device.api_interface = self.api_interface
-            device.set_fan_speed("auto")
+            device.set_state(True, "auto")
             device.set_fan_direction("reverse")
             device.set_fan_timer(300)
             device.update_state()

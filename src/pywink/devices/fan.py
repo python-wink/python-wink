@@ -39,7 +39,7 @@ class WinkFan(WinkDevice):
         return fan_timer_range
 
     def current_fan_speed(self):
-        return self._last_reading.get('mode', None)
+        return self._last_reading.get('mode', "lowest")
 
     def current_fan_direction(self):
         return self._last_reading.get('direction', None)
@@ -50,26 +50,18 @@ class WinkFan(WinkDevice):
     def state(self):
         return self._last_reading.get('powered', False)
 
-    def set_state(self, state):
+    def set_state(self, state, speed=None):
         """
         :param powered: bool
-        :return: nothing
-        """
-        desired_state = {"powered": state}
-
-        response = self.api_interface.set_device_state(self, {
-            "desired_state": desired_state
-        })
-
-        self._update_state_from_response(response)
-
-    def set_fan_speed(self, speed):
-        """
         :param speed: a string one of ["lowest", "low",
-            "medium", "high", "auto"]
+            "medium", "high", "auto"] defaults to last speed
         :return: nothing
         """
-        desired_state = {"mode": speed}
+        speed = speed or self.current_fan_speed()
+        if state:
+            desired_state = {"powered": state, "mode": speed}
+        else:
+            desired_state = {"powered": state}
 
         response = self.api_interface.set_device_state(self, {
             "desired_state": desired_state

@@ -1,5 +1,4 @@
 import json
-import sys
 import time
 import urllib.parse
 
@@ -39,8 +38,6 @@ class WinkApiInterface(object):
                 arequest = requests.post(url_string,
                                          headers=API_HEADERS)
             else:
-                print(url_string)
-                print(state)
                 arequest = requests.post(url_string,
                                          data=json.dumps(state),
                                          headers=API_HEADERS)
@@ -56,7 +53,6 @@ class WinkApiInterface(object):
                                         headers=API_HEADERS)
             else:
                 raise WinkAPIException("Failed to refresh access token.")
-        print(str(arequest.json()))
         return arequest.json()
 
     def get_device_state(self, device, id_override=None, type_override=None):
@@ -120,7 +116,6 @@ def legacy_set_wink_credentials(email, password, client_id, client_secret):
     response_json = response.json()
     access_token = response_json.get('access_token')
     REFRESH_TOKEN = response_json.get('refresh_token')
-    sys.stdout.write(access_token)
     set_bearer_token(access_token)
 
 
