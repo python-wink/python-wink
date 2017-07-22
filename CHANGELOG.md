@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.4.0
+- Local control support for lights, locks, and switches
+
 ## 1.3.1
 - Fixed fans speed selection
 
@@ -105,10 +108,10 @@
 ## 0.7.6
 - Added ability to return the battery level if a device is battery powered
 
-## 0.7.5 
+## 0.7.5
 - Fixed bug where light bulb states were not updating.
 
-## 0.7.4 
+## 0.7.4
 - Fixed bug where we shouldn't have been indexing into an object
 
 ## 0.7.3
@@ -117,12 +120,12 @@
 ## 0.7.2
 - Conserving brightness when setting color (temperature, hue sat, etc.)
 
-## 0.7.1 
+## 0.7.1
 - Exposed bulb color support methods (E.g. supports_hue_saturation())
 
 ## 0.7.0
 - Expanded color support for WinkBulbs
-- Added ability to supply client_id, client_secret, and refresh_token 
+- Added ability to supply client_id, client_secret, and refresh_token
 instead of access_token.  This should get around tokens expiring.
 
 ## 0.6.4
@@ -138,11 +141,11 @@ instead of access_token.  This should get around tokens expiring.
 ## 0.6.1
 - Return the capability of a sensor as part of the name.
 
-## 0.6.0 
+## 0.6.0
 - Major structural change.  Using modules to avoid circular dependencies.
 - Added support for devices that contain multiple onboard sensors.
 
-## 0.5.0 
+## 0.5.0
 - Major bug fix.  Methods like `get_bulbs` were always returning empty lists.
 
 ## 0.4.3
@@ -170,7 +173,7 @@ instead of access_token.  This should get around tokens expiring.
 ## 0.3.1
 - Added init method for WinkEggTray
 
-## 0.3.0 
+## 0.3.0
 - Breaking change: Renamed classes to satisfy pylint
 
 ## 0.2.1

@@ -2,11 +2,13 @@
 
 cd "$(dirname "$0")/.."
 
+flake8 --version
 echo "Checking style with flake8..."
 flake8 src/pywink
 
 FLAKE8_STATUS=$?
 
+pylint --version
 echo "Checking style with pylint..."
 pylint src/pywink
 PYLINT_STATUS=$?

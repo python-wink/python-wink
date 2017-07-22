@@ -1,0 +1,81 @@
+{
+  "object_type": "light_bulb",
+  "object_id": "2816576",
+  "uuid": "27ead441-9df5-4068-8880-7c1520880d1d",
+  "icon_id": "71",
+  "icon_code": "light_bulb-light_bulb",
+  "desired_state": {
+    "powered": false,
+    "brightness": 1.0
+  },
+  "last_reading": {
+    "powered": false,
+    "powered_updated_at": 1500756445.3817778,
+    "brightness": 1.0,
+    "brightness_updated_at": 1500756445.3817778,
+    "connection": true,
+    "connection_updated_at": 1500756445.3817778,
+    "firmware_version": "0.0b00 / 0.0b0f",
+    "firmware_version_updated_at": 1500756445.3817778,
+    "firmware_date_code": null,
+    "firmware_date_code_updated_at": null,
+    "desired_powered_updated_at": 1500744848.702631,
+    "desired_brightness_updated_at": 1500744981.9335368,
+    "powered_changed_at": 1500744848.5510266,
+    "brightness_changed_at": 1500136535.6655562,
+    "connection_changed_at": 1500139260.8078806,
+    "firmware_version_changed_at": 1500069548.8840287,
+    "desired_powered_changed_at": 1500744848.702631,
+    "desired_brightness_changed_at": 1500139582.3379252
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+      "channel": "fsdjafkljakl;sdjf;lkadsfkl;djasd"
+    }
+  },
+  "light_bulb_id": "2816576",
+  "name": "Dining room fan light",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1500069521,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "boolean",
+        "field": "powered",
+        "mutability": "read-write"
+      },
+      {
+        "type": "percentage",
+        "field": "brightness",
+        "mutability": "read-write"
+      },
+      {
+        "type": "boolean",
+        "field": "connection",
+        "mutability": "read-only"
+      }
+    ]
+  },
+  "triggers": [],
+  "manufacturer_device_model": "home_decorators_home_decorators_light_bulb",
+  "manufacturer_device_id": null,
+  "device_manufacturer": "home_decorators",
+  "model_name": "Ceiling Fan",
+  "upc_id": "485",
+  "upc_code": "home_decorators_light_bulb",
+  "primary_upc_code": "home_decorators_light_bulb",
+  "gang_id": "91031",
+  "hub_id": "302528",
+  "local_id": "37.2",
+  "radio_type": "zigbee",
+  "linked_service_id": null,
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "order": 0
+}

@@ -28,3 +28,6 @@ class WinkHub(WinkDevice):
 
     def firmware_version(self):
         return self._last_reading.get('firmware_version')
+
+    def local_control_id(self):
+        return self._last_reading.get('local_control_id')

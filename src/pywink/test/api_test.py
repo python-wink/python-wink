@@ -9,6 +9,7 @@ import os
 # Third-party imports...
 import requests
 from mock import patch
+from unittest.mock import MagicMock, Mock
 
 from pywink.api import *
 from pywink.devices import types as device_types
@@ -68,23 +69,42 @@ class ApiTests(unittest.TestCase):
         start_mock_server(self.port)
         self.api_interface = MockApiInterface()
 
+    def test_local_control_enabled_by_default(self):
+        self.assertTrue(ALLOW_LOCAL_CONTROL)
+
+    def test_that_disable_local_control_works(self):
+        from pywink.api import ALLOW_LOCAL_CONTROL
+        disable_local_control()
+        self.assertFalse(ALLOW_LOCAL_CONTROL)
+
+    def test_set_user_agent(self):
+        from pywink.api import API_HEADERS
+        set_user_agent("THIS IS A TEST")
+        self.assertEqual("THIS IS A TEST", API_HEADERS["User-Agent"])
+
+    def test_set_bearer_token(self):
+        from pywink.api import API_HEADERS, LOCAL_API_HEADERS
+        set_bearer_token("THIS IS A TEST")
+        self.assertEqual("Bearer THIS IS A TEST", API_HEADERS["Authorization"])
+
+
+    def test_get_authorization_url(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        url = get_authorization_url("TEST", "127.0.0.1")
+        comparison_url = "%s/oauth2/authorize?client_id=TEST&redirect_uri=127.0.0.1" % ("http://localhost:" + str(self.port))
+        self.assertEqual(comparison_url, url)
+
     def test_bad_status_codes(self):
         try:
             WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port) + "/401/"
-            get_all_devices()
+            wink_api_fetch()
         except Exception as e:
             self.assertTrue(type(e), WinkAPIException)
         try:
             WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port) + "/404/"
-            get_all_devices()
+            wink_api_fetch()
         except Exception as e:
             self.assertTrue(type(e), WinkAPIException)
-
-    def test_set_bearer_token(self):
-        self.assertIsNone(get_set_access_token())
-        set_bearer_token("THIS_IS_A_TEST")
-        self.assertEqual("THIS_IS_A_TEST", get_set_access_token())
-        self.assertTrue(is_token_set())
 
     def test_get_subscription_key(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -94,7 +114,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 64)
+        self.assertEqual(len(devices), 65)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -249,6 +269,64 @@ class ApiTests(unittest.TestCase):
         for device in devices:
             self.assertTrue(device.state())
 
+    def test_all_devices_local_control_id_is_not_decimal(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_all_devices()
+        for device in devices:
+            if device.local_id() is not None:
+                _temp = float(device.local_id())
+                _temp2 = int(device.local_id())
+                self.assertEqual(_temp, _temp2)
+
+    def test_local_control_get_state_is_being_called(self):
+        mock_api_object = Mock()
+        mock_api_object.local_get_state = MagicMock()
+        mock_api_object.get_device_state = MagicMock()
+        devices = get_light_bulbs()
+        devices[0].api_interface = mock_api_object
+        devices[0].update_state()
+        mock_api_object.local_get_state.assert_called_with(devices[0])
+
+    def test_local_control_set_state_is_being_called(self):
+
+        def Any(cls):
+            class Any(cls):
+                def __eq__(self, other):
+                    return True
+            return Any()
+
+        mock_api_object = Mock()
+        mock_api_object.local_set_state = MagicMock()
+        mock_api_object.set_device_state = MagicMock()
+        devices = get_light_bulbs()
+        devices[0].api_interface = mock_api_object
+        devices[0].set_state(True)
+        mock_api_object.local_set_state.assert_called_with(devices[0], Any(str))
+
+    def test_local_control_get_state_is_not_being_called(self):
+        mock_api_object = Mock()
+        mock_api_object.local_get_state = MagicMock()
+        mock_api_object.get_device_state = MagicMock()
+        devices = get_piggy_banks()
+        devices[0].api_interface = mock_api_object
+        devices[0].update_state()
+        mock_api_object.get_device_state.assert_called_with(devices[0])
+
+    def test_local_control_set_state_is_not_being_called(self):
+
+        def Any(cls):
+            class Any(cls):
+                def __eq__(self, other):
+                    return True
+            return Any()
+
+        mock_api_object = Mock()
+        mock_api_object.local_set_state = MagicMock()
+        mock_api_object.set_device_state = MagicMock()
+        devices = get_thermostats()
+        devices[0].api_interface = mock_api_object
+        devices[0].set_operation_mode("auto")
+        mock_api_object.set_device_state.assert_called_with(devices[0], Any(str))
 
     def test_get_shade_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -523,6 +601,9 @@ class MockApiInterface():
 
         return return_dict
 
+    def local_set_state(self, device, state, id_override=None, type_override=None):
+        return self.set_device_state(device, state, id_override, type_override)
+
     def get_device_state(self, device, id_override=None, type_override=None):
         """
         :type device: WinkDevice
@@ -534,4 +615,7 @@ class MockApiInterface():
             if _object_id == object_id:
                 return_dict["data"] = device
         return return_dict
+
+    def local_get_state(self, device, id_override=None, type_override=None):
+        return self.get_device_state(device, id_override, type_override)
 

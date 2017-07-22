@@ -32,6 +32,19 @@ class WinkDevice(object):
     def object_type(self):
         return self.obj_type
 
+    def hub_id(self):
+        return self.json_state.get('hub_id')
+
+    def local_id(self):
+        # Devices with a "gang" controlling them (Ceiling fans and their associated light)
+        # must be controlled by the gang's local control ID.
+        # These devices local control ID is in the following format (gang_id.their_id)
+        # Stripping the trailing ID so the first ID is always used.
+        _local_id = self.json_state.get('local_id')
+        if _local_id is not None:
+            _local_id = _local_id.split(".")[0]
+        return _local_id
+
     @property
     def _last_reading(self):
         return self.json_state.get('last_reading') or {}
@@ -41,8 +54,14 @@ class WinkDevice(object):
 
     def battery_level(self):
         if not self._last_reading.get('external_power'):
-            return self._last_reading.get('battery')
-        return None
+            try:
+                _battery = self._last_reading.get('battery')
+                _battery = float(_battery)
+                return _battery
+            except TypeError:
+                return None
+        else:
+            return None
 
     def manufacturer_device_model(self):
         return self.json_state.get('manufacturer_device_model')

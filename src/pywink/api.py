@@ -1,20 +1,33 @@
 import json
 import time
+import logging
 import urllib.parse
-
-import requests
 
 from pywink.devices import types as device_types
 from pywink.devices.factory import build_device
 
-API_HEADERS = {}
+import requests
+try:
+    import urllib3
+    from urllib3.exceptions import InsecureRequestWarning
+    urllib3.disable_warnings(InsecureRequestWarning)
+except ImportError:
+    pass
+
 CLIENT_ID = None
 CLIENT_SECRET = None
 REFRESH_TOKEN = None
 USER_AGENT = "Manufacturer/python-wink python/3 Wink/3"
+API_HEADERS = {"User-Agent": USER_AGENT}
 ALL_DEVICES = None
 LAST_UPDATE = None
 OAUTH_AUTHORIZE = "{}/oauth2/authorize?client_id={}&redirect_uri={}"
+LOCAL_API_HEADERS = {}
+HUBS = {}
+SUPPORTS_LOCAL_CONTROL = ["wink_hub", "wink_hub2"]
+ALLOW_LOCAL_CONTROL = True
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class WinkApiInterface(object):
@@ -27,6 +40,7 @@ class WinkApiInterface(object):
         :param state:   a boolean of true (on) or false ('off')
         :return: The JSON response from the API (new device state)
         """
+        _LOGGER.info("Setting state via online API")
         object_id = id_override or device.object_id()
         object_type = type_override or device.object_type()
         url_string = "{}/{}s/{}".format(self.BASE_URL,
@@ -53,48 +67,107 @@ class WinkApiInterface(object):
                                         headers=API_HEADERS)
             else:
                 raise WinkAPIException("Failed to refresh access token.")
-        return arequest.json()
+        response_json = arequest.json()
+        _LOGGER.debug(response_json)
+        return response_json
+
+    def local_set_state(self, device, state, id_override=None, type_override=None):
+        if ALLOW_LOCAL_CONTROL:
+            if device.local_id() is not None:
+                hub = HUBS.get(device.hub_id())
+                if hub is None:
+                    return self.set_device_state(device, state, id_override, type_override)
+            else:
+                return self.set_device_state(device, state, id_override, type_override)
+            _LOGGER.info("Setting local state")
+            local_id = id_override or device.local_id().split(".")[0]
+            object_type = type_override or device.object_type()
+            LOCAL_API_HEADERS['Authorization'] = "Bearer " + hub["token"]
+            url_string = "https://{}:8888/{}s/{}".format(hub["ip"],
+                                                         object_type,
+                                                         local_id)
+            arequest = requests.put(url_string,
+                                    data=json.dumps(state),
+                                    headers=LOCAL_API_HEADERS,
+                                    verify=False)
+            response_json = arequest.json()
+            _LOGGER.debug(response_json)
+            temp_state = device.json_state
+            for key, value in response_json["data"]["last_reading"].items():
+                temp_state["last_reading"][key] = value
+            return temp_state
+        else:
+            return self.set_device_state(device, state, id_override, type_override)
 
     def get_device_state(self, device, id_override=None, type_override=None):
         """
         :type device: WinkDevice
         """
+        _LOGGER.info("Getting state via online API")
         object_id = id_override or device.object_id()
         object_type = type_override or device.object_type()
         url_string = "{}/{}s/{}".format(self.BASE_URL,
                                         object_type, object_id)
         arequest = requests.get(url_string, headers=API_HEADERS)
-        return arequest.json()
+        response_json = arequest.json()
+        _LOGGER.debug(response_json)
+        return response_json
+
+    def local_get_state(self, device, id_override=None, type_override=None):
+        """
+        :type device: WinkDevice
+        """
+        if ALLOW_LOCAL_CONTROL:
+            if device.local_id() is not None:
+                hub = HUBS.get(device.hub_id())
+                if hub is not None:
+                    ip = hub["ip"]
+                    access_token = hub["token"]
+                else:
+                    return self.get_device_state(device, id_override, type_override)
+            else:
+                return self.get_device_state(device, id_override, type_override)
+            _LOGGER.info("Getting local state")
+            local_id = id_override or device.local_id()
+            object_type = type_override or device.object_type()
+            LOCAL_API_HEADERS['Authorization'] = "Bearer " + access_token
+            url_string = "https://{}:8888/{}s/{}".format(ip,
+                                                         object_type,
+                                                         local_id)
+            arequest = requests.get(url_string,
+                                    headers=LOCAL_API_HEADERS,
+                                    verify=False)
+            response_json = arequest.json()
+            _LOGGER.debug(response_json)
+            temp_state = device.json_state
+            for key, value in response_json["data"]["last_reading"].items():
+                temp_state["last_reading"][key] = value
+            return temp_state
+        else:
+            return self.get_device_state(device, id_override, type_override)
 
 
-def get_set_access_token():
-    auth = API_HEADERS.get("Authorization")
-    if auth is not None:
-        return auth.split()[1]
-    return None
-
-
-def set_bearer_token(token):
-    global API_HEADERS
-
-    API_HEADERS = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer {}".format(token)
-    }
-    if USER_AGENT:
-        API_HEADERS["User-Agent"] = USER_AGENT
+def disable_local_control():
+    global ALLOW_LOCAL_CONTROL
+    ALLOW_LOCAL_CONTROL = False
 
 
 def set_user_agent(user_agent):
-    global USER_AGENT
+    _LOGGER.info("Setting user agent to " + user_agent)
+    API_HEADERS["User-Agent"] = user_agent
 
-    USER_AGENT = user_agent
 
-    if USER_AGENT:
-        API_HEADERS["User-Agent"] = USER_AGENT
+def set_bearer_token(token):
+    global LOCAL_API_HEADERS
+
+    API_HEADERS["Content-Type"] = "application/json"
+    API_HEADERS["Authorization"] = "Bearer {}".format(token)
+    LOCAL_API_HEADERS = API_HEADERS
 
 
 def legacy_set_wink_credentials(email, password, client_id, client_secret):
+    log_string = "Email: %s Password: %s Client_id: %s Client_secret: %s" % (email, password, client_id, client_secret)
+    _LOGGER.debug(log_string)
     global CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
 
     CLIENT_ID = client_id
@@ -120,6 +193,9 @@ def legacy_set_wink_credentials(email, password, client_id, client_secret):
 
 
 def set_wink_credentials(client_id, client_secret, access_token, refresh_token):
+    log_string = "Client_id: %s Client_secret: %s Access_token: %s Refreash_token: %s" % (client_id, client_secret,
+                                                                                          access_token, refresh_token)
+    _LOGGER.debug(log_string)
     global CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
 
     CLIENT_ID = client_id
@@ -128,7 +204,15 @@ def set_wink_credentials(client_id, client_secret, access_token, refresh_token):
     set_bearer_token(access_token)
 
 
+def get_current_oauth_credentials():
+    access_token = API_HEADERS.get("Authorization").split()[1]
+    return {"access_token": access_token, "refresh_token": REFRESH_TOKEN,
+            "client_id": CLIENT_ID, "client_secret": CLIENT_SECRET}
+
+
 def refresh_access_token():
+    global REFRESH_TOKEN
+    _LOGGER.info("Attempting to refresh access token")
     if CLIENT_ID and CLIENT_SECRET and REFRESH_TOKEN:
         data = {
             "client_id": CLIENT_ID,
@@ -144,12 +228,14 @@ def refresh_access_token():
                                  headers=headers)
         response_json = response.json()
         access_token = response_json.get('access_token')
+        REFRESH_TOKEN = response_json.get('refresh_token')
         set_bearer_token(access_token)
         return access_token
     return None
 
 
 def get_authorization_url(client_id, redirect_uri):
+    _LOGGER.debug("Client_id: " + client_id + " redirect_uri: " + redirect_uri)
     global CLIENT_ID
 
     CLIENT_ID = client_id
@@ -158,6 +244,7 @@ def get_authorization_url(client_id, redirect_uri):
 
 
 def request_token(code, client_secret):
+    _LOGGER.debug("code: " + code + " Client_secret: " + client_secret)
     data = {
         "client_secret": client_secret,
         "grant_type": "authorization_code",
@@ -169,6 +256,7 @@ def request_token(code, client_secret):
     response = requests.post('{}/oauth2/token'.format(WinkApiInterface.BASE_URL),
                              data=json.dumps(data),
                              headers=headers)
+    _LOGGER.debug(response)
     response_json = response.json()
     access_token = response_json.get('access_token')
     refresh_token = response_json.get('refresh_token')
@@ -178,12 +266,34 @@ def request_token(code, client_secret):
 def get_user():
     url_string = "{}/users/me".format(WinkApiInterface.BASE_URL)
     arequest = requests.get(url_string, headers=API_HEADERS)
+    _LOGGER.debug(arequest)
     return arequest.json()
 
 
-def is_token_set():
-    """ Returns if an auth token has been set. """
-    return bool(API_HEADERS)
+def get_local_control_access_token(local_control_id):
+    _LOGGER.debug("Local_control_id: " + local_control_id)
+    if CLIENT_ID and CLIENT_SECRET and REFRESH_TOKEN:
+        data = {
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": REFRESH_TOKEN,
+            "scope": "local_control",
+            "local_control_id": local_control_id
+        }
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        response = requests.post('{}/oauth2/token'.format(WinkApiInterface.BASE_URL),
+                                 data=json.dumps(data),
+                                 headers=headers)
+        _LOGGER.debug(response)
+        response_json = response.json()
+        access_token = response_json.get('access_token')
+        return access_token
+    _LOGGER.error("Failed to get local control access, reverting to online API")
+    disable_local_control()
+    return None
 
 
 def get_all_devices():
@@ -243,7 +353,14 @@ def get_thermostats():
 
 
 def get_hubs():
-    return get_devices(device_types.HUB)
+    hubs = get_devices(device_types.HUB)
+    for hub in hubs:
+        if hub.manufacturer_device_model() in SUPPORTS_LOCAL_CONTROL:
+            _id = hub.local_control_id()
+            token = get_local_control_access_token(_id)
+            ip = hub.ip_address()
+            HUBS[hub.object_id()] = {"ip": ip, "token": token, "id": _id}
+    return hubs
 
 
 def get_fans():
@@ -323,6 +440,7 @@ def get_subscription_key_from_response_dict(device):
 def wink_api_fetch(end_point='wink_devices'):
     arequest_url = "{}/users/me/{}".format(WinkApiInterface.BASE_URL, end_point)
     response = requests.get(arequest_url, headers=API_HEADERS)
+    _LOGGER.debug(response)
     if response.status_code == 200:
         return response.json()
 

@@ -3,8 +3,7 @@ Top level functions
 """
 # noqa
 from pywink.api import set_bearer_token, refresh_access_token, \
-    set_wink_credentials, set_user_agent, wink_api_fetch, \
-    get_set_access_token, is_token_set, get_devices, \
+    set_wink_credentials, set_user_agent, wink_api_fetch, get_devices, \
     get_subscription_key
 
 from pywink.api import get_light_bulbs, get_garage_doors, get_locks, \

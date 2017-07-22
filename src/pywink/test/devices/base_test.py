@@ -119,7 +119,7 @@ class BaseTests(unittest.TestCase):
         skip_manufactuer_device_models = ["linear_wadwaz_1",  "linear_wapirz_1", "aeon_labs_dsb45_zwus", "wink_hub", "wink_hub2", "sylvania_sylvania_ct",
                                           "ge_bulb", "quirky_ge_spotter", "schlage_zwave_lock", "home_decorators_home_decorators_fan",
                                           "sylvania_sylvania_rgbw", "somfy_bali", "wink_relay_sensor", "wink_project_one", "kidde_smoke_alarm",
-                                          "wink_relay_switch", "leaksmart_valve"]
+                                          "wink_relay_switch", "leaksmart_valve", "home_decorators_home_decorators_light_bulb"]
         skip_names = ["GoControl Thermostat", "GE Zwave Switch", "New Shortcut", "Test robot"]
         for device in devices:
             if device.name() in skip_names:

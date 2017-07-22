@@ -47,6 +47,11 @@ class WinkLightBulb(WinkDevice):
         """
         return self._last_reading.get('saturation')
 
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        response = self.api_interface.local_get_state(self)
+        return self._update_state_from_response(response)
+
     def set_state(self, state, brightness=None,
                   color_kelvin=None, color_xy=None,
                   color_hue_saturation=None):
@@ -72,7 +77,7 @@ class WinkLightBulb(WinkDevice):
         if brightness is not None:
             desired_state.update({'brightness': brightness})
 
-        response = self.api_interface.set_device_state(self, {
+        response = self.api_interface.local_set_state(self, {
             "desired_state": desired_state
         })
         self._update_state_from_response(response)
