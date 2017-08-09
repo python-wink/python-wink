@@ -103,8 +103,8 @@ def build_device(device_state_as_json, api_interface):
     elif object_type == device_types.SCENE:
         new_objects.append(WinkScene(device_state_as_json, api_interface))
     elif object_type == device_types.GROUP:
-        # This will skip auto created groups that Wink creates.
-        if device_state_as_json.get("name")[0] not in [".", "@"]:
+        # This will skip auto created groups that Wink creates as well has empty groups
+        if device_state_as_json.get("name")[0] not in [".", "@"] and device_state_as_json.get("members"):
             # This is a group of swithces
             if device_state_as_json.get("reading_aggregation").get("brightness") is None:
                 new_objects.append(WinkBinarySwitchGroup(device_state_as_json, api_interface))

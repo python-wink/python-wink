@@ -23,6 +23,12 @@ class WinkDevice(object):
     def name(self):
         return self.json_state.get('name')
 
+    def set_name(self, name):
+        response = self.api_interface.set_device_state(self, {
+            "name": name
+        })
+        self._update_state_from_response(response)
+
     def state(self):
         raise NotImplementedError("Must implement state")
 

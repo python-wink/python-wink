@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.5.0
+- Change device names and hub pairing commands
+
 ## 1.4.2
 - Changed try/except in local control calls to catch all errors
 

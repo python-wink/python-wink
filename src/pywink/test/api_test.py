@@ -483,6 +483,16 @@ class ApiTests(unittest.TestCase):
             device.update_state()
         self.assertEqual(device.tare(), 5.0)
 
+    def test_set_all_device_names(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_all_devices()
+        old_states = {}
+        for device in devices:
+            device.api_interface = self.api_interface
+            device.set_name("TEST_NAME")
+            device.update_state()
+        for device in devices:
+            self.assertTrue(device.name().startswith("TEST_NAME"))
 
 
 class MockServerRequestHandler(BaseHTTPRequestHandler):
@@ -563,7 +573,22 @@ class MockApiInterface():
         device_object_type = device.object_type()
         object_type = type_override or device_object_type
         return_dict = {}
-        if object_type != "group":
+        if "name" in str(state):
+            for dict_device in USERS_ME_WINK_DEVICES.get('data'):
+                _object_id = dict_device.get("object_id")
+                if _object_id == object_id:
+                    if device_object_type == "outlet":
+                        index = device.index()
+                        set_state = state["outlets"][index]["name"]
+                        dict_device["outlets"][index]["name"] = set_state
+                        return_dict["data"] = dict_device
+                    else:
+                        dict_device["name"] = state.get("name")
+            for dict_device in GROUPS.get('data'):
+                _object_id = dict_device.get("object_id")
+                if _object_id == object_id:
+                    dict_device["name"] = state.get("name")
+        elif object_type != "group":
             for dict_device in USERS_ME_WINK_DEVICES.get('data'):
                 _object_id = dict_device.get("object_id")
                 if _object_id == object_id:

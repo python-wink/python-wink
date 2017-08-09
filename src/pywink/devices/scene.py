@@ -26,9 +26,3 @@ class WinkScene(WinkDevice):
         """
         response = self.api_interface.set_device_state(self, None)
         self._update_state_from_response(response)
-
-    def update_state(self):
-        """
-        Nothing changes in the JSON state of this device.
-        """
-        return True

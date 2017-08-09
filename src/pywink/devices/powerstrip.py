@@ -74,6 +74,15 @@ class WinkPowerStripOutlet(WinkDevice):
     def parent_object_type(self):
         return self.json_state.get('parent_object_type')
 
+    def set_name(self, name):
+        if self.index() == 0:
+            values = {"outlets": [{"name": name}, {}]}
+        else:
+            values = {"outlets": [{}, {"name": name}]}
+        response = self.api_interface.set_device_state(self, values, id_override=self.parent_id(),
+                                                       type_override="powerstrip")
+        self._update_state_from_response(response)
+
     def set_state(self, state):
         """
         :param state:   a boolean of true (on) or false ('off')
