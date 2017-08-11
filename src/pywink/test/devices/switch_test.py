@@ -65,3 +65,12 @@ class BinarySwitchTests(unittest.TestCase):
         groups = get_devices_from_response_dict(response_dict, device_types.GROUP)
         switch_group = groups[0]
         self.assertTrue(switch_group.available())
+
+    def test_last_event(self):
+        with open('{}/api_responses/leaksmart_valve.json'.format(os.path.dirname(__file__))) as binary_switch_file:
+            response_dict = json.load(binary_switch_file)
+        response_dict = {"data": [response_dict]}
+        binary_switches = get_devices_from_response_dict(response_dict, device_types.BINARY_SWITCH)
+        for switch in binary_switches:
+            if switch.model_name() == "leakSMART Valve":
+                self.assertEqual(switch.last_event(), "monthly_cycle_success")

@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.5.1
+- Support all binary_switches which use a binary field of powered or opened
+
 ## 1.5.0
 - Change device names and hub pairing commands
 

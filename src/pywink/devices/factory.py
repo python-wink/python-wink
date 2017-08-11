@@ -5,7 +5,7 @@ Build Wink devices.
 from pywink.devices import types as device_types
 from pywink.devices.sensor import WinkSensor
 from pywink.devices.light_bulb import WinkLightBulb
-from pywink.devices.binary_switch import WinkBinarySwitch, WinkLeakSmartValve
+from pywink.devices.binary_switch import WinkBinarySwitch
 from pywink.devices.lock import WinkLock
 from pywink.devices.eggtray import WinkEggtray
 from pywink.devices.garage_door import WinkGarageDoor
@@ -45,8 +45,6 @@ def build_device(device_state_as_json, api_interface):
             mode = device_state_as_json["last_reading"]["powering_mode"]
             if mode == "dumb":
                 new_objects.append(WinkBinarySwitch(device_state_as_json, api_interface))
-        elif device_state_as_json.get("model_name") == "leakSMART Valve":
-            new_objects.append(WinkLeakSmartValve(device_state_as_json, api_interface))
         else:
             new_objects.append(WinkBinarySwitch(device_state_as_json, api_interface))
     elif object_type == device_types.LOCK:
