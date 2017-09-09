@@ -238,7 +238,7 @@ class WinkApiInterface(object):
             type_override (String, optional): Used to override the device type
                 when a device inherits from a device other than WinkDevice.
         Returns:
-            response_json (boolean): True if the device was removed.
+            (boolean): True if the device was removed.
         """
         object_id = id_override or device.object_id()
         object_type = type_override or device.object_type()
@@ -251,6 +251,32 @@ class WinkApiInterface(object):
             return True
         _LOGGER.error("Failed to remove device. Status code: " + arequest.status_code)
         return False
+
+    def create_lock_key(self, device, new_device_json, id_override=None, type_override=None):
+        """
+        Create a new lock key code.
+
+        Args:
+            device (WinkDevice): The device the change is being requested for.
+            new_device_json (String): The JSON string required to create the device.
+            id_override (String, optional): A device ID used to override the
+                passed in device's ID. Used to make changes on sub-devices.
+                i.e. Outlet in a Powerstrip. The Parent device's ID.
+            type_override (String, optional): Used to override the device type
+                when a device inherits from a device other than WinkDevice.
+        Returns:
+            response_json (Dict): The API's response in dictionary format
+        """
+        object_id = id_override or device.object_id()
+        object_type = type_override or device.object_type()
+        url_string = "{}/{}s/{}/keys".format(self.BASE_URL,
+                                             object_type,
+                                             object_id)
+        arequest = requests.post(url_string,
+                                 data=json.dumps(new_device_json),
+                                 headers=API_HEADERS)
+        response_json = arequest.json()
+        return response_json
 
 
 def disable_local_control():
@@ -511,6 +537,10 @@ def get_robots():
 
 def get_scenes():
     return get_devices(device_types.SCENE, "scenes")
+
+
+def get_water_heaters():
+    return get_devices(device_types.WATER_HEATER)
 
 
 def get_light_groups():

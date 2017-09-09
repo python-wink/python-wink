@@ -9,10 +9,10 @@ from pywink.devices import types as device_types
 from pywink.devices.air_conditioner import WinkAirConditioner
 
 
-class FanTests(unittest.TestCase):
+class AirConditionerTests(unittest.TestCase):
 
     def setUp(self):
-        super(FanTests, self).setUp()
+        super(AirConditionerTests, self).setUp()
         self.api_interface = mock.MagicMock()
 
     def test_ac_state(self):
@@ -35,7 +35,7 @@ class FanTests(unittest.TestCase):
         ac = get_devices_from_response_dict(response_dict, device_types.AIR_CONDITIONER)[0]
         self.assertEqual(ac.modes(), ["auto_eco", "cool_only", "fan_only"])
 
-    def test_thermostat_current_fan_speed(self):
+    def test_ac_current_fan_speed(self):
         device_list = []
         response_dict = {}
         _json_file = open('{}/api_responses/quirky_aros.json'.format(os.path.dirname(__file__)))
@@ -55,7 +55,7 @@ class FanTests(unittest.TestCase):
         ac = get_devices_from_response_dict(response_dict, device_types.AIR_CONDITIONER)[0]
         self.assertEqual(ac.current_temperature(), 17.777777777777779)
 
-    def test_thermostat_max_set_point(self):
+    def test_ac_max_set_point(self):
         device_list = []
         response_dict = {}
         _json_file = open('{}/api_responses/quirky_aros.json'.format(os.path.dirname(__file__)))
@@ -65,7 +65,7 @@ class FanTests(unittest.TestCase):
         ac = get_devices_from_response_dict(response_dict, device_types.AIR_CONDITIONER)[0]
         self.assertEqual(ac.current_max_set_point(), 20.0)
 
-    def test_thermostat_is_on(self):
+    def test_ac_is_on(self):
         device_list = []
         response_dict = {}
         _json_file = open('{}/api_responses/quirky_aros.json'.format(os.path.dirname(__file__)))

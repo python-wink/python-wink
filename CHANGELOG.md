@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.6.0
+- Support for water heaters. Added support for adding new lock key codes.
+
 ## 1.5.2
 - Fixed firmware update and added device deletion
 

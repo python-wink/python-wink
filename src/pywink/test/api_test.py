@@ -38,6 +38,7 @@ from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
 from pywink.devices.scene import WinkScene
 from pywink.devices.robot import WinkRobot
+from pywink.devices.water_heater import WinkWaterHeater
 
 USERS_ME_WINK_DEVICES = {}
 GROUPS = {}
@@ -114,7 +115,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 66)
+        self.assertEqual(len(devices), 67)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -176,6 +177,9 @@ class ApiTests(unittest.TestCase):
         propane_tanks = get_propane_tanks()
         for tank in propane_tanks:
             self.assertTrue(isinstance(tank, WinkPropaneTank))
+        water_heaters = get_water_heaters()
+        for water_heater in water_heaters:
+            self.assertTrue(isinstance(water_heater, WinkWaterHeater))
 
     def test_get_sensor_and_binary_switch_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -442,6 +446,21 @@ class ApiTests(unittest.TestCase):
                 self.assertEqual(device.current_fan_mode(), "auto")
             self.assertEqual(10, device.current_min_set_point())
             self.assertEqual(50, device.current_max_set_point())
+
+    def test_get_water_heater_updated_states_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_water_heaters()
+        old_states = {}
+        for device in devices:
+            device.api_interface = self.api_interface
+            old_states[device.object_id()] = device.state()
+            device.set_operation_mode("heat_pump")
+            device.set_temperature(70)
+            device.set_vacation_mode(True)
+        for device in devices:
+            self.assertEqual(device.state(), "heat_pump")
+            self.assertEqual(70, device.current_set_point())
+            self.assertTrue(device.vacation_mode_enabled())
 
     def test_get_camera_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)

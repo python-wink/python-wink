@@ -1,0 +1,101 @@
+{
+  "object_type": "water_heater",
+  "object_id": "2729",
+  "uuid": "REMOVED",
+  "icon_id": null,
+  "icon_code": null,
+  "desired_state": {
+    "set_point": 48.888888888888886,
+    "mode": "eco",
+    "powered": true,
+    "vacation_mode": false
+  },
+  "last_reading": {
+    "units": {
+      "temperature": "f"
+    },
+    "units_updated_at": 1504666537.7042785,
+    "connection": true,
+    "connection_updated_at": 1504666537.7042785,
+    "set_point": 48.888888888888886,
+    "set_point_updated_at": 1504666537.7042785,
+    "mode": "eco",
+    "mode_updated_at": 1504666537.7042785,
+    "powered": true,
+    "powered_updated_at": 1504666537.7042785,
+    "vacation_mode": false,
+    "vacation_mode_updated_at": 1504666537.7042785,
+    "max_set_point_allowed": 60.0,
+    "max_set_point_allowed_updated_at": 1504666537.7042785,
+    "min_set_point_allowed": 43.333333333333336,
+    "min_set_point_allowed_updated_at": 1504666537.7042785,
+    "scald_message": "CAUTION. HOT WATER.  Contact may cause serious burns to skin.",
+    "scald_message_updated_at": 1504666537.7042785,
+    "rheem_type": "Heat Pump Water Heater",
+    "rheem_type_updated_at": 1504666537.7042785,
+    "modes_allowed": [
+      "eco",
+      "heat_pump",
+      "high_demand",
+      "electric_only"
+    ],
+    "modes_allowed_updated_at": 1504666537.7042785,
+    "alarm_message": null,
+    "alarm_message_updated_at": null,
+    "desired_set_point": null,
+    "desired_set_point_updated_at": null,
+    "desired_mode": null,
+    "desired_mode_updated_at": null,
+    "desired_powered": null,
+    "desired_powered_updated_at": null,
+    "desired_vacation_mode": null,
+    "desired_vacation_mode_updated_at": null,
+    "connection_changed_at": 1504666416.2879331,
+    "mode_changed_at": 1504666416.634584,
+    "set_point_changed_at": 1504666416.634584,
+    "powered_changed_at": 1504666416.634584,
+    "vacation_mode_changed_at": 1504666416.634584,
+    "max_set_point_allowed_changed_at": 1504666416.634584,
+    "min_set_point_allowed_changed_at": 1504666416.634584,
+    "units_changed_at": 1504666416.634584,
+    "scald_message_changed_at": 1504666416.634584,
+    "modes_allowed_changed_at": 1504666416.634584,
+    "rheem_type_changed_at": 1504666416.634584
+  },
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "REMOVED",
+      "channel": "REMOVED"
+    }
+  },
+  "water_heater_id": "2729",
+  "name": "Garage Gen 4",
+  "locale": "en_us",
+  "units": {},
+  "created_at": 1504666416,
+  "hidden_at": null,
+  "capabilities": {
+    "fields": [
+      {
+        "type": "nested_hash",
+        "field": "units",
+        "mutability": "read-only"
+      }
+    ],
+    "excludes_naming": true,
+    "excludes_robot_cause": true
+  },
+  "manufacturer_device_model": "Water Heater Heat Pump Water Heater",
+  "manufacturer_device_id": "51688",
+  "device_manufacturer": "rheem",
+  "model_name": "Water Heater",
+  "upc_id": "143",
+  "upc_code": "020352614724",
+  "primary_upc_code": "rheem_water_heater",
+  "linked_service_id": "793030",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": ""
+}

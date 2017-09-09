@@ -26,6 +26,7 @@ from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
 from pywink.devices.scene import WinkScene
 from pywink.devices.robot import WinkRobot
+from pywink.devices.water_heater import WinkWaterHeater
 
 
 class BaseTests(unittest.TestCase):
@@ -84,7 +85,7 @@ class BaseTests(unittest.TestCase):
         skip_types = [WinkFan, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkBinarySwitch, WinkHub,
                       WinkLightBulb, WinkThermostat, WinkKey, WinkPowerStrip, WinkPowerStripOutlet,
                       WinkRemote, WinkShade, WinkSprinkler, WinkButton, WinkGang, WinkCanaryCamera,
-                      WinkAirConditioner, WinkScene, WinkRobot]
+                      WinkAirConditioner, WinkScene, WinkRobot, WinkWaterHeater]
         for device in devices:
             if device.manufacturer_device_model() == "leaksmart_valve":
                 self.assertIsNotNone(device.battery_level())
