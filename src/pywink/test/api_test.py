@@ -115,7 +115,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 67)
+        self.assertEqual(len(devices), 68)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -379,10 +379,23 @@ class ApiTests(unittest.TestCase):
             device.set_state(not device.state())
             device.set_mode("strobe")
             device.set_auto_shutoff(120)
+            device.set_siren_volume("medium")
+            device.set_chime_volume("medium")
+            device.set_siren_sound("test_sound")
+            device.set_chime("test_sound", 10)
+            device.set_chime_strobe_enabled(True)
+            device.set_siren_strobe_enabled(False)
             device.update_state()
         self.assertEqual(not device.state(), old_states.get(device.object_id()))
         self.assertEqual(device.mode(), "strobe")
         self.assertEqual(device.auto_shutoff(), 120)
+        self.assertEqual(device.siren_volume(), "medium")
+        self.assertEqual(device.chime_volume(), "medium")
+        self.assertEqual(device.chime_mode(), "test_sound")
+        self.assertEqual(device.siren_sound(), "test_sound")
+        self.assertTrue(device.chime_strobe_enabled())
+        self.assertFalse(device.strobe_enabled())
+        self.assertEqual(device.chime_cycles(), 10)
 
     def test_get_lock_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)

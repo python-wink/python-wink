@@ -33,9 +33,9 @@ class HubTests(unittest.TestCase):
         devices = get_devices_from_response_dict(self.response_dict, device_types.HUB)
         for device in devices:
             if device.manufacturer_device_model() == "wink_project_one":
-                continue
-            if device.manufacturer_device_model() == "philips":
-                continue
+                self.assertIsNone(device.kidde_radio_code())
+            elif device.manufacturer_device_model() == "philips":
+                self.assertIsNone(device.kidde_radio_code())
             else:
                 self.assertIsNotNone(device.kidde_radio_code())
 
