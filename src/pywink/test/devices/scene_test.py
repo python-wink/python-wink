@@ -2,11 +2,8 @@ import json
 import os
 import unittest
 
-import mock
-
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.scene import WinkScene
 
 
 class SceneTests(unittest.TestCase):

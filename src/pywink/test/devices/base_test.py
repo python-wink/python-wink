@@ -2,9 +2,9 @@ import json
 import os
 import unittest
 
-import mock
+from unittest.mock import MagicMock
 
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
 from pywink.devices.key import WinkKey
 from pywink.devices.powerstrip import WinkPowerStripOutlet, WinkPowerStrip
@@ -33,7 +33,7 @@ class BaseTests(unittest.TestCase):
 
     def setUp(self):
         super(BaseTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []

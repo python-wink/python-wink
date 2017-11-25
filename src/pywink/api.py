@@ -116,7 +116,7 @@ class WinkApiInterface(object):
                                         data=json.dumps(state),
                                         headers=LOCAL_API_HEADERS,
                                         verify=False, timeout=3)
-            except:
+            except requests.exceptions.RequestException:
                 _LOGGER.error("Error sending local control request. Sending request online")
                 return self.set_device_state(device, state, id_override, type_override)
             response_json = arequest.json()
@@ -159,7 +159,6 @@ class WinkApiInterface(object):
 
         Args:
             device (WinkDevice): The device the change is being requested for.
-            state (Dict): The state being requested.
             id_override (String, optional): A device ID used to override the
                 passed in device's ID. Used to make changes on sub-devices.
                 i.e. Outlet in a Powerstrip. The Parent device's ID.
@@ -189,7 +188,7 @@ class WinkApiInterface(object):
                 arequest = requests.get(url_string,
                                         headers=LOCAL_API_HEADERS,
                                         verify=False, timeout=3)
-            except:
+            except requests.exceptions.RequestException:
                 _LOGGER.error("Error sending local control request. Sending request online")
                 return self.get_device_state(device, id_override, type_override)
             response_json = arequest.json()
@@ -221,10 +220,13 @@ class WinkApiInterface(object):
         url_string = "{}/{}s/{}/update_firmware".format(self.BASE_URL,
                                                         object_type,
                                                         object_id)
-        arequest = requests.post(url_string,
-                                 headers=API_HEADERS)
-        response_json = arequest.json()
-        return response_json
+        try:
+            arequest = requests.post(url_string,
+                                     headers=API_HEADERS)
+            response_json = arequest.json()
+            return response_json
+        except requests.exceptions.RequestException:
+            return None
 
     def remove_device(self, device, id_override=None, type_override=None):
         """
@@ -245,12 +247,16 @@ class WinkApiInterface(object):
         url_string = "{}/{}s/{}".format(self.BASE_URL,
                                         object_type,
                                         object_id)
-        arequest = requests.delete(url_string,
-                                   headers=API_HEADERS)
-        if arequest.status_code == 204:
-            return True
-        _LOGGER.error("Failed to remove device. Status code: " + arequest.status_code)
-        return False
+        try:
+            arequest = requests.delete(url_string,
+                                       headers=API_HEADERS)
+            if arequest.status_code == 204:
+                return True
+            _LOGGER.error("Failed to remove device. Status code: " + arequest.status_code)
+            return False
+        except requests.exceptions.RequestException:
+            _LOGGER.error("Failed to remove device. Status code: " + arequest.status_code)
+            return False
 
     def create_lock_key(self, device, new_device_json, id_override=None, type_override=None):
         """
@@ -272,11 +278,14 @@ class WinkApiInterface(object):
         url_string = "{}/{}s/{}/keys".format(self.BASE_URL,
                                              object_type,
                                              object_id)
-        arequest = requests.post(url_string,
-                                 data=json.dumps(new_device_json),
-                                 headers=API_HEADERS)
-        response_json = arequest.json()
-        return response_json
+        try:
+            arequest = requests.post(url_string,
+                                     data=json.dumps(new_device_json),
+                                     headers=API_HEADERS)
+            response_json = arequest.json()
+            return response_json
+        except requests.exceptions.RequestException:
+            return None
 
 
 def disable_local_control():
@@ -563,8 +572,11 @@ def get_binary_switch_groups():
 
 def get_subscription_key():
     response_dict = wink_api_fetch()
-    first_device = response_dict.get('data')[0]
-    return get_subscription_key_from_response_dict(first_device)
+    try:
+        first_device = response_dict.get('data')[0]
+        return get_subscription_key_from_response_dict(first_device)
+    except IndexError:
+        raise WinkAPIException("No Wink devices associated with account.")
 
 
 def get_subscription_key_from_response_dict(device):
@@ -579,7 +591,6 @@ def wink_api_fetch(end_point='wink_devices'):
     _LOGGER.debug(response)
     if response.status_code == 200:
         return response.json()
-
     if response.status_code == 401:
         raise WinkAPIException("401 Response from Wink API.  Maybe Bearer token is expired?")
     else:

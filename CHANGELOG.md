@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.7.1
+- Extended lock feature can't be performed via local control. Set with online.
+- Cleaned up imports/tests/style
+
 ## 1.7.0
 - Thermostat fixes for away mode.
 - Support for Dome Siren/Chime
@@ -44,7 +48,7 @@
 - Wink Aros Bugfix
 
 ## 1.2.2
-- Siren inherts from Base device
+- Siren inherits from Base device
 
 ## 1.2.1
 - Set default endpoint in wink_api_fetch
@@ -53,7 +57,7 @@
 - Robot and Scene support
 
 ## 1.1.1
-- Bugfix for lutron lights missing object_id and object_type
+- Bugfix for Lutron lights missing object_id and object_type
 
 ## 1.1.0
 - Support for Quirky Aros AC units
@@ -62,7 +66,7 @@
 - Fix for leaksmart valves
 
 ## 1.0.0
-- Switch to object_type for device type detction
+- Switch to object_type for device type detection
 - Hard coded user agent
 - Support for Lutron connected bulb remotes
 - Support for Sprinklers
@@ -121,7 +125,7 @@
 - Added Wink keys (Wink Lock user codes)
 
 ## 0.7.8
-- Added support for retrieving the Pubnub subscription details
+- Added support for retrieving the PubNub subscription details
 
 ## 0.7.7
 - Stopped duplicating door switches in `get_devices_from_response_dict`

@@ -2,18 +2,17 @@ import json
 import os
 import unittest
 
-import mock
+from unittest.mock import MagicMock
 
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.fan import WinkFan
 
 
 class FanTests(unittest.TestCase):
 
     def setUp(self):
         super(FanTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         device_list = []
         self.response_dict = {}
         _json_file = open('{}/api_responses/fan.json'.format(os.path.dirname(__file__)))

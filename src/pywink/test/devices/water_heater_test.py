@@ -2,18 +2,17 @@ import json
 import os
 import unittest
 
-import mock
+from unittest.mock import MagicMock
 
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.water_heater import WinkWaterHeater
 
 
 class WaterHeaterTests(unittest.TestCase):
 
     def setUp(self):
         super(WaterHeaterTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
 
     def test_current_state(self):
         device_list = []

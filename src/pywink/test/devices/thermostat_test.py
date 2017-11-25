@@ -2,18 +2,17 @@ import json
 import os
 import unittest
 
-import mock
+from unittest.mock import MagicMock
 
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.thermostat import WinkThermostat
 
 
 class ThermostatTests(unittest.TestCase):
 
     def setUp(self):
         super(ThermostatTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
 
     def test_thermostat_state(self):
         device_list = []
@@ -59,7 +58,6 @@ class ThermostatTests(unittest.TestCase):
         thermostat2 = get_devices_from_response_dict(response_dict, device_types.THERMOSTAT)[1]
         self.assertTrue(thermostat.away())
         self.assertEqual(thermostat2.away(), None)
-
 
     def test_thermostat_users_away_generic(self):
         device_list = []

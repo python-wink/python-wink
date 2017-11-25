@@ -2,11 +2,8 @@ import json
 import os
 import unittest
 
-import mock
-
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.binary_switch import WinkBinarySwitch
 from pywink.devices.binary_switch_group import WinkBinarySwitchGroup
 
 JSON_DATA = {}

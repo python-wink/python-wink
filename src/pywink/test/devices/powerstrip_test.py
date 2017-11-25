@@ -2,11 +2,8 @@ import json
 import os
 import unittest
 
-import mock
-
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
 
 
 class PowerstripTests(unittest.TestCase):
@@ -45,7 +42,6 @@ class PowerstripTests(unittest.TestCase):
         devices = get_devices_from_response_dict(response_dict, device_types.POWERSTRIP)
 
         self.assertEqual(len(devices), 3)
-        powerstrip = devices[-1]
         outlet_1 = devices[0]
         outlet_2 = devices[1]
         self.assertEqual(0, outlet_1.index())

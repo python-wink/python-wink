@@ -1,5 +1,4 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
 import re
 import socket
 from threading import Thread
@@ -7,12 +6,9 @@ import unittest
 import os
 
 # Third-party imports...
-import requests
-from mock import patch
 from unittest.mock import MagicMock, Mock
 
 from pywink.api import *
-from pywink.devices import types as device_types
 from pywink.api import WinkApiInterface
 from pywink.devices.sensor import WinkSensor
 from pywink.devices.hub import WinkHub
@@ -32,7 +28,6 @@ from pywink.devices.thermostat import WinkThermostat
 from pywink.devices.button import WinkButton
 from pywink.devices.gang import WinkGang
 from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
-from pywink.devices.sprinkler import WinkSprinkler
 from pywink.devices.camera import WinkCanaryCamera
 from pywink.devices.air_conditioner import WinkAirConditioner
 from pywink.devices.propane_tank import WinkPropaneTank
@@ -45,7 +40,6 @@ GROUPS = {}
 
 
 class ApiTests(unittest.TestCase):
-
 
     def setUp(self):
         global USERS_ME_WINK_DEVICES, GROUPS

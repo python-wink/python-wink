@@ -2,20 +2,19 @@ import json
 import os
 import unittest
 
-import mock
+from unittest.mock import MagicMock
 
-from pywink.api import get_devices_from_response_dict, WinkApiInterface
+from pywink.api import get_devices_from_response_dict
 from pywink.devices import types as device_types
-from pywink.devices.sensor import WinkSensor
 from pywink.devices.piggy_bank import WinkPorkfolioBalanceSensor
 from pywink.devices.smoke_detector import WinkSmokeDetector, WinkCoDetector, WinkSmokeSeverity, WinkCoSeverity
-from pywink.devices.propane_tank import WinkPropaneTank
+
 
 class SensorTests(unittest.TestCase):
 
     def setUp(self):
         super(SensorTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -49,7 +48,7 @@ class EggtrayTests(unittest.TestCase):
 
     def setUp(self):
         super(EggtrayTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -75,11 +74,12 @@ class EggtrayTests(unittest.TestCase):
         for device in devices:
             self.assertEqual(device.unit(), "eggs")
 
+
 class KeyTests(unittest.TestCase):
 
     def setUp(self):
         super(KeyTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -116,11 +116,12 @@ class KeyTests(unittest.TestCase):
         for device in devices:
             self.assertIsNone(device.unit())
 
+
 class PorkfolioTests(unittest.TestCase):
 
     def setUp(self):
         super(PorkfolioTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -156,11 +157,12 @@ class PorkfolioTests(unittest.TestCase):
             if isinstance(device, WinkPorkfolioBalanceSensor):
                 self.assertTrue(device.available())
 
+
 class GangTests(unittest.TestCase):
 
     def setUp(self):
         super(GangTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -176,11 +178,12 @@ class GangTests(unittest.TestCase):
         for device in devices:
             self.assertIsNone(device.unit())
 
+
 class SmokeDetectorTests(unittest.TestCase):
 
     def setUp(self):
         super(SmokeDetectorTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -217,7 +220,7 @@ class RemoteTests(unittest.TestCase):
 
     def setUp(self):
         super(RemoteTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
@@ -247,7 +250,7 @@ class PropaneTankTests(unittest.TestCase):
 
     def setUp(self):
         super(PropaneTankTests, self).setUp()
-        self.api_interface = mock.MagicMock()
+        self.api_interface = MagicMock()
         all_devices = os.listdir('{}/api_responses/'.format(os.path.dirname(__file__)))
         self.response_dict = {}
         device_list = []
