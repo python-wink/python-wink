@@ -3,6 +3,7 @@
 ## 1.7.1
 - Extended lock feature can't be performed via local control. Set with online.
 - Cleaned up imports/tests/style
+- Use string formatting when logging
 
 ## 1.7.0
 - Thermostat fixes for away mode.

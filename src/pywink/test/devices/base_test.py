@@ -104,7 +104,7 @@ class BaseTests(unittest.TestCase):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkKey, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkPowerStripOutlet,
                       WinkSiren, WinkEggtray, WinkRemote, WinkPowerStrip, WinkAirConditioner, WinkPropaneTank]
-        devices_with_no_device_model = ["GoControl Thermostat", "New Shortcut", "Test robot"]
+        devices_with_no_device_model = ["GoControl Thermostat", "New Shortcut", "Test robot", "August lock"]
         for device in devices:
             if type(device) in skip_types:
                 self.assertIsNone(device.manufacturer_device_model())
@@ -134,7 +134,7 @@ class BaseTests(unittest.TestCase):
 
     def test_all_devices_device_manufacturer_is_valid(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
-        device_with_no_manufacturer = ["GoControl Thermostat", "New Shortcut", "Test robot"]
+        device_with_no_manufacturer = ["GoControl Thermostat", "New Shortcut", "Test robot", "August lock"]
         for device in devices:
             if type(device) is WinkKey:
                 self.assertIsNone(device.device_manufacturer())
@@ -147,7 +147,7 @@ class BaseTests(unittest.TestCase):
 
     def test_all_devices_model_name_is_valid(self):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
-        devices_with_no_model_name = ["GoControl Thermostat", "New Shortcut", "Test robot"]
+        devices_with_no_model_name = ["GoControl Thermostat", "New Shortcut", "Test robot", "August lock"]
         for device in devices:
             if type(device) is WinkKey:
                 self.assertIsNone(device.model_name())

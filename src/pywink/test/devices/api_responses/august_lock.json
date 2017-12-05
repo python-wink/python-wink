@@ -1,0 +1,61 @@
+{
+   "object_type":"lock",
+   "object_id":"19134",
+   "uuid":"4500ff6c-00f4-4b27-887a-6273c713456",
+   "icon_id":null,
+   "icon_code":null,
+   "desired_state":{
+      "locked":true
+   },
+   "last_reading":{
+      "connection":true,
+      "connection_updated_at":1510865414.4690557,
+      "locked":true,
+      "locked_updated_at":1511899061.7470028,
+      "battery":0.99,
+      "battery_updated_at":1511826054.0000897,
+      "last_error":null,
+      "last_error_updated_at":null,
+      "desired_locked_updated_at":1511829238.0223362,
+      "connection_changed_at":1510865414.4690557,
+      "battery_changed_at":1511308024.8441072,
+      "locked_changed_at":1511899061.7470028,
+      "desired_locked_changed_at":1511829238.0223362
+   },
+   "subscription":{
+      "pubnub":{
+         "subscribe_key":"sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+         "channel":"5e6352fdcfb6baf8f845e3b6bb132465|lock-19134|user-76134"
+      }
+   },
+   "lock_id":"191627",
+   "name":"August lock",
+   "locale":"en_us",
+   "units":{
+
+   },
+   "created_at":1510865414,
+   "hidden_at":null,
+   "capabilities":{
+
+   },
+   "triggers":[
+
+   ],
+   "manufacturer_device_model":null,
+   "manufacturer_device_id":"august:9458EEF9492D4A2E9AE567FE4C132456",
+   "device_manufacturer":null,
+   "model_name":null,
+   "upc_id":"",
+   "upc_code":"august_lock_4",
+   "primary_upc_code":null,
+   "hub_id":null,
+   "local_id":null,
+   "radio_type":null,
+   "linked_service_id":"857123",
+   "lat_lng":[
+      null,
+      null
+   ],
+   "location":""
+}
