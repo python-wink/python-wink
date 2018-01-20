@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.7.3
+- Return none for heat_on and cool_on if not supported by thermostat
+
 ## 1.7.2
 - Added Nest Cam sensor support and fixed some lint errors
 

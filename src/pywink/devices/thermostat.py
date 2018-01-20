@@ -195,7 +195,7 @@ class WinkThermostat(WinkDevice):
         self._update_state_from_response(response)
 
     def cool_on(self):
-        return self._last_reading.get('cool_active', False)
+        return self._last_reading.get('cool_active')
 
     def heat_on(self):
-        return self._last_reading.get('heat_active', False)
+        return self._last_reading.get('heat_active')
