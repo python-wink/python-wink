@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.8.0
+- Special behaviour for recognizing GE fan as fan, rather than dimmable light.
+
 ## 1.7.3
 - Return none for heat_on and cool_on if not supported by thermostat
 
