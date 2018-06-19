@@ -6,3 +6,5 @@
 /src/python_wink.egg-info
 /.coverage
 /.idea/*
+
+src/*tst\.py

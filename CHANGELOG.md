@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.9.0
+- Added support for fan groups. Refresh Wink token on first device fetch.
+
 ## 1.8.0
 - Special behaviour for recognizing GE fan as fan, rather than dimmable light.
 
