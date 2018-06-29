@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.9.1
+- Support all float values from "dimmable fans".
+
 ## 1.9.0
 - Added support for fan groups. Refresh Wink token on first device fetch.
 
