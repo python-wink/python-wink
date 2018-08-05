@@ -1,4 +1,4 @@
-class WinkDevice(object):
+class WinkDevice:
     """
     This is a generic Wink device, all other object inherit from this.
     """

@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 
 # pylint: disable=too-many-public-methods
@@ -123,7 +123,7 @@ class WinkGeZwaveFan(WinkFan):
         brightness = self._last_reading.get('brightness', 0.33)
         if brightness <= 0.33:
             return "low"
-        elif brightness <= 0.66:
+        if brightness <= 0.66:
             return "medium"
         return "high"
 

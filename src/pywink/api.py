@@ -5,8 +5,8 @@ import urllib.parse
 
 import requests
 
-from pywink.devices import types as device_types
-from pywink.devices.factory import build_device, get_object_type
+from .devices import types as device_types
+from .devices.factory import build_device, get_object_type
 
 try:
     import urllib3
@@ -31,7 +31,7 @@ ALLOW_LOCAL_CONTROL = True
 _LOGGER = logging.getLogger(__name__)
 
 
-class WinkApiInterface(object):
+class WinkApiInterface:
 
     BASE_URL = "https://api.wink.com"
     api_headers = API_HEADERS
@@ -306,7 +306,6 @@ def set_bearer_token(token):
     API_HEADERS["Content-Type"] = "application/json"
     API_HEADERS["Authorization"] = "Bearer {}".format(token)
     LOCAL_API_HEADERS = API_HEADERS
-    print(token)
 
 
 def legacy_set_wink_credentials(email, password, client_id, client_secret):
@@ -614,10 +613,8 @@ def wink_api_fetch(end_point='wink_devices', retry=True):
             refresh_access_token()
             # Only retry once so pass in False for retry value
             return wink_api_fetch(end_point, False)
-        else:
-            raise WinkAPIException("401 Response from Wink API.")
-    else:
-        raise WinkAPIException("Unexpected")
+        raise WinkAPIException("401 Response from Wink API.")
+    raise WinkAPIException("Unexpected")
 
 
 def get_devices(device_type, end_point="wink_devices"):
@@ -630,12 +627,11 @@ def get_devices(device_type, end_point="wink_devices"):
             ALL_DEVICES = wink_api_fetch(end_point)
             LAST_UPDATE = now
         return get_devices_from_response_dict(ALL_DEVICES, device_type)
-    elif end_point == "robots" or end_point == "scenes" or end_point == "groups":
+    if end_point in ("robots", "scenes", "groups"):
         json_data = wink_api_fetch(end_point)
         return get_devices_from_response_dict(json_data, device_type)
-    else:
-        _LOGGER.error("Invalid endpoint %s", end_point)
-        return {}
+    _LOGGER.error("Invalid endpoint %s", end_point)
+    return {}
 
 
 def get_devices_from_response_dict(response_dict, device_type):
@@ -647,10 +643,7 @@ def get_devices_from_response_dict(response_dict, device_type):
     devices = []
 
     api_interface = WinkApiInterface()
-    if isinstance(device_type, (list,)):
-        check_list = True
-    else:
-        check_list = False
+    check_list = bool(isinstance(device_type, (list,)))
 
     for item in items:
         if (check_list and get_object_type(item) in device_type) or \

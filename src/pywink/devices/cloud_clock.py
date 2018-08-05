@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 
 class WinkCloudClock(WinkDevice):
@@ -32,6 +32,9 @@ class WinkCloudClockAlarm(WinkDevice):
     def __init__(self, device_state_as_json, api_interface):
         super().__init__(device_state_as_json, api_interface)
         self.parent = None
+
+    def state(self):
+        return self.json_state('state')
 
     def set_parent(self, parent):
         self.parent = parent
@@ -88,12 +91,15 @@ class WinkCloudClockDial(WinkDevice):
     def set_parent(self, parent):
         self.parent = parent
 
-    def _update_state_from_response(self, response):
+    def _update_state_from_response(self, response_json):
         """
-        :param response: the json obj returned from query
+        :param response_json: the json obj returned from query
         :return:
         """
-        cloud_clock = response.get('data')
+        cloud_clock = response_json.get('data')
+
+        if cloud_clock is None:
+            return False
 
         cloud_clock_last_reading = cloud_clock.get('last_reading')
         dials = cloud_clock.get('dials')
@@ -101,6 +107,8 @@ class WinkCloudClockDial(WinkDevice):
             if dial.get('object_id') == self.object_id():
                 dial['connection'] = cloud_clock_last_reading.get('connection')
                 self.json_state = dial
+                return True
+        return False
 
     def pubnub_update(self, json_response):
         self._update_state_from_response(json_response)
@@ -113,6 +121,13 @@ class WinkCloudClockDial(WinkDevice):
 
     def parent_object_type(self):
         return self.json_state.get('parent_object_type')
+
+    def set_name(self, name):
+        value = self.parent.json_state
+        _json = {"name": name}
+        value["dials"][self.index()] = _json
+        response = self.api_interface.set_device_state(self, value, self.parent_id(), self.parent_object_type())
+        self._update_state_from_response(response)
 
     def set_configuration(self, min_value, max_value, rotation="cw", scale="linear", ticks=12, min_position=0,
                           max_position=360):
@@ -128,10 +143,10 @@ class WinkCloudClockDial(WinkDevice):
         :return:
         """
 
-        json = {"min_value": min_value, "max_value": max_value, "rotation": rotation, "scale": scale, "ticks": ticks,
-                "min_position": min_position, "max_position": max_position}
+        _json = {"min_value": min_value, "max_value": max_value, "rotation": rotation, "scale": scale, "ticks": ticks,
+                 "min_position": min_position, "max_position": max_position}
 
-        dial_config = {"dial_configuration": json}
+        dial_config = {"dial_configuration": _json}
 
         self._update_state_from_response(self.parent.set_dial(dial_config, self.index()))
 

@@ -1,4 +1,4 @@
-from pywink.devices.light_bulb import WinkLightBulb
+from ..devices.light_bulb import WinkLightBulb
 
 
 class WinkLightGroup(WinkLightBulb):

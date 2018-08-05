@@ -2,36 +2,36 @@
 Build Wink devices.
 """
 
-from pywink.devices import types as device_types
-from pywink.devices.sensor import WinkSensor
-from pywink.devices.light_bulb import WinkLightBulb
-from pywink.devices.binary_switch import WinkBinarySwitch
-from pywink.devices.lock import WinkLock
-from pywink.devices.eggtray import WinkEggtray
-from pywink.devices.garage_door import WinkGarageDoor
-from pywink.devices.shade import WinkShade
-from pywink.devices.siren import WinkSiren
-from pywink.devices.key import WinkKey
-from pywink.devices.thermostat import WinkThermostat
-from pywink.devices.fan import WinkFan, WinkGeZwaveFan
-from pywink.devices.remote import WinkRemote
-from pywink.devices.hub import WinkHub
-from pywink.devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
-from pywink.devices.piggy_bank import WinkPorkfolioBalanceSensor, WinkPorkfolioNose
-from pywink.devices.sprinkler import WinkSprinkler
-from pywink.devices.button import WinkButton
-from pywink.devices.gang import WinkGang
-from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
-from pywink.devices.camera import WinkCanaryCamera
-from pywink.devices.air_conditioner import WinkAirConditioner
-from pywink.devices.propane_tank import WinkPropaneTank
-from pywink.devices.robot import WinkRobot
-from pywink.devices.scene import WinkScene
-from pywink.devices.light_group import WinkLightGroup
-from pywink.devices.binary_switch_group import WinkBinarySwitchGroup
-from pywink.devices.water_heater import WinkWaterHeater
-from pywink.devices.shade_group import WinkShadeGroup
-from pywink.devices.cloud_clock import WinkCloudClock, WinkCloudClockDial
+from ..devices import types as device_types
+from ..devices.sensor import WinkSensor
+from ..devices.light_bulb import WinkLightBulb
+from ..devices.binary_switch import WinkBinarySwitch
+from ..devices.lock import WinkLock
+from ..devices.eggtray import WinkEggtray
+from ..devices.garage_door import WinkGarageDoor
+from ..devices.shade import WinkShade
+from ..devices.siren import WinkSiren
+from ..devices.key import WinkKey
+from ..devices.thermostat import WinkThermostat
+from ..devices.fan import WinkFan, WinkGeZwaveFan
+from ..devices.remote import WinkRemote
+from ..devices.hub import WinkHub
+from ..devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
+from ..devices.piggy_bank import WinkPorkfolioBalanceSensor, WinkPorkfolioNose
+from ..devices.sprinkler import WinkSprinkler
+from ..devices.button import WinkButton
+from ..devices.gang import WinkGang
+from ..devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
+from ..devices.camera import WinkCanaryCamera
+from ..devices.air_conditioner import WinkAirConditioner
+from ..devices.propane_tank import WinkPropaneTank
+from ..devices.robot import WinkRobot
+from ..devices.scene import WinkScene
+from ..devices.light_group import WinkLightGroup
+from ..devices.binary_switch_group import WinkBinarySwitchGroup
+from ..devices.water_heater import WinkWaterHeater
+from ..devices.shade_group import WinkShadeGroup
+from ..devices.cloud_clock import WinkCloudClock, WinkCloudClockDial
 
 
 # pylint: disable=too-many-branches, too-many-statements

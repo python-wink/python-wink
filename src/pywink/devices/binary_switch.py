@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 SUPPORTED_BINARY_STATE_FIELDS = ['powered', 'opened']
 

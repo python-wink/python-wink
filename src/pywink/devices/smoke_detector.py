@@ -1,4 +1,4 @@
-from pywink.devices.sensor import WinkDevice
+from ..devices.sensor import WinkDevice
 
 
 class WinkBaseSmokeDetector(WinkDevice):
