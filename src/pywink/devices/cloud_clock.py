@@ -1,4 +1,13 @@
+from datetime import datetime
+import logging
+
 from ..devices.base import WinkDevice
+
+
+DTSTART = "DTSTART;TZID="
+REPEAT = "RRULE:FREQ=WEEKLY;BYDAY="
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class WinkCloudClock(WinkDevice):
@@ -9,19 +18,33 @@ class WinkCloudClock(WinkDevice):
     def state(self):
         return self.available()
 
-    def set_dial(self, json_value, index):
+    def set_dial(self, json_value, index, timezone=None):
         """
         :param json_value: The value to set
         :param index: The dials index
+        :param timezone: The time zone to use for a time dial
         :return:
         """
 
         values = self.json_state
-        json_value["channel_configuration"] = {"channel_id": "10"}
-        values["dials"][index] = json_value
+        if timezone is None:
+            json_value["channel_configuration"] = {"channel_id": "10"}
+            values["dials"][index] = json_value
 
-        response = self.api_interface.set_device_state(self, values)
+            response = self.api_interface.set_device_state(self, values)
+        else:
+            json_value["channel_configuration"] = {"channel_id": "1", "timezone": timezone}
+            values["dials"][index] = json_value
+            response = self.api_interface.set_device_state(self, values)
         return response
+
+    def get_time_dial(self):
+        for dial in self.json_state.get("dials", {}):
+            if dial['channel_configuration']['channel_id'] == "1":
+                if dial['name'] == "Time":
+                    return dial
+                return None
+        return None
 
 
 class WinkCloudClockAlarm(WinkDevice):
@@ -32,15 +55,84 @@ class WinkCloudClockAlarm(WinkDevice):
     def __init__(self, device_state_as_json, api_interface):
         super().__init__(device_state_as_json, api_interface)
         self.parent = None
+        self.start_time, self.days = _parse_ical(device_state_as_json.get('recurrence'))
 
     def state(self):
-        return self.json_state('state')
+        return self.json_state['next_at']
 
     def set_parent(self, parent):
         self.parent = parent
 
     def available(self):
-        return self.json_state.get('connection', False)
+        enabled = self.json_state['enabled']
+        clock = self.parent.get_time_dial()
+        return bool(enabled and clock is not None)
+
+    def set_enabled(self, enabled):
+        self.api_interface.set_device_state(self, {"enabled": enabled})
+
+    def update_state(self):
+        """ Update state with latest info from Wink API. """
+        response = self.api_interface.get_device_state(self, id_override=self.parent.object_id(),
+                                                       type_override=self.parent.object_type())
+        self._update_state_from_response(response)
+
+    def _update_state_from_response(self, response_json):
+        """
+        :param response_json: the json obj returned from query
+        :return:
+        """
+        if 'data' in response_json and response_json['data']['object_type'] == "cloud_clock":
+            cloud_clock = response_json.get('data')
+            if cloud_clock is None:
+                return False
+
+            alarms = cloud_clock.get('alarms')
+            for alarm in alarms:
+                if alarm.get('object_id') == self.object_id():
+                    self.json_state = alarm
+                    return True
+            return False
+        elif 'data' in response_json:
+            alarm = response_json.get('data')
+            self.json_state = alarm
+            return True
+        else:
+            self.json_state = response_json
+            return True
+
+    def set_recurrence(self, date, days=None):
+        """
+
+        :param date: Datetime object time to start/repeat
+        :param days: days to repeat (Defaults to one time alarm)
+        :return:
+        """
+        if self.parent.get_time_dial() is None:
+            _LOGGER.error("Not setting alarm, no time dial.")
+            return False
+        timezone_string = self.parent.get_time_dial()["channel_configuration"]["timezone"]
+        valid_days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"]
+        ical_string = DTSTART + timezone_string + ":" + date.strftime("%Y%m%dT%H%M%S")
+        if days is not None:
+            if days == "DAILY":
+                ical_string = ical_string + "\nRRULE:FREQ=DAILY"
+            else:
+                ical_string = ical_string + "\n" + REPEAT
+                for day in days:
+                    if day in valid_days:
+                        if day == days[0]:
+                            ical_string = ical_string + day
+                        else:
+                            ical_string = ical_string + ',' + day
+                    else:
+                        error = "Invalid repeat day {}".format(day)
+                        _LOGGER.error(error)
+
+        _json = {"recurrence": ical_string, "enabled": True}
+        print(str(_json))
+        self.api_interface.set_device_state(self, _json)
+        return True
 
 
 class WinkCloudClockDial(WinkDevice):
@@ -166,3 +258,33 @@ class WinkCloudClockDial(WinkDevice):
             values["labels"] = json_labels
 
         self._update_state_from_response(self.parent.set_dial(values, self.index()))
+
+    def make_time_dial(self, timezone_string):
+        """
+
+        :param timezone_string:
+        :return:
+        """
+        self._update_state_from_response(self.parent.set_dial({}, self.index(), timezone_string))
+
+
+def _parse_ical(ical_string):
+    """
+    SU,MO,TU,WE,TH,FR,SA
+    DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=SA
+    DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=DAILY
+    DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA
+    DTSTART;TZID=America/New_York:20180718T174500
+    """
+    start_time = ical_string.splitlines()[0].replace(DTSTART, '')
+    if "RRULE" in ical_string:
+        days = ical_string.splitlines()[1].replace(REPEAT, '')
+        if days == "RRULE:FREQ=DAILY":
+            days = ['DAILY']
+        else:
+            days = days.split(',')
+    else:
+        days = None
+    start_time = start_time.splitlines()[0].split(':')[1]
+    datetime_object = datetime.strptime(start_time, '%Y%m%dT%H%M%S')
+    return datetime_object, days

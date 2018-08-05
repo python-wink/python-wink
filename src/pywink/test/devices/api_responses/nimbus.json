@@ -152,8 +152,8 @@
   ],
   "alarms": [
     {
-      "next_at": null,
-      "enabled": false,
+      "next_at": 1533576003,
+      "enabled": true,
       "recurrence": "DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=SA",
       "alarm_id": "11740",
       "name": "",
@@ -164,8 +164,8 @@
       "updated_at": 1533441551
     },
     {
-      "next_at": null,
-      "enabled": false,
+      "next_at": 1533576003,
+      "enabled": true,
       "recurrence": "DTSTART;TZID=America/New_York:20180805T114547\nRRULE:FREQ=WEEKLY;BYDAY=MO",
       "alarm_id": "11741",
       "name": "",
@@ -174,6 +174,18 @@
       "object_id": "11741",
       "created_at": 1533440761,
       "updated_at": 1533441553
+    },
+    {
+      "next_at": 1533576003,
+      "enabled": true,
+      "recurrence": "DTSTART;TZID=America/New_York:20180806T132003\nRRULE:FREQ=WEEKLY;BYDAY=SU,MO,TU",
+      "alarm_id": "11742",
+      "name": "",
+      "media_id": "1",
+      "object_type": "alarm",
+      "object_id": "11742",
+      "created_at": 1533489368,
+      "updated_at": 1533490109
     }
   ],
   "object_type": "cloud_clock",
