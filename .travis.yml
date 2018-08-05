@@ -2,13 +2,21 @@ sudo: false
 language: python
 cache: pip
 python:
-  - 3.4
-  - 3.5
+- 3.4
+- 3.5
 install:
-  - script/before_install
+- script/before_install
 script:
-  - script/test
+- script/test
 after_success:
-  - coveralls
+- coveralls
 matrix:
   fast_finish: true
+deploy:
+  provider: pypi
+  distributions: sdist
+  user: w1ll1am23
+  password:
+    secure: kI2djVwVrBKbAVEcTzOStKXHL1TSuXtTD9pTWtBJF8o/yFlib7HMWPo6p2PY9jEQK82ADo7dUVZphpqshteM8vjKSsn8pDjK+Tzt2uwpKhRpu63QxJVKCQ+GrZ9QJPrHSA4t6feZsq8lK650/xht/yXMeV2pNCRJxRiLJNxhChNOasSOEHtRxBXrZ87y5a/ZjKWzl1Q48FhYjIpdV35eDoeHVOtV1mDED2Zqypqtm39FFtL2kh7GjkAzq6xEwXcwBBkthkhsSF8RQ4MJ4cyN6Z8mzKektGVCwQif8gYsVwDhwjNQhaagoW4oI/AvQ8wLFenmrV8i68LK61InCsZFiImtgufp8t1p7i5Bclxfby0ZPvYw/MrL0xnxbOppbRZmUwi2aV5xI8aVzpOponPq/mXHqLZ952Cy2E/jEl3lO5y2x2iydbSlaMMcceMAXdTHjqEf+AIJPXsOjVzBqpyoA7HpfMIA0x49FiIKRj1Tyx7VR7VdXBdpS5d5tnLrVAtnQI6zIa84btUPAGT2c5Nuk8k/M3DI4Dn0X48NwGXa/oimNaniAAeYPeKoMEfI99gH17D3volBLioVR3OYQGGbLubMojLQxS4kcxm/Qog4FMU89boHQxCoofAGmT8DC3tphGhrzz8NmpPUSul5nE3QVHl+DTCbzHe7oHvIoiT0uf4=
+  on:
+    branch: master
