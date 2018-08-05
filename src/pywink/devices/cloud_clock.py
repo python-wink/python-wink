@@ -93,13 +93,12 @@ class WinkCloudClockAlarm(WinkDevice):
                     self.json_state = alarm
                     return True
             return False
-        elif 'data' in response_json:
+        if 'data' in response_json:
             alarm = response_json.get('data')
             self.json_state = alarm
             return True
-        else:
-            self.json_state = response_json
-            return True
+        self.json_state = response_json
+        return True
 
     def set_recurrence(self, date, days=None):
         """
