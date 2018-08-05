@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.0.0
+- Support for Quirky Nimbus
+
 ## 1.9.1
 - Support all float values from "dimmable fans".
 
