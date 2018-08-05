@@ -31,6 +31,7 @@ from pywink.devices.light_group import WinkLightGroup
 from pywink.devices.binary_switch_group import WinkBinarySwitchGroup
 from pywink.devices.water_heater import WinkWaterHeater
 from pywink.devices.shade_group import WinkShadeGroup
+from pywink.devices.cloud_clock import WinkCloudClock, WinkCloudClockDial
 
 
 # pylint: disable=too-many-branches, too-many-statements
@@ -119,6 +120,9 @@ def build_device(device_state_as_json, api_interface):
                 new_objects.append(WinkLightGroup(device_state_as_json, api_interface))
     elif object_type == device_types.WATER_HEATER:
         new_objects.append(WinkWaterHeater(device_state_as_json, api_interface))
+    elif object_type == device_types.CLOUD_CLOCK:
+        cloud_clock = WinkCloudClock(device_state_as_json, api_interface)
+        new_objects.extend(__get_dials_from_cloudclock(device_state_as_json, api_interface, cloud_clock))
 
     return new_objects
 
@@ -175,3 +179,16 @@ def __get_sensors_from_smoke_detector(item, api_interface):
         sensors.append(WinkSmokeSeverity(item, api_interface))
         sensors.append(WinkCoSeverity(item, api_interface))
     return sensors
+
+
+def __get_dials_from_cloudclock(item, api_interface, parent):
+    _dials = []
+    dials = item['dials']
+    for dial in dials:
+        if 'subscription' in item:
+            dial['subscription'] = item['subscription']
+        dial['connection'] = item['last_reading']['connection']
+        dial_obj = WinkCloudClockDial(dial, api_interface)
+        dial_obj.set_parent(parent)
+        _dials.append(dial_obj)
+    return _dials

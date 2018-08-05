@@ -306,6 +306,7 @@ def set_bearer_token(token):
     API_HEADERS["Content-Type"] = "application/json"
     API_HEADERS["Authorization"] = "Bearer {}".format(token)
     LOCAL_API_HEADERS = API_HEADERS
+    print(token)
 
 
 def legacy_set_wink_credentials(email, password, client_id, client_secret):
@@ -555,6 +556,10 @@ def get_water_heaters():
     return get_devices(device_types.WATER_HEATER)
 
 
+def get_cloud_clocks():
+    return get_devices(device_types.CLOUD_CLOCK)
+
+
 def get_light_groups():
     light_groups = []
     for group in get_devices(device_types.GROUP, "groups"):
@@ -642,9 +647,14 @@ def get_devices_from_response_dict(response_dict, device_type):
     devices = []
 
     api_interface = WinkApiInterface()
+    if isinstance(device_type, (list,)):
+        check_list = True
+    else:
+        check_list = False
 
     for item in items:
-        if get_object_type(item) in device_type:
+        if (check_list and get_object_type(item) in device_type) or \
+                (not check_list and get_object_type(item) == device_type):
             _devices = build_device(item, api_interface)
             for device in _devices:
                 devices.append(device)
