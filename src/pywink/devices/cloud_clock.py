@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import random
 
 from ..devices.base import WinkDevice
 
@@ -46,6 +47,21 @@ class WinkCloudClock(WinkDevice):
                 return None
         return None
 
+    def create_alarm(self, date, days=None, name=None):
+        if self.get_time_dial() is None:
+            _LOGGER.error("Not creating alarm, no time dial.")
+            return False
+        timezone_string = self.get_time_dial()["channel_configuration"]["timezone"]
+        ical_string = _create_ical_string(timezone_string, date, days)
+
+        nonce = str(random.randint(0, 1000000000))
+
+        _json = {'recurrence': ical_string, 'enabled': True, 'nonce': nonce}
+        if name:
+            _json['name'] = name
+        self.api_interface.create_cloud_clock_alarm(self, _json)
+        return True
+
 
 class WinkCloudClockAlarm(WinkDevice):
     """
@@ -55,7 +71,7 @@ class WinkCloudClockAlarm(WinkDevice):
     def __init__(self, device_state_as_json, api_interface):
         super().__init__(device_state_as_json, api_interface)
         self.parent = None
-        self.start_time, self.days = _parse_ical(device_state_as_json.get('recurrence'))
+        self.start_time, self.days = _parse_ical_string(device_state_as_json.get('recurrence'))
 
     def state(self):
         return self.json_state['next_at']
@@ -111,25 +127,9 @@ class WinkCloudClockAlarm(WinkDevice):
             _LOGGER.error("Not setting alarm, no time dial.")
             return False
         timezone_string = self.parent.get_time_dial()["channel_configuration"]["timezone"]
-        valid_days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"]
-        ical_string = DTSTART + timezone_string + ":" + date.strftime("%Y%m%dT%H%M%S")
-        if days is not None:
-            if days == "DAILY":
-                ical_string = ical_string + "\nRRULE:FREQ=DAILY"
-            else:
-                ical_string = ical_string + "\n" + REPEAT
-                for day in days:
-                    if day in valid_days:
-                        if day == days[0]:
-                            ical_string = ical_string + day
-                        else:
-                            ical_string = ical_string + ',' + day
-                    else:
-                        error = "Invalid repeat day {}".format(day)
-                        _LOGGER.error(error)
+        ical_string = _create_ical_string(timezone_string, date, days)
+        _json = {'recurrence': ical_string, 'enabled': True}
 
-        _json = {"recurrence": ical_string, "enabled": True}
-        print(str(_json))
         self.api_interface.set_device_state(self, _json)
         return True
 
@@ -267,7 +267,28 @@ class WinkCloudClockDial(WinkDevice):
         self._update_state_from_response(self.parent.set_dial({}, self.index(), timezone_string))
 
 
-def _parse_ical(ical_string):
+def _create_ical_string(timezone_string, date, days=None):
+    valid_days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"]
+    ical_string = DTSTART + timezone_string + ":" + date.strftime("%Y%m%dT%H%M%S")
+    if days is not None:
+        if days == "DAILY":
+            ical_string = ical_string + "\nRRULE:FREQ=DAILY"
+        else:
+            ical_string = ical_string + "\n" + REPEAT
+            for day in days:
+                if day in valid_days:
+                    if day == days[0]:
+                        ical_string = ical_string + day
+                    else:
+                        ical_string = ical_string + ',' + day
+                else:
+                    error = "Invalid repeat day {}".format(day)
+                    _LOGGER.error(error)
+
+    return ical_string
+
+
+def _parse_ical_string(ical_string):
     """
     SU,MO,TU,WE,TH,FR,SA
     DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=SA

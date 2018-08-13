@@ -108,7 +108,7 @@ class BaseTests(unittest.TestCase):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkKey, WinkPorkfolioBalanceSensor, WinkPorkfolioNose, WinkPowerStripOutlet,
                       WinkSiren, WinkEggtray, WinkRemote, WinkPowerStrip, WinkAirConditioner, WinkPropaneTank,
-                      WinkCloudClockDial, WinkCloudClockAlarm]
+                      WinkCloudClockDial, WinkCloudClockAlarm, WinkCloudClock]
         devices_with_no_device_model = ["GoControl Thermostat", "New Shortcut", "Test robot", "August lock"]
         for device in devices:
             if type(device) in skip_types:
@@ -122,7 +122,7 @@ class BaseTests(unittest.TestCase):
         devices = get_devices_from_response_dict(self.response_dict, device_types.ALL_SUPPORTED_DEVICES)
         skip_types = [WinkKey, WinkPowerStrip, WinkPowerStripOutlet, WinkPorkfolioBalanceSensor, WinkPorkfolioNose,
                       WinkSiren, WinkEggtray, WinkRemote, WinkButton, WinkAirConditioner, WinkPropaneTank,
-                      WinkGeZwaveFan, WinkCloudClockDial, WinkCloudClockAlarm]
+                      WinkGeZwaveFan, WinkCloudClockDial, WinkCloudClockAlarm, WinkCloudClock]
         skip_manufactuer_device_models = ["linear_wadwaz_1",  "linear_wapirz_1", "aeon_labs_dsb45_zwus", "wink_hub", "wink_hub2", "sylvania_sylvania_ct",
                                           "ge_bulb", "quirky_ge_spotter", "schlage_zwave_lock", "home_decorators_home_decorators_fan",
                                           "sylvania_sylvania_rgbw", "somfy_bali", "wink_relay_sensor", "wink_project_one", "kidde_smoke_alarm",

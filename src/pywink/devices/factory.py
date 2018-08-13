@@ -122,6 +122,7 @@ def build_device(device_state_as_json, api_interface):
         new_objects.append(WinkWaterHeater(device_state_as_json, api_interface))
     elif object_type == device_types.CLOUD_CLOCK:
         cloud_clock = WinkCloudClock(device_state_as_json, api_interface)
+        new_objects.append(cloud_clock)
         new_objects.extend(__get_dials_from_cloudclock(device_state_as_json, api_interface, cloud_clock))
         new_objects.extend(__get_alarms_from_cloudclock(device_state_as_json, api_interface, cloud_clock))
 

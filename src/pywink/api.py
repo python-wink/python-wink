@@ -289,6 +289,57 @@ class WinkApiInterface:
         except requests.exceptions.RequestException:
             return None
 
+    def create_cloud_clock_alarm(self, device, new_device_json, id_override=None, type_override=None):
+        """
+        Create a new alarm on the provided Nimbus.
+
+        Args:
+            device (WinkDevice): The device the change is being requested for.
+            new_device_json (String): The JSON string required to create the device.
+            id_override (String, optional): A device ID used to override the
+                passed in device's ID. Used to make changes on sub-devices.
+                i.e. Outlet in a Powerstrip. The Parent device's ID.
+            type_override (String, optional): Used to override the device type
+                when a device inherits from a device other than WinkDevice.
+        Returns:
+            response_json (Dict): The API's response in dictionary format
+        """
+        object_id = id_override or device.object_id()
+        object_type = type_override or device.object_type()
+        url_string = "{}/{}s/{}/alarms".format(self.BASE_URL,
+                                               object_type,
+                                               object_id)
+        try:
+            arequest = requests.post(url_string,
+                                     data=json.dumps(new_device_json),
+                                     headers=API_HEADERS)
+            response_json = arequest.json()
+            return response_json
+        except requests.exceptions.RequestException:
+            return None
+
+    def piggy_bank_deposit(self, device, _json):
+        """
+        Args:
+            device (WinkPorkfolioBalanceSensor): The piggy bank device to deposit to/withdrawal from.
+            _json (String): The JSON string to perform the deposit/withdrawal.
+        Returns:
+            response_json (Dict): The API's response in dictionary format
+        """
+        url_string = "{}/{}s/{}/deposits".format(self.BASE_URL,
+                                                 device.object_type(),
+                                                 device.object_id())
+        print(url_string)
+        try:
+            arequest = requests.post(url_string,
+                                     data=json.dumps(_json),
+                                     headers=API_HEADERS)
+            response_json = arequest.json()
+            print(json.dumps(response_json, indent=4, sort_keys=True))
+            return response_json
+        except requests.exceptions.RequestException:
+            return None
+
 
 def disable_local_control():
     global ALLOW_LOCAL_CONTROL
@@ -643,7 +694,7 @@ def get_devices_from_response_dict(response_dict, device_type):
     devices = []
 
     api_interface = WinkApiInterface()
-    check_list = bool(isinstance(device_type, (list,)))
+    check_list = isinstance(device_type, (list,))
 
     for item in items:
         if (check_list and get_object_type(item) in device_type) or \

@@ -107,7 +107,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 84)
+        self.assertEqual(len(devices), 85)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -529,7 +529,7 @@ class ApiTests(unittest.TestCase):
             device.set_name("TEST_NAME")
             device.update_state()
         for device in devices:
-            if not isinstance(device, WinkCloudClockAlarm):
+            if not isinstance(device, WinkCloudClockAlarm) and not isinstance(device, WinkCloudClockDial):
                 self.assertTrue(device.name().startswith("TEST_NAME"))
 
 
