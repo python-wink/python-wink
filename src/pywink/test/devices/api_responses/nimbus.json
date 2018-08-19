@@ -133,7 +133,7 @@
       "dial_configuration": {
         "min_value": 0,
         "max_value": 360,
-        "rotation": "cw",
+        "rotation": "ccw",
         "min_position": 0,
         "max_position": 360,
         "scale_type": "linear",

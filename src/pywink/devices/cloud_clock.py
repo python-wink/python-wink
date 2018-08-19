@@ -84,6 +84,9 @@ class WinkCloudClockAlarm(WinkDevice):
         clock = self.parent.get_time_dial()
         return bool(enabled and clock is not None)
 
+    def recurrence(self):
+        return self.json_state['recurrence']
+
     def set_enabled(self, enabled):
         self.api_interface.set_device_state(self, {"enabled": enabled})
 
@@ -153,22 +156,22 @@ class WinkCloudClockDial(WinkDevice):
         return self.json_state.get('labels')
 
     def rotation(self):
-        return self.json_state.get('rotation')
+        return self.json_state['dial_configuration'].get('rotation')
 
     def max_value(self):
-        return self.json_state.get('max_value')
+        return self.json_state['dial_configuration'].get('max_value')
 
     def min_value(self):
-        return self.json_state.get('min_value')
+        return self.json_state['dial_configuration'].get('min_value')
 
     def ticks(self):
-        return self.json_state.get('ticks')
+        return self.json_state['dial_configuration'].get('num_ticks')
 
     def min_position(self):
-        return self.json_state.get('min_position')
+        return self.json_state['dial_configuration'].get('min_position')
 
     def max_position(self):
-        return self.json_state.get('max_position')
+        return self.json_state['dial_configuration'].get('max_position')
 
     def available(self):
         return self.json_state.get('connection', False)
@@ -277,12 +280,13 @@ def _create_ical_string(timezone_string, date, days=None):
             ical_string = ical_string + "\n" + REPEAT
             for day in days:
                 if day in valid_days:
-                    if day == days[0]:
+                    if ical_string[-1] == "=":
                         ical_string = ical_string + day
                     else:
                         ical_string = ical_string + ',' + day
                 else:
                     error = "Invalid repeat day {}".format(day)
+
                     _LOGGER.error(error)
 
     return ical_string
