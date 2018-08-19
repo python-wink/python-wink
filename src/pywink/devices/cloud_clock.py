@@ -191,6 +191,7 @@ class WinkCloudClockDial(WinkDevice):
         :return:
         """
         cloud_clock = response_json.get('data')
+        self.parent.json_state = cloud_clock
 
         if cloud_clock is None:
             return False

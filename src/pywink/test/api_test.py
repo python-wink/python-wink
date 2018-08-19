@@ -177,9 +177,9 @@ class ApiTests(unittest.TestCase):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         sensor_types = [WinkSensor, WinkHub, WinkPorkfolioBalanceSensor, WinkKey, WinkRemote,
                         WinkGang, WinkSmokeDetector, WinkSmokeSeverity,
-                        WinkCoDetector, WinkCoSeverity, WinkButton, WinkRobot, WinkCloudClockDial]
+                        WinkCoDetector, WinkCoSeverity, WinkButton, WinkRobot]
         # No way to validate scene is activated, so skipping.
-        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera, WinkScene, WinkCloudClock, WinkCloudClockAlarm]
+        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera, WinkScene, WinkCloudClock, WinkCloudClockDial, WinkCloudClockAlarm]
         devices = get_all_devices()
         old_states = {}
         for device in devices:
@@ -521,13 +521,27 @@ class ApiTests(unittest.TestCase):
             device.update_state()
         self.assertEqual(device.tare(), 5.0)
 
+    def test_get_cloud_clock_dial_updated_states_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_cloud_clocks()
+        dial = devices[1]
+        for device in devices:
+            device.api_interface = self.api_interface
+        dial.set_configuration(0, 123, "ccw", min_position=0, max_position=125)
+        dial.update_state()
+
+        self.assertEqual(dial.max_position(), 125)
+        self.assertEqual(dial.max_value(), 123)
+        self.assertEquals(dial.rotation(), "ccw")
+
     def test_set_all_device_names(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
         for device in devices:
-            device.api_interface = self.api_interface
-            device.set_name("TEST_NAME")
-            device.update_state()
+            if not isinstance(device, WinkCloudClockAlarm) and not isinstance(device, WinkCloudClockDial):
+                device.api_interface = self.api_interface
+                device.set_name("TEST_NAME")
+                device.update_state()
         for device in devices:
             if not isinstance(device, WinkCloudClockAlarm) and not isinstance(device, WinkCloudClockDial):
                 self.assertTrue(device.name().startswith("TEST_NAME"))
@@ -616,7 +630,7 @@ class MockApiInterface:
         device_object_type = device.object_type()
         object_type = type_override or device_object_type
         return_dict = {}
-        if "name" in str(state):
+        if "TEST_NAME" in str(state):
             for dict_device in USERS_ME_WINK_DEVICES.get('data'):
                 _object_id = dict_device.get("object_id")
                 if _object_id == object_id:
@@ -649,6 +663,15 @@ class MockApiInterface:
                         index = device.index()
                         set_state = state["outlets"][index]["desired_state"]["powered"]
                         dict_device["outlets"][index]["last_reading"]["powered"] = set_state
+                        return_dict["data"] = dict_device
+                    elif device_object_type == "cloud_clock":
+                        index = 0
+                        for dial in state["dials"]:
+                            for key, value in dial.get("channel_configuration").items():
+                                dict_device["dials"][index]["channel_configuration"][key] = value
+                            for key, value in dial.get("dial_configuration").items():
+                                dict_device["dials"][index]["dial_configuration"][key] = value
+                            index = index + 1
                         return_dict["data"] = dict_device
                     else:
                         if "nose_color" in state:
