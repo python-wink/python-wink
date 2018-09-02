@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 SENSOR_FIELDS_TO_UNITS = {"humidity": "%", "temperature": u'\N{DEGREE SIGN}', "brightness": "%", "proximity": ""}
 

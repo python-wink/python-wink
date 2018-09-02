@@ -29,9 +29,11 @@ ROBOT = 'robot'
 SCENE = 'scene'
 GROUP = 'group'
 WATER_HEATER = 'water_heater'
+CLOUD_CLOCK = 'cloud_clock'
 
 ALL_SUPPORTED_DEVICES = [LIGHT_BULB, BINARY_SWITCH, SENSOR_POD, LOCK, EGGTRAY,
                          GARAGE_DOOR, POWERSTRIP, SHADE, SIREN, KEY, PIGGY_BANK,
                          SMOKE_DETECTOR, THERMOSTAT, HUB, FAN, DOOR_BELL, REMOTE,
                          SPRINKLER, BUTTON, GANG, CAMERA, AIR_CONDITIONER,
-                         PROPANE_TANK, ROBOT, SCENE, GROUP, WATER_HEATER]
+                         PROPANE_TANK, ROBOT, SCENE, GROUP, WATER_HEATER,
+                         CLOUD_CLOCK]

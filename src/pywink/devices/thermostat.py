@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 
 # pylint: disable=too-many-public-methods
@@ -39,12 +39,11 @@ class WinkThermostat(WinkDevice):
         ecobee = self.profile()
         if nest is not None:
             return nest
-        elif ecobee is not None:
+        if ecobee is not None:
             if ecobee == "home":
                 return False
             return True
-        else:
-            return None
+        return None
 
     def current_hvac_mode(self):
         return self._last_reading.get('mode', None)

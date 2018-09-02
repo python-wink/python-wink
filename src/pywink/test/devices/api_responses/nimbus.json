@@ -1,0 +1,226 @@
+{
+  "last_reading": {
+    "connection": true,
+    "connection_updated_at": 1533401140.762892,
+    "connection_changed_at": 1533397680.0599086
+  },
+  "dials": [
+    {
+      "name": "Time",
+      "value": 41639.0,
+      "position": 346.99166666666667,
+      "label": "11:33 AM",
+      "labels": [
+        "11:33 AM",
+        "New York"
+      ],
+      "brightness": 100,
+      "channel_configuration": {
+        "locale": "en_us",
+        "timezone": "America/New_York",
+        "channel_id": "1",
+        "object_type": null,
+        "object_id": null
+      },
+      "dial_configuration": {
+        "min_value": 0,
+        "max_value": 86400,
+        "min_position": 0,
+        "max_position": 720,
+        "scale_type": "linear",
+        "rotation": "cw",
+        "num_ticks": 12
+      },
+      "dial_index": 0,
+      "dial_id": "78830",
+      "refreshed_at": 1533483239,
+      "object_type": "dial",
+      "object_id": "78830",
+      "created_at": 1533397676,
+      "updated_at": 1533483196,
+      "parent_object_type": "cloud_clock",
+      "parent_object_id": "19596"
+    },
+    {
+      "name": "Porkfolio",
+      "value": 279.0,
+      "position": 279.0,
+      "label": "279",
+      "labels": [
+        "279"
+      ],
+      "brightness": 25,
+      "channel_configuration": {
+        "channel_id": "10",
+        "object_type": null,
+        "object_id": null
+      },
+      "dial_configuration": {
+        "min_value": 0,
+        "max_value": 360,
+        "rotation": "cw",
+        "min_position": 0,
+        "max_position": 360,
+        "scale_type": "linear",
+        "num_ticks": 12
+      },
+      "dial_index": 1,
+      "dial_id": "78831",
+      "refreshed_at": 1533440249,
+      "object_type": "dial",
+      "object_id": "78831",
+      "created_at": 1533397676,
+      "updated_at": 1533483182,
+      "parent_object_type": "cloud_clock",
+      "parent_object_id": "19596"
+    },
+    {
+      "name": "Porkfolio",
+      "value": 1327.0,
+      "position": 296.658,
+      "label": "$13.27",
+      "labels": [
+        "$13.27",
+        "PORK"
+      ],
+      "brightness": 25,
+      "channel_configuration": {
+        "locale": "en_us",
+        "reading_type": "balance",
+        "channel_id": "12",
+        "wink_device_types": [
+          "piggy_bank"
+        ],
+        "wink_device_ids": [
+          "15212"
+        ],
+        "object_type": "piggy_bank",
+        "object_id": "15212"
+      },
+      "dial_configuration": {
+        "min_value": 0,
+        "max_value": 5000,
+        "min_position": -135,
+        "max_position": 135,
+        "scale_type": "linear",
+        "rotation": "cw",
+        "num_ticks": 12
+      },
+      "dial_index": 2,
+      "dial_id": "78832",
+      "refreshed_at": 1533483196,
+      "object_type": "dial",
+      "object_id": "78832",
+      "created_at": 1533397676,
+      "updated_at": 1533483196,
+      "parent_object_type": "cloud_clock",
+      "parent_object_id": "19596"
+    },
+    {
+      "name": "Dial #4",
+      "value": 212.0,
+      "position": 212.0,
+      "label": "212",
+      "labels": [
+        "212"
+      ],
+      "brightness": 25,
+      "channel_configuration": {
+        "channel_id": "10",
+        "object_type": null,
+        "object_id": null
+      },
+      "dial_configuration": {
+        "min_value": 0,
+        "max_value": 360,
+        "rotation": "ccw",
+        "min_position": 0,
+        "max_position": 360,
+        "scale_type": "linear",
+        "num_ticks": 12
+      },
+      "dial_index": 3,
+      "dial_id": "78833",
+      "refreshed_at": 1533405097,
+      "object_type": "dial",
+      "object_id": "78833",
+      "created_at": 1533397676,
+      "updated_at": 1533483182,
+      "parent_object_type": "cloud_clock",
+      "parent_object_id": "19596"
+    }
+  ],
+  "alarms": [
+    {
+      "next_at": 1533576003,
+      "enabled": true,
+      "recurrence": "DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=SA",
+      "alarm_id": "11740",
+      "name": "",
+      "media_id": "1",
+      "object_type": "alarm",
+      "object_id": "11740",
+      "created_at": 1533439680,
+      "updated_at": 1533441551
+    },
+    {
+      "next_at": 1533576003,
+      "enabled": true,
+      "recurrence": "DTSTART;TZID=America/New_York:20180805T114547\nRRULE:FREQ=WEEKLY;BYDAY=MO",
+      "alarm_id": "11741",
+      "name": "",
+      "media_id": "1",
+      "object_type": "alarm",
+      "object_id": "11741",
+      "created_at": 1533440761,
+      "updated_at": 1533441553
+    },
+    {
+      "next_at": 1533576003,
+      "enabled": true,
+      "recurrence": "DTSTART;TZID=America/New_York:20180806T132003\nRRULE:FREQ=WEEKLY;BYDAY=SU,MO,TU",
+      "alarm_id": "11742",
+      "name": "",
+      "media_id": "1",
+      "object_type": "alarm",
+      "object_id": "11742",
+      "created_at": 1533489368,
+      "updated_at": 1533490109
+    }
+  ],
+  "object_type": "cloud_clock",
+  "object_id": "19596",
+  "uuid": "002515db-46c4-4dd0-a20f-1bb3f658d82b",
+  "created_at": 1533397676,
+  "updated_at": 1533440084,
+  "icon_id": null,
+  "icon_code": null,
+  "subscription": {
+    "pubnub": {
+      "subscribe_key": "sub-c-f7bf7f7e-0542-11e3-a5e8-02ee2ddab7fe",
+      "channel": "9870af0c123456938c54dd4f8fc630ef|cloud_clock-19596|user-377123"
+    }
+  },
+  "cloud_clock_id": "19596",
+  "name": "Nimbus",
+  "locale": "en_us",
+  "units": {},
+  "hidden_at": null,
+  "capabilities": {
+    "supports_electric_imp": true,
+    "needs_wifi_network_list": true
+  },
+  "triggers": [],
+  "device_manufacturer": "quirky_ge",
+  "model_name": "Nimbus",
+  "upc_id": "527",
+  "upc_code": "quirky_ge_nimbus",
+  "primary_upc_code": "quirky_ge_nimbus",
+  "lat_lng": [
+    null,
+    null
+  ],
+  "location": "",
+  "mac_address": "0c2a6906b4c4",
+  "serial": "ADAA00048839"
+}

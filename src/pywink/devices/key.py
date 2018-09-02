@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 
 class WinkKey(WinkDevice):

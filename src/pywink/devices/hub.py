@@ -1,6 +1,6 @@
 import logging
 
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 _LOGGER = logging.getLogger(__name__)
 

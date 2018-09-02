@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 
 class WinkPowerStrip(WinkDevice):
@@ -39,14 +39,7 @@ class WinkPowerStripOutlet(WinkDevice):
         """ Update state with latest info from Wink API. """
         response = self.api_interface.get_device_state(self, id_override=self.parent_id(),
                                                        type_override=self.parent_object_type())
-        power_strip = response.get('data')
-
-        power_strip_reading = power_strip.get('last_reading')
-        outlets = power_strip.get('outlets')
-        for outlet in outlets:
-            if outlet.get('object_id') == self.object_id():
-                outlet['last_reading']['connection'] = power_strip_reading.get('connection')
-                self.json_state = outlet
+        self._update_state_from_response(response)
 
     def _update_state_from_response(self, response_json):
         """

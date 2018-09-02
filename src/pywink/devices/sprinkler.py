@@ -1,4 +1,4 @@
-from pywink.devices.binary_switch import WinkBinarySwitch
+from ..devices.binary_switch import WinkBinarySwitch
 
 
 class WinkSprinkler(WinkBinarySwitch):

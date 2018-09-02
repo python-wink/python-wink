@@ -1,4 +1,4 @@
-from pywink.devices.base import WinkDevice
+from ..devices.base import WinkDevice
 
 
 class WinkPorkfolioNose(WinkDevice):
@@ -79,3 +79,11 @@ class WinkPorkfolioBalanceSensor(WinkDevice):
         always returning True to avoid this issue.
         """
         return self._available
+
+    def deposit(self, amount):
+        """
+
+        :param amount: (int +/-) amount to be deposited or withdrawn in cents
+        """
+        _json = {"amount": amount}
+        self.api_interface.piggy_bank_deposit(self, _json)

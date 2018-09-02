@@ -2,35 +2,36 @@
 Build Wink devices.
 """
 
-from pywink.devices import types as device_types
-from pywink.devices.sensor import WinkSensor
-from pywink.devices.light_bulb import WinkLightBulb
-from pywink.devices.binary_switch import WinkBinarySwitch
-from pywink.devices.lock import WinkLock
-from pywink.devices.eggtray import WinkEggtray
-from pywink.devices.garage_door import WinkGarageDoor
-from pywink.devices.shade import WinkShade
-from pywink.devices.siren import WinkSiren
-from pywink.devices.key import WinkKey
-from pywink.devices.thermostat import WinkThermostat
-from pywink.devices.fan import WinkFan, WinkGeZwaveFan
-from pywink.devices.remote import WinkRemote
-from pywink.devices.hub import WinkHub
-from pywink.devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
-from pywink.devices.piggy_bank import WinkPorkfolioBalanceSensor, WinkPorkfolioNose
-from pywink.devices.sprinkler import WinkSprinkler
-from pywink.devices.button import WinkButton
-from pywink.devices.gang import WinkGang
-from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
-from pywink.devices.camera import WinkCanaryCamera
-from pywink.devices.air_conditioner import WinkAirConditioner
-from pywink.devices.propane_tank import WinkPropaneTank
-from pywink.devices.robot import WinkRobot
-from pywink.devices.scene import WinkScene
-from pywink.devices.light_group import WinkLightGroup
-from pywink.devices.binary_switch_group import WinkBinarySwitchGroup
-from pywink.devices.water_heater import WinkWaterHeater
-from pywink.devices.shade_group import WinkShadeGroup
+from ..devices import types as device_types
+from ..devices.sensor import WinkSensor
+from ..devices.light_bulb import WinkLightBulb
+from ..devices.binary_switch import WinkBinarySwitch
+from ..devices.lock import WinkLock
+from ..devices.eggtray import WinkEggtray
+from ..devices.garage_door import WinkGarageDoor
+from ..devices.shade import WinkShade
+from ..devices.siren import WinkSiren
+from ..devices.key import WinkKey
+from ..devices.thermostat import WinkThermostat
+from ..devices.fan import WinkFan, WinkGeZwaveFan
+from ..devices.remote import WinkRemote
+from ..devices.hub import WinkHub
+from ..devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
+from ..devices.piggy_bank import WinkPorkfolioBalanceSensor, WinkPorkfolioNose
+from ..devices.sprinkler import WinkSprinkler
+from ..devices.button import WinkButton
+from ..devices.gang import WinkGang
+from ..devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
+from ..devices.camera import WinkCanaryCamera
+from ..devices.air_conditioner import WinkAirConditioner
+from ..devices.propane_tank import WinkPropaneTank
+from ..devices.robot import WinkRobot
+from ..devices.scene import WinkScene
+from ..devices.light_group import WinkLightGroup
+from ..devices.binary_switch_group import WinkBinarySwitchGroup
+from ..devices.water_heater import WinkWaterHeater
+from ..devices.shade_group import WinkShadeGroup
+from ..devices.cloud_clock import WinkCloudClock, WinkCloudClockDial, WinkCloudClockAlarm
 
 
 # pylint: disable=too-many-branches, too-many-statements
@@ -119,6 +120,11 @@ def build_device(device_state_as_json, api_interface):
                 new_objects.append(WinkLightGroup(device_state_as_json, api_interface))
     elif object_type == device_types.WATER_HEATER:
         new_objects.append(WinkWaterHeater(device_state_as_json, api_interface))
+    elif object_type == device_types.CLOUD_CLOCK:
+        cloud_clock = WinkCloudClock(device_state_as_json, api_interface)
+        new_objects.append(cloud_clock)
+        new_objects.extend(__get_dials_from_cloudclock(device_state_as_json, api_interface, cloud_clock))
+        new_objects.extend(__get_alarms_from_cloudclock(device_state_as_json, api_interface, cloud_clock))
 
     return new_objects
 
@@ -175,3 +181,28 @@ def __get_sensors_from_smoke_detector(item, api_interface):
         sensors.append(WinkSmokeSeverity(item, api_interface))
         sensors.append(WinkCoSeverity(item, api_interface))
     return sensors
+
+
+def __get_dials_from_cloudclock(item, api_interface, parent):
+    _dials = []
+    dials = item['dials']
+    for dial in dials:
+        if 'subscription' in item:
+            dial['subscription'] = item['subscription']
+        dial['connection'] = item['last_reading']['connection']
+        dial_obj = WinkCloudClockDial(dial, api_interface)
+        dial_obj.set_parent(parent)
+        _dials.append(dial_obj)
+    return _dials
+
+
+def __get_alarms_from_cloudclock(item, api_interface, parent):
+    _alarms = []
+    alarms = item['alarms']
+    for alarm in alarms:
+        alarm['subscription'] = item['subscription']
+        alarm['connection'] = item['last_reading']['connection']
+        alarm_obj = WinkCloudClockAlarm(alarm, api_interface)
+        alarm_obj.set_parent(parent)
+        _alarms.append(alarm_obj)
+    return _alarms

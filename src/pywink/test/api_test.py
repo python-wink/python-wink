@@ -7,33 +7,34 @@ import os
 
 # Third-party imports...
 from unittest.mock import MagicMock, Mock
+from requests import *
 
-from pywink.api import *
-from pywink.api import WinkApiInterface
-from pywink.devices.sensor import WinkSensor
-from pywink.devices.hub import WinkHub
-from pywink.devices.piggy_bank import WinkPorkfolioBalanceSensor, WinkPorkfolioNose
-from pywink.devices.key import WinkKey
-from pywink.devices.remote import WinkRemote
-from pywink.devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
-from pywink.devices.light_bulb import WinkLightBulb
-from pywink.devices.binary_switch import WinkBinarySwitch
-from pywink.devices.lock import WinkLock
-from pywink.devices.eggtray import WinkEggtray
-from pywink.devices.garage_door import WinkGarageDoor
-from pywink.devices.shade import WinkShade
-from pywink.devices.siren import WinkSiren
-from pywink.devices.fan import WinkFan, WinkGeZwaveFan
-from pywink.devices.thermostat import WinkThermostat
-from pywink.devices.button import WinkButton
-from pywink.devices.gang import WinkGang
-from pywink.devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
-from pywink.devices.camera import WinkCanaryCamera
-from pywink.devices.air_conditioner import WinkAirConditioner
-from pywink.devices.propane_tank import WinkPropaneTank
-from pywink.devices.scene import WinkScene
-from pywink.devices.robot import WinkRobot
-from pywink.devices.water_heater import WinkWaterHeater
+from ..api import *
+from ..devices.sensor import WinkSensor
+from ..devices.hub import WinkHub
+from ..devices.piggy_bank import WinkPorkfolioBalanceSensor, WinkPorkfolioNose
+from ..devices.key import WinkKey
+from ..devices.remote import WinkRemote
+from ..devices.powerstrip import WinkPowerStrip, WinkPowerStripOutlet
+from ..devices.light_bulb import WinkLightBulb
+from ..devices.binary_switch import WinkBinarySwitch
+from ..devices.lock import WinkLock
+from ..devices.eggtray import WinkEggtray
+from ..devices.garage_door import WinkGarageDoor
+from ..devices.shade import WinkShade
+from ..devices.siren import WinkSiren
+from ..devices.fan import WinkFan, WinkGeZwaveFan
+from ..devices.thermostat import WinkThermostat
+from ..devices.button import WinkButton
+from ..devices.gang import WinkGang
+from ..devices.smoke_detector import WinkSmokeDetector, WinkSmokeSeverity, WinkCoDetector, WinkCoSeverity
+from ..devices.camera import WinkCanaryCamera
+from ..devices.air_conditioner import WinkAirConditioner
+from ..devices.propane_tank import WinkPropaneTank
+from ..devices.scene import WinkScene
+from ..devices.robot import WinkRobot
+from ..devices.water_heater import WinkWaterHeater
+from ..devices.cloud_clock import WinkCloudClock, WinkCloudClockDial, WinkCloudClockAlarm
 
 USERS_ME_WINK_DEVICES = {}
 GROUPS = {}
@@ -68,20 +69,17 @@ class ApiTests(unittest.TestCase):
         self.assertTrue(ALLOW_LOCAL_CONTROL)
 
     def test_that_disable_local_control_works(self):
-        from pywink.api import ALLOW_LOCAL_CONTROL
+        from ..api import ALLOW_LOCAL_CONTROL
         disable_local_control()
         self.assertFalse(ALLOW_LOCAL_CONTROL)
 
     def test_set_user_agent(self):
-        from pywink.api import API_HEADERS
         set_user_agent("THIS IS A TEST")
         self.assertEqual("THIS IS A TEST", API_HEADERS["User-Agent"])
 
     def test_set_bearer_token(self):
-        from pywink.api import API_HEADERS, LOCAL_API_HEADERS
         set_bearer_token("THIS IS A TEST")
         self.assertEqual("Bearer THIS IS A TEST", API_HEADERS["Authorization"])
-
 
     def test_get_authorization_url(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
@@ -109,7 +107,7 @@ class ApiTests(unittest.TestCase):
     def test_get_all_devices_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        self.assertEqual(len(devices), 77)
+        self.assertEqual(len(devices), 85)
         lights = get_light_bulbs()
         for light in lights:
             self.assertTrue(isinstance(light, WinkLightBulb))
@@ -181,7 +179,7 @@ class ApiTests(unittest.TestCase):
                         WinkGang, WinkSmokeDetector, WinkSmokeSeverity,
                         WinkCoDetector, WinkCoSeverity, WinkButton, WinkRobot]
         # No way to validate scene is activated, so skipping.
-        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera, WinkScene]
+        skip_types = [WinkPowerStripOutlet, WinkCanaryCamera, WinkScene, WinkCloudClock, WinkCloudClockDial, WinkCloudClockAlarm]
         devices = get_all_devices()
         old_states = {}
         for device in devices:
@@ -483,7 +481,6 @@ class ApiTests(unittest.TestCase):
     def test_get_camera_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_cameras()
-        old_states = {}
         for device in devices:
             if isinstance(device, WinkCanaryCamera):
                 device.api_interface = self.api_interface
@@ -498,7 +495,6 @@ class ApiTests(unittest.TestCase):
     def test_get_fan_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_fans()
-        old_states = {}
         for device in devices:
             device.api_interface = self.api_interface
             if isinstance(device, WinkGeZwaveFan):
@@ -516,27 +512,39 @@ class ApiTests(unittest.TestCase):
                 self.assertEqual(device.current_fan_direction(), "reverse")
                 self.assertEqual(device.current_timer(), 300)
 
-
     def test_get_propane_tank_updated_states_from_api(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_propane_tanks()
-        old_states = {}
         for device in devices:
             device.api_interface = self.api_interface
             device.set_tare(5.0)
             device.update_state()
         self.assertEqual(device.tare(), 5.0)
 
+    def test_get_cloud_clock_dial_updated_states_from_api(self):
+        WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
+        devices = get_cloud_clocks()
+        dial = devices[1]
+        for device in devices:
+            device.api_interface = self.api_interface
+        dial.set_configuration(0, 123, "ccw", min_position=0, max_position=125)
+        dial.update_state()
+
+        self.assertEqual(dial.max_position(), 125)
+        self.assertEqual(dial.max_value(), 123)
+        self.assertEquals(dial.rotation(), "ccw")
+
     def test_set_all_device_names(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)
         devices = get_all_devices()
-        old_states = {}
         for device in devices:
-            device.api_interface = self.api_interface
-            device.set_name("TEST_NAME")
-            device.update_state()
+            if not isinstance(device, WinkCloudClockAlarm) and not isinstance(device, WinkCloudClockDial):
+                device.api_interface = self.api_interface
+                device.set_name("TEST_NAME")
+                device.update_state()
         for device in devices:
-            self.assertTrue(device.name().startswith("TEST_NAME"))
+            if not isinstance(device, WinkCloudClockAlarm) and not isinstance(device, WinkCloudClockDial):
+                self.assertTrue(device.name().startswith("TEST_NAME"))
 
 
 class MockServerRequestHandler(BaseHTTPRequestHandler):
@@ -607,17 +615,22 @@ def start_mock_server(port):
     mock_server_thread.start()
 
 
-class MockApiInterface():
+class MockApiInterface:
 
     def set_device_state(self, device, state, id_override=None, type_override=None):
         """
-        :type device: WinkDevice
+
+        :param device:
+        :param state:
+        :param id_override:
+        :param type_override:
+        :return:
         """
         object_id = id_override or device.object_id()
         device_object_type = device.object_type()
         object_type = type_override or device_object_type
         return_dict = {}
-        if "name" in str(state):
+        if "TEST_NAME" in str(state):
             for dict_device in USERS_ME_WINK_DEVICES.get('data'):
                 _object_id = dict_device.get("object_id")
                 if _object_id == object_id:
@@ -625,6 +638,11 @@ class MockApiInterface():
                         index = device.index()
                         set_state = state["outlets"][index]["name"]
                         dict_device["outlets"][index]["name"] = set_state
+                        return_dict["data"] = dict_device
+                    elif device_object_type == "dial":
+                        index = device.index()
+                        set_state = state["dials"][index]["name"]
+                        dict_device["dials"][index]["name"] = set_state
                         return_dict["data"] = dict_device
                     else:
                         dict_device["name"] = state.get("name")
@@ -645,6 +663,15 @@ class MockApiInterface():
                         index = device.index()
                         set_state = state["outlets"][index]["desired_state"]["powered"]
                         dict_device["outlets"][index]["last_reading"]["powered"] = set_state
+                        return_dict["data"] = dict_device
+                    elif device_object_type == "cloud_clock":
+                        index = 0
+                        for dial in state["dials"]:
+                            for key, value in dial.get("channel_configuration").items():
+                                dict_device["dials"][index]["channel_configuration"][key] = value
+                            for key, value in dial.get("dial_configuration").items():
+                                dict_device["dials"][index]["dial_configuration"][key] = value
+                            index = index + 1
                         return_dict["data"] = dict_device
                     else:
                         if "nose_color" in state:
@@ -680,7 +707,11 @@ class MockApiInterface():
 
     def get_device_state(self, device, id_override=None, type_override=None):
         """
-        :type device: WinkDevice
+
+        :param device:
+        :param id_override:
+        :param type_override:
+        :return:
         """
         object_id = id_override or device.object_id()
         return_dict = {}
