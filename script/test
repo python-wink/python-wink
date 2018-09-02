@@ -20,3 +20,5 @@ then
 else
   exit $LINT_STATUS
 fi
+
+rm -r .pytest_cache
