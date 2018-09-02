@@ -12,6 +12,8 @@ after_success:
 - coveralls
 matrix:
   fast_finish: true
+before_deploy:
+- cd src/
 deploy:
   provider: pypi
   distributions: sdist
