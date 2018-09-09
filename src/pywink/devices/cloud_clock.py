@@ -198,14 +198,14 @@ class WinkCloudClockDial(WinkDevice):
             cloud_clock = response_json.get('data')
         else:
             cloud_clock = response_json
-        self.parent.json_state = {**self.parent.json_state, **cloud_clock}
+        self.parent.json_state = cloud_clock
 
         cloud_clock_last_reading = cloud_clock.get('last_reading')
         dials = cloud_clock.get('dials')
         for dial in dials:
             if dial.get('object_id') == self.object_id():
                 dial['connection'] = cloud_clock_last_reading.get('connection')
-                self.json_state = {**self.json_state, **dial}
+                self.json_state = dial
                 return True
         return False
 
