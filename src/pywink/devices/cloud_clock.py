@@ -28,10 +28,10 @@ class WinkCloudClock(WinkDevice):
         """
 
         values = self.json_state
+        values["nonce"] = str(random.randint(0, 1000000000))
         if timezone is None:
             json_value["channel_configuration"] = {"channel_id": "10"}
             values["dials"][index] = json_value
-
             response = self.api_interface.set_device_state(self, values)
         else:
             json_value["channel_configuration"] = {"channel_id": "1", "timezone": timezone}
@@ -137,6 +137,7 @@ class WinkCloudClockAlarm(WinkDevice):
         return True
 
 
+# pylint: disable=too-many-public-methods
 class WinkCloudClockDial(WinkDevice):
     """
     Represents a Quirky nimbus dial.
@@ -173,6 +174,9 @@ class WinkCloudClockDial(WinkDevice):
     def max_position(self):
         return self.json_state['dial_configuration'].get('max_position')
 
+    def scale(self):
+        return self.json_state['dial_configuration'].get('scale_type')
+
     def available(self):
         return self.json_state.get('connection', False)
 
@@ -190,18 +194,18 @@ class WinkCloudClockDial(WinkDevice):
         :param response_json: the json obj returned from query
         :return:
         """
-        cloud_clock = response_json.get('data')
-        self.parent.json_state = cloud_clock
-
-        if cloud_clock is None:
-            return False
+        if response_json.get('data') is not None:
+            cloud_clock = response_json.get('data')
+        else:
+            cloud_clock = response_json
+        self.parent.json_state = {**self.parent.json_state, **cloud_clock}
 
         cloud_clock_last_reading = cloud_clock.get('last_reading')
         dials = cloud_clock.get('dials')
         for dial in dials:
             if dial.get('object_id') == self.object_id():
                 dial['connection'] = cloud_clock_last_reading.get('connection')
-                self.json_state = dial
+                self.json_state = {**self.json_state, **dial}
                 return True
         return False
 
@@ -231,15 +235,15 @@ class WinkCloudClockDial(WinkDevice):
         :param min_value: Any number
         :param max_value: Any number above min_value
         :param rotation: (String) cw or ccw
-        :param scale: (String) Linear and ...
+        :param scale: (String) linear or log
         :param ticks:(Int) number of ticks of the clock up to 360?
         :param min_position: (Int) 0-360
         :param max_position: (Int) 0-360
         :return:
         """
 
-        _json = {"min_value": min_value, "max_value": max_value, "rotation": rotation, "scale": scale, "ticks": ticks,
-                 "min_position": min_position, "max_position": max_position}
+        _json = {"min_value": min_value, "max_value": max_value, "rotation": rotation, "scale_type": scale,
+                 "num_ticks": ticks, "min_position": min_position, "max_position": max_position}
 
         dial_config = {"dial_configuration": _json}
 

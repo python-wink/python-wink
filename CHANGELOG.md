@@ -1,6 +1,9 @@
 # Change Log
 
-## 2.0.0
+## 1.10.1
+- Fixed nimbus bugs found while integrating with Home Assistant
+
+## 1.10.0
 - Support for Quirky Nimbus
 
 ## 1.9.1
