@@ -532,7 +532,7 @@ class ApiTests(unittest.TestCase):
 
         self.assertEqual(dial.max_position(), 125)
         self.assertEqual(dial.max_value(), 123)
-        self.assertEquals(dial.rotation(), "ccw")
+        self.assertEqual(dial.rotation(), "ccw")
 
     def test_set_all_device_names(self):
         WinkApiInterface.BASE_URL = "http://localhost:" + str(self.port)

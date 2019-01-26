@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.10.2
+- Added get_eggs which returns the times of each egg in an eggminder
+
 ## 1.10.1
 - Fixed nimbus bugs found while integrating with Home Assistant
 
