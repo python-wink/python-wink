@@ -20,3 +20,6 @@ class WinkEggtray(WinkDevice):
 
     def state(self):
         return self._last_reading.get("inventory")
+
+    def eggs(self):
+        return self.json_state.get("eggs")

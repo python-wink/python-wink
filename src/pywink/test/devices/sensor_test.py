@@ -74,6 +74,15 @@ class EggtrayTests(unittest.TestCase):
         for device in devices:
             self.assertEqual(device.unit(), "eggs")
 
+    def test_eggs(self):
+        devices = get_devices_from_response_dict(self.response_dict, device_types.EGGTRAY)
+        for device in devices:
+            for egg in device.eggs():
+                try:
+                    val = float(egg) 
+                except ValueError:
+                    self.fail("test_eggs raised ValueError unexpectedly.")
+
 
 class KeyTests(unittest.TestCase):
 

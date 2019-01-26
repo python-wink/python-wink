@@ -115,5 +115,5 @@ class NimbusTests(unittest.TestCase):
         the_date = datetime.strptime('20180804T233251', '%Y%m%dT%H%M%S')
         self.assertEqual(first_alarm.recurrence(), _create_ical_string("America/New_York", the_date, ["SA"]))
         self.assertEqual("DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=DAILY", _create_ical_string("America/New_York", the_date, "DAILY"))
-        self.assertEquals("DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=MO", _create_ical_string("America/New_York", the_date, ["TEST", "MO"]))
+        self.assertEqual("DTSTART;TZID=America/New_York:20180804T233251\nRRULE:FREQ=WEEKLY;BYDAY=MO", _create_ical_string("America/New_York", the_date, ["TEST", "MO"]))
 
