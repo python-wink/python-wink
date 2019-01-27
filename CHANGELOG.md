@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.10.3
+- Added the ability to send a POST to the session endpoint for PubNub fix
+
 ## 1.10.2
 - Added get_eggs which returns the times of each egg in an eggminder
 
