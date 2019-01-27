@@ -2,6 +2,7 @@ import json
 import time
 import logging
 import urllib.parse
+import random
 
 import requests
 
@@ -329,13 +330,11 @@ class WinkApiInterface:
         url_string = "{}/{}s/{}/deposits".format(self.BASE_URL,
                                                  device.object_type(),
                                                  device.object_id())
-        print(url_string)
         try:
             arequest = requests.post(url_string,
                                      data=json.dumps(_json),
                                      headers=API_HEADERS)
             response_json = arequest.json()
-            print(json.dumps(response_json, indent=4, sort_keys=True))
             return response_json
         except requests.exceptions.RequestException:
             return None
@@ -460,6 +459,28 @@ def get_user():
     arequest = requests.get(url_string, headers=API_HEADERS)
     _LOGGER.debug('%s', arequest)
     return arequest.json()
+
+
+def post_session():
+    """
+    This endpoint appears to be required in order to keep pubnub updates flowing for some user.
+
+    This just posts a random nonce to the /users/me/session endpoint and returns the result.
+    """
+
+    url_string = "{}/users/me/session".format(WinkApiInterface.BASE_URL)
+
+    nonce = ''.join([str(random.randint(0, 9)) for i in range(9)])
+    _json = {"nonce": str(nonce)}
+
+    try:
+        arequest = requests.post(url_string,
+                                 data=json.dumps(_json),
+                                 headers=API_HEADERS)
+        response_json = arequest.json()
+        return response_json
+    except requests.exceptions.RequestException:
+        return None
 
 
 def get_local_control_access_token(local_control_id):
