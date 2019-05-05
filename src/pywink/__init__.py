@@ -4,7 +4,7 @@ Top level functions
 # noqa
 from pywink.api import set_bearer_token, refresh_access_token, \
     set_wink_credentials, set_user_agent, wink_api_fetch, get_devices, \
-    get_subscription_key, get_user, get_authorization_url, \
+    get_subscription_details, get_user, get_authorization_url, \
     request_token, legacy_set_wink_credentials, get_current_oauth_credentials, \
     disable_local_control, post_session
 

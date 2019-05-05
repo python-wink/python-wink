@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.10.4
+- Consume the origin URL in the subscription block
+
 ## 1.10.3
 - Added the ability to send a POST to the session endpoint for PubNub fix
 

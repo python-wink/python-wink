@@ -658,11 +658,13 @@ def get_shade_groups():
     return shade_groups
 
 
-def get_subscription_key():
+def get_subscription_details():
     response_dict = wink_api_fetch()
     try:
         first_device = response_dict.get('data')[0]
-        return get_subscription_key_from_response_dict(first_device)
+        origin = get_subscription_origin(first_device)
+        key = get_subscription_key_from_response_dict(first_device)
+        return key, origin
     except IndexError:
         raise WinkAPIException("No Wink devices associated with account.")
 
@@ -670,6 +672,11 @@ def get_subscription_key():
 def get_subscription_key_from_response_dict(device):
     if "subscription" in device:
         return device.get("subscription").get("pubnub").get("subscribe_key")
+    return None
+
+def get_subscription_origin(device):
+    if "subscription" in device:
+        return device.get("subscription").get("pubnub").get("origin")
     return None
 
 
